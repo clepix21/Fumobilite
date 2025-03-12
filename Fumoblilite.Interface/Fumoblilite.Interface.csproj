@@ -46,7 +46,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\FormConnexion.cs" />
+    <Compile Include="Forms\FormPrincipal.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserControls\UCAccueil.cs" />
+    <Compile Include="UserControls\UCConsultationHoraires.cs" />
+    <Compile Include="UserControls\UCConsultationLigne.cs" />
+    <Compile Include="UserControls\UCConsultationReseau.cs" />
+    <Compile Include="UserControls\UCGestionArrets.cs" />
+    <Compile Include="UserControls\UCRechercheItineraire.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

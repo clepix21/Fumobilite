@@ -1,0 +1,41 @@
+using System;
+using System.Windows.Forms;
+using System.IO;
+using GestionTransport.AccesDonnees;
+using GestionTransport.Interface.Forms;
+
+namespace GestionTransport.Interface
+{
+    static class Program
+    {
+        /// <summary>
+        /// Point d'entrée principal de l'application.
+        /// </summary>
+        [STAThread]
+        static void Main()
+        {
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+
+            // Chemin de la base de données
+            string dossierApplication = AppDomain.CurrentDomain.BaseDirectory;
+            string cheminBaseDonnees = Path.Combine(dossierApplication, "GestionTransport.db");
+
+            // Initialisation de la base de données
+            GestionBaseDonnees gestionBD = new GestionBaseDonnees(cheminBaseDonnees);
+            bool nouvelleBaseDonnees = gestionBD.CreerBaseDonneesSiNonExistante();
+
+            if (nouvelleBaseDonnees)
+            {
+                MessageBox.Show("Une nouvelle base de données a été créée avec des données de démonstration.\n\nIdentifiants par défaut :\nUtilisateur : admin\nMot de passe : admin", 
+                    "Base de données initialisée", 
+                    MessageBoxButtons.OK, 
+                    MessageBoxIcon.Information);
+            }
+
+            // Démarrer l'application avec le formulaire de connexion
+            Application.Run(new FormConnexion(gestionBD.ConnectionString));
+        }
+    }
+}
+
