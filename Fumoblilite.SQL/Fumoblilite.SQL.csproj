@@ -46,7 +46,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GestionBaseDonnees.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\RepositoryArret.cs" />
+    <Compile Include="Repositories\RepositoryArretLigne.cs" />
+    <Compile Include="Repositories\RepositoryHoraire.cs" />
+    <Compile Include="Repositories\RepositoryLigne.cs" />
+    <Compile Include="Repositories\RepositoryUtilisateur.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
