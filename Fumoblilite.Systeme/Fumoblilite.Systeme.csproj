@@ -41,7 +41,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interfaces\IRepositoryArret.cs" />
+    <Compile Include="Interfaces\IRepositoryArretLigne.cs" />
+    <Compile Include="Interfaces\IRepositoryHoraire.cs" />
+    <Compile Include="Interfaces\IRepositoryLigne.cs" />
+    <Compile Include="Interfaces\IRepositoryUtilisateur.cs" />
+    <Compile Include="Modeles\Arret.cs" />
+    <Compile Include="Modeles\ArretLigne.cs" />
+    <Compile Include="Modeles\Horaire.cs" />
+    <Compile Include="Modeles\Itineraire.cs" />
+    <Compile Include="Modeles\Ligne.cs" />
+    <Compile Include="Modeles\Utilisateur.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ServiceArret.cs" />
+    <Compile Include="Services\ServiceAuthentification.cs" />
+    <Compile Include="Services\ServiceHoraire.cs" />
+    <Compile Include="Services\ServiceItineraire.cs" />
+    <Compile Include="Services\ServiceLigne.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
