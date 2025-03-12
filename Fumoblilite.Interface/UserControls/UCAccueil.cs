@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace GestionTransport.Interface.UserControls
+namespace Fumoblilite.Interface.UserControls
 {
     public partial class UCAccueil : UserControl
     {

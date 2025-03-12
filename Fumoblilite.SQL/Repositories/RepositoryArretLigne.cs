@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
-using GestionTransport.Systeme.Modeles;
-using GestionTransport.Systeme.Interfaces;
+using Fumoblilite.Systeme.Modeles;
+using Fumoblilite.Systeme.Interfaces;
 
-namespace GestionTransport.SQL.Repositories
+namespace Fumoblilite.SQL.Repositories
 {
     public class RepositoryArretLigne : IRepositoryArretLigne
     {

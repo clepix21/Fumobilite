@@ -1,9 +1,9 @@
 using System;
 using System.Windows.Forms;
-using GestionTransport.Systeme.Modeles;
-using GestionTransport.Interface.UserControls;
+using Fumoblilite.Systeme.Modeles;
+using Fumoblilite.Interface.UserControls;
 
-namespace GestionTransport.Interface.Forms
+namespace Fumoblilite.Interface.Forms
 {
     public partial class FormPrincipal : Form
     {

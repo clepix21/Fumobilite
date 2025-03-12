@@ -1,11 +1,11 @@
 using System;
 using System.Windows.Forms;
 using System.Collections.Generic;
-using GestionTransport.Systeme.Modeles;
-using GestionTransport.Systeme.Services;
-using GestionTransport.AccesDonnees.Repositories;
+using Fumoblilite.Systeme.Modeles;
+using Fumoblilite.Systeme.Services;
+using Fumoblilite.SQL.Repositories;
 
-namespace GestionTransport.Interface.UserControls
+namespace Fumoblilite.Interface.UserControls
 {
     public partial class UCGestionArrets : UserControl
     {

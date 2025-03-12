@@ -1,10 +1,10 @@
 using System;
 using System.Windows.Forms;
 using System.IO;
-using GestionTransport.AccesDonnees;
-using GestionTransport.Interface.Forms;
+using Fumoblilite.SQL;
+using Fumoblilite.Interface.Forms;
 
-namespace GestionTransport.Interface
+namespace Fumoblilite.Interface
 {
     static class Program
     {
@@ -19,7 +19,7 @@ namespace GestionTransport.Interface
 
             // Chemin de la base de données
             string dossierApplication = AppDomain.CurrentDomain.BaseDirectory;
-            string cheminBaseDonnees = Path.Combine(dossierApplication, "GestionTransport.db");
+            string cheminBaseDonnees = Path.Combine(dossierApplication, "Fumoblilite.db");
 
             // Initialisation de la base de données
             GestionBaseDonnees gestionBD = new GestionBaseDonnees(cheminBaseDonnees);

@@ -1,6 +1,6 @@
 using System;
 
-namespace GestionTransport.Systeme.Modeles
+namespace Fumoblilite.Systeme.Modeles
 {
     public class Horaire
     {

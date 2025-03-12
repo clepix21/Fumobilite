@@ -1,10 +1,10 @@
 using System;
 using System.Windows.Forms;
-using GestionTransport.Systeme.Services;
-using GestionTransport.Systeme.Modeles;
-using GestionTransport.AccesDonnees.Repositories;
+using Fumoblilite.Systeme.Services;
+using Fumoblilite.Systeme.Modeles;
+using Fumoblilite.SQL.Repositories;
 
-namespace GestionTransport.Interface.Forms
+namespace Fumoblilite.Interface.Forms
 {
     public partial class FormConnexion : Form
     {

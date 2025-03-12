@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Linq;
-using GestionTransport.Systeme.Modeles;
-using GestionTransport.Systeme.Services;
-using GestionTransport.AccesDonnees.Repositories;
-using GestionTransport.Systeme.Interfaces;
+using Fumoblilite.Systeme.Modeles;
+using Fumoblilite.Systeme.Services;
+using Fumoblilite.SQL.Repositories;
+using Fumoblilite.Systeme.Interfaces;
 
-namespace GestionTransport.Interface.UserControls
+namespace Fumoblilite.Interface.UserControls
 {
     public partial class UCConsultationReseau : UserControl
     {

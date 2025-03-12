@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using GestionTransport.Systeme.Modeles;
+using Fumoblilite.Systeme.Modeles;
 
-namespace GestionTransport.Systeme.Interfaces
+namespace Fumoblilite.Systeme.Interfaces
 {
     public interface IRepositoryHoraire
     {

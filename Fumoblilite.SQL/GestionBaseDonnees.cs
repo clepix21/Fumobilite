@@ -2,7 +2,7 @@ using System;
 using System.Data.SQLite;
 using System.IO;
 
-namespace GestionTransport.SQL
+namespace Fumoblilite.SQL
 {
     public class GestionBaseDonnees
     {

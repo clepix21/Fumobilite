@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using GestionTransport.Systeme.Modeles;
-using GestionTransport.Systeme.Interfaces;
+using Fumoblilite.Systeme.Modeles;
+using Fumoblilite.Systeme.Interfaces;
 
-namespace GestionTransport.Systeme.Services
+namespace Fumoblilite.Systeme.Services
 {
     public class ServiceHoraire
     {

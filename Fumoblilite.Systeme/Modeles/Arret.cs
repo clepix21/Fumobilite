@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace GestionTransport.Systeme.Modeles
+namespace Fumoblilite.Systeme.Modeles
 {
     public class Arret
     {
