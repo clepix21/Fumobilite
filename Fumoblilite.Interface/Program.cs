@@ -24,12 +24,13 @@ namespace Fumoblilite.Interface
             // Initialisation de la base de données
             GestionBaseDonnees gestionBD = new GestionBaseDonnees(cheminBaseDonnees);
             bool nouvelleBaseDonnees = gestionBD.CreerBaseDonneesSiNonExistante();
+            //gestionBD.CreerTables();
 
             if (nouvelleBaseDonnees)
             {
-                MessageBox.Show("Une nouvelle base de données a été créée avec des données de démonstration.\n\nIdentifiants par défaut :\nUtilisateur : admin\nMot de passe : admin", 
-                    "Base de données initialisée", 
-                    MessageBoxButtons.OK, 
+                MessageBox.Show("Une nouvelle base de données a été créée avec des données de démonstration.\n\nIdentifiants par défaut :\nUtilisateur : admin\nMot de passe : admin",
+                    "Base de données initialisée",
+                    MessageBoxButtons.OK,
                     MessageBoxIcon.Information);
             }
 

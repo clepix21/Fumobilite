@@ -37,7 +37,7 @@ namespace Fumoblilite.SQL
             }
         }
 
-        private void CreerTables()
+        public void CreerTables()
         {
             using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
             {
@@ -146,7 +146,7 @@ namespace Fumoblilite.SQL
             }
         }
 
-        private void InsererDonneesInitiales()
+        public void InsererDonneesInitiales()
         {
             using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
             {
