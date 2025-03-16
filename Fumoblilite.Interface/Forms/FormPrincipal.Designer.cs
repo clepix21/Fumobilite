@@ -16,70 +16,191 @@ namespace Fumoblilite.Interface.Forms
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormPrincipal));
-
-            this.menuStrip = new MenuStrip();
-            this.menuFichier = new ToolStripMenuItem();
-            this.menuItemDeconnexion = new ToolStripMenuItem();
-            this.menuItemQuitter = new ToolStripMenuItem();
-            this.menuGestion = new ToolStripMenuItem();
-            this.menuItemArrets = new ToolStripMenuItem();
-            this.menuItemLignes = new ToolStripMenuItem();
-            this.menuItemHoraires = new ToolStripMenuItem();
-            this.menuItemUtilisateurs = new ToolStripMenuItem();
-            this.menuConsultation = new ToolStripMenuItem();
-            this.menuItemReseau = new ToolStripMenuItem();
-            this.menuItemLigneDetails = new ToolStripMenuItem();
-            this.menuItemHorairesJournee = new ToolStripMenuItem();
-            this.menuRecherche = new ToolStripMenuItem();
-            this.menuItemItineraire = new ToolStripMenuItem();
-            this.statusStrip = new StatusStrip();
-            this.lblStatusUtilisateur = new ToolStripStatusLabel();
-            this.panelContenu = new Panel();
-
-            this.menuStrip.Items.AddRange(new ToolStripItem[] { menuFichier, menuGestion, menuConsultation, menuRecherche });
-            this.menuFichier.DropDownItems.AddRange(new ToolStripItem[] { menuItemDeconnexion, menuItemQuitter });
-            this.menuGestion.DropDownItems.AddRange(new ToolStripItem[] { menuItemArrets, menuItemLignes, menuItemHoraires, menuItemUtilisateurs });
-            this.menuConsultation.DropDownItems.AddRange(new ToolStripItem[] { menuItemReseau, menuItemLigneDetails, menuItemHorairesJournee });
-            this.menuRecherche.DropDownItems.AddRange(new ToolStripItem[] { menuItemItineraire });
-
+            this.menuStrip = new System.Windows.Forms.MenuStrip();
+            this.menuFichier = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItemDeconnexion = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItemQuitter = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuGestion = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItemArrets = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItemLignes = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItemHoraires = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItemUtilisateurs = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuConsultation = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItemReseau = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItemLigneDetails = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItemHorairesJournee = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuRecherche = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuItemItineraire = new System.Windows.Forms.ToolStripMenuItem();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.lblStatusUtilisateur = new System.Windows.Forms.ToolStripStatusLabel();
+            this.panelContenu = new System.Windows.Forms.Panel();
+            this.menuStrip.SuspendLayout();
+            this.statusStrip.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // menuStrip
+            // 
+            this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuFichier,
+            this.menuGestion,
+            this.menuConsultation,
+            this.menuRecherche});
+            this.menuStrip.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip.Name = "menuStrip";
+            this.menuStrip.Size = new System.Drawing.Size(284, 24);
+            this.menuStrip.TabIndex = 2;
+            // 
+            // menuFichier
+            // 
+            this.menuFichier.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuItemDeconnexion,
+            this.menuItemQuitter});
+            this.menuFichier.Name = "menuFichier";
+            this.menuFichier.Size = new System.Drawing.Size(54, 20);
             this.menuFichier.Text = "Fichier";
+            // 
+            // menuItemDeconnexion
+            // 
+            this.menuItemDeconnexion.Name = "menuItemDeconnexion";
+            this.menuItemDeconnexion.Size = new System.Drawing.Size(144, 22);
             this.menuItemDeconnexion.Text = "Déconnexion";
-            this.menuItemQuitter.Text = "Quitter";
-            this.menuGestion.Text = "Gestion";
-            this.menuItemArrets.Text = "Arrêts";
-            this.menuItemLignes.Text = "Lignes";
-            this.menuItemHoraires.Text = "Horaires";
-            this.menuItemUtilisateurs.Text = "Utilisateurs";
-            this.menuConsultation.Text = "Consultation";
-            this.menuItemReseau.Text = "Réseau complet";
-            this.menuItemLigneDetails.Text = "Détails d'une ligne";
-            this.menuItemHorairesJournee.Text = "Horaires du jour";
-            this.menuRecherche.Text = "Recherche";
-            this.menuItemItineraire.Text = "Itinéraire";
-
             this.menuItemDeconnexion.Click += new System.EventHandler(this.menuItemDeconnexion_Click);
+            // 
+            // menuItemQuitter
+            // 
+            this.menuItemQuitter.Name = "menuItemQuitter";
+            this.menuItemQuitter.Size = new System.Drawing.Size(144, 22);
+            this.menuItemQuitter.Text = "Quitter";
             this.menuItemQuitter.Click += new System.EventHandler(this.menuItemQuitter_Click);
+            // 
+            // menuGestion
+            // 
+            this.menuGestion.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuItemArrets,
+            this.menuItemLignes,
+            this.menuItemHoraires,
+            this.menuItemUtilisateurs});
+            this.menuGestion.Name = "menuGestion";
+            this.menuGestion.Size = new System.Drawing.Size(59, 20);
+            this.menuGestion.Text = "Gestion";
+            // 
+            // menuItemArrets
+            // 
+            this.menuItemArrets.Name = "menuItemArrets";
+            this.menuItemArrets.Size = new System.Drawing.Size(132, 22);
+            this.menuItemArrets.Text = "Arrêts";
             this.menuItemArrets.Click += new System.EventHandler(this.menuItemArrets_Click);
+            // 
+            // menuItemLignes
+            // 
+            this.menuItemLignes.Name = "menuItemLignes";
+            this.menuItemLignes.Size = new System.Drawing.Size(132, 22);
+            this.menuItemLignes.Text = "Lignes";
             this.menuItemLignes.Click += new System.EventHandler(this.menuItemLignes_Click);
+            // 
+            // menuItemHoraires
+            // 
+            this.menuItemHoraires.Name = "menuItemHoraires";
+            this.menuItemHoraires.Size = new System.Drawing.Size(132, 22);
+            this.menuItemHoraires.Text = "Horaires";
             this.menuItemHoraires.Click += new System.EventHandler(this.menuItemHoraires_Click);
+            // 
+            // menuItemUtilisateurs
+            // 
+            this.menuItemUtilisateurs.Name = "menuItemUtilisateurs";
+            this.menuItemUtilisateurs.Size = new System.Drawing.Size(132, 22);
+            this.menuItemUtilisateurs.Text = "Utilisateurs";
             this.menuItemUtilisateurs.Click += new System.EventHandler(this.menuItemUtilisateurs_Click);
+            // 
+            // menuConsultation
+            // 
+            this.menuConsultation.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuItemReseau,
+            this.menuItemLigneDetails,
+            this.menuItemHorairesJournee});
+            this.menuConsultation.Name = "menuConsultation";
+            this.menuConsultation.Size = new System.Drawing.Size(87, 20);
+            this.menuConsultation.Text = "Consultation";
+            // 
+            // menuItemReseau
+            // 
+            this.menuItemReseau.Name = "menuItemReseau";
+            this.menuItemReseau.Size = new System.Drawing.Size(171, 22);
+            this.menuItemReseau.Text = "Réseau complet";
             this.menuItemReseau.Click += new System.EventHandler(this.menuItemReseau_Click);
+            // 
+            // menuItemLigneDetails
+            // 
+            this.menuItemLigneDetails.Name = "menuItemLigneDetails";
+            this.menuItemLigneDetails.Size = new System.Drawing.Size(171, 22);
+            this.menuItemLigneDetails.Text = "Détails d\'une ligne";
             this.menuItemLigneDetails.Click += new System.EventHandler(this.menuItemLigneDetails_Click);
+            // 
+            // menuItemHorairesJournee
+            // 
+            this.menuItemHorairesJournee.Name = "menuItemHorairesJournee";
+            this.menuItemHorairesJournee.Size = new System.Drawing.Size(171, 22);
+            this.menuItemHorairesJournee.Text = "Horaires du jour";
             this.menuItemHorairesJournee.Click += new System.EventHandler(this.menuItemHorairesJournee_Click);
+            // 
+            // menuRecherche
+            // 
+            this.menuRecherche.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuItemItineraire});
+            this.menuRecherche.Name = "menuRecherche";
+            this.menuRecherche.Size = new System.Drawing.Size(74, 20);
+            this.menuRecherche.Text = "Recherche";
+            // 
+            // menuItemItineraire
+            // 
+            this.menuItemItineraire.Name = "menuItemItineraire";
+            this.menuItemItineraire.Size = new System.Drawing.Size(120, 22);
+            this.menuItemItineraire.Text = "Itinéraire";
             this.menuItemItineraire.Click += new System.EventHandler(this.menuItemItineraire_Click);
-
-            this.statusStrip.Items.Add(this.lblStatusUtilisateur);
+            // 
+            // statusStrip
+            // 
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.lblStatusUtilisateur});
+            this.statusStrip.Location = new System.Drawing.Point(0, 239);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(284, 22);
+            this.statusStrip.TabIndex = 1;
+            // 
+            // lblStatusUtilisateur
+            // 
+            this.lblStatusUtilisateur.Name = "lblStatusUtilisateur";
+            this.lblStatusUtilisateur.Size = new System.Drawing.Size(118, 17);
             this.lblStatusUtilisateur.Text = "Utilisateur connecté: ";
-
-            this.panelContenu.Dock = DockStyle.Fill;
+            // 
+            // panelContenu
+            // 
+            this.panelContenu.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panelContenu.Location = new System.Drawing.Point(0, 24);
+            this.panelContenu.Name = "panelContenu";
+            this.panelContenu.Size = new System.Drawing.Size(284, 215);
+            this.panelContenu.TabIndex = 0;
+            // 
+            // FormPrincipal
+            // 
+            this.ClientSize = new System.Drawing.Size(284, 261);
             this.Controls.Add(this.panelContenu);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.menuStrip);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip;
+            this.Name = "FormPrincipal";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Gestion de Transport en Commun";
-            this.StartPosition = FormStartPosition.CenterScreen;
-            this.WindowState = FormWindowState.Maximized;
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.FormPrincipal_Load);
+            this.menuStrip.ResumeLayout(false);
+            this.menuStrip.PerformLayout();
+            this.statusStrip.ResumeLayout(false);
+            this.statusStrip.PerformLayout();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
     }
 }
