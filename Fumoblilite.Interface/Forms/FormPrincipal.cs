@@ -20,6 +20,7 @@ namespace Fumoblilite.Interface.Forms
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormPrincipal));
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.menuFichier = new System.Windows.Forms.ToolStripMenuItem();
             this.menuItemDeconnexion = new System.Windows.Forms.ToolStripMenuItem();
@@ -67,14 +68,14 @@ namespace Fumoblilite.Interface.Forms
             // menuItemDeconnexion
             // 
             this.menuItemDeconnexion.Name = "menuItemDeconnexion";
-            this.menuItemDeconnexion.Size = new System.Drawing.Size(142, 22);
+            this.menuItemDeconnexion.Size = new System.Drawing.Size(144, 22);
             this.menuItemDeconnexion.Text = "Déconnexion";
             this.menuItemDeconnexion.Click += new System.EventHandler(this.menuItemDeconnexion_Click);
             // 
             // menuItemQuitter
             // 
             this.menuItemQuitter.Name = "menuItemQuitter";
-            this.menuItemQuitter.Size = new System.Drawing.Size(142, 22);
+            this.menuItemQuitter.Size = new System.Drawing.Size(144, 22);
             this.menuItemQuitter.Text = "Quitter";
             this.menuItemQuitter.Click += new System.EventHandler(this.menuItemQuitter_Click);
             // 
@@ -92,28 +93,28 @@ namespace Fumoblilite.Interface.Forms
             // menuItemArrets
             // 
             this.menuItemArrets.Name = "menuItemArrets";
-            this.menuItemArrets.Size = new System.Drawing.Size(180, 22);
+            this.menuItemArrets.Size = new System.Drawing.Size(132, 22);
             this.menuItemArrets.Text = "Arrêts";
             this.menuItemArrets.Click += new System.EventHandler(this.menuItemArrets_Click);
             // 
             // menuItemLignes
             // 
             this.menuItemLignes.Name = "menuItemLignes";
-            this.menuItemLignes.Size = new System.Drawing.Size(180, 22);
+            this.menuItemLignes.Size = new System.Drawing.Size(132, 22);
             this.menuItemLignes.Text = "Lignes";
             this.menuItemLignes.Click += new System.EventHandler(this.menuItemLignes_Click);
             // 
             // menuItemHoraires
             // 
             this.menuItemHoraires.Name = "menuItemHoraires";
-            this.menuItemHoraires.Size = new System.Drawing.Size(180, 22);
+            this.menuItemHoraires.Size = new System.Drawing.Size(132, 22);
             this.menuItemHoraires.Text = "Horaires";
             this.menuItemHoraires.Click += new System.EventHandler(this.menuItemHoraires_Click);
             // 
             // menuItemUtilisateurs
             // 
             this.menuItemUtilisateurs.Name = "menuItemUtilisateurs";
-            this.menuItemUtilisateurs.Size = new System.Drawing.Size(180, 22);
+            this.menuItemUtilisateurs.Size = new System.Drawing.Size(132, 22);
             this.menuItemUtilisateurs.Text = "Utilisateurs";
             this.menuItemUtilisateurs.Click += new System.EventHandler(this.menuItemUtilisateurs_Click);
             // 
@@ -130,21 +131,21 @@ namespace Fumoblilite.Interface.Forms
             // menuItemReseau
             // 
             this.menuItemReseau.Name = "menuItemReseau";
-            this.menuItemReseau.Size = new System.Drawing.Size(180, 22);
+            this.menuItemReseau.Size = new System.Drawing.Size(171, 22);
             this.menuItemReseau.Text = "Réseau complet";
             this.menuItemReseau.Click += new System.EventHandler(this.menuItemReseau_Click);
             // 
             // menuItemLigneDetails
             // 
             this.menuItemLigneDetails.Name = "menuItemLigneDetails";
-            this.menuItemLigneDetails.Size = new System.Drawing.Size(180, 22);
+            this.menuItemLigneDetails.Size = new System.Drawing.Size(171, 22);
             this.menuItemLigneDetails.Text = "Détails d\'une ligne";
             this.menuItemLigneDetails.Click += new System.EventHandler(this.menuItemLigneDetails_Click);
             // 
             // menuItemHorairesJournee
             // 
             this.menuItemHorairesJournee.Name = "menuItemHorairesJournee";
-            this.menuItemHorairesJournee.Size = new System.Drawing.Size(180, 22);
+            this.menuItemHorairesJournee.Size = new System.Drawing.Size(171, 22);
             this.menuItemHorairesJournee.Text = "Horaires du jour";
             this.menuItemHorairesJournee.Click += new System.EventHandler(this.menuItemHorairesJournee_Click);
             // 
@@ -159,7 +160,7 @@ namespace Fumoblilite.Interface.Forms
             // menuItemItineraire
             // 
             this.menuItemItineraire.Name = "menuItemItineraire";
-            this.menuItemItineraire.Size = new System.Drawing.Size(180, 22);
+            this.menuItemItineraire.Size = new System.Drawing.Size(120, 22);
             this.menuItemItineraire.Text = "Itinéraire";
             this.menuItemItineraire.Click += new System.EventHandler(this.menuItemItineraire_Click);
             // 
@@ -195,6 +196,7 @@ namespace Fumoblilite.Interface.Forms
             this.Controls.Add(this.panelContenu);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.menuStrip);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip;
             this.Name = "FormPrincipal";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -207,6 +209,7 @@ namespace Fumoblilite.Interface.Forms
             this.statusStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         private System.Windows.Forms.MenuStrip menuStrip;
