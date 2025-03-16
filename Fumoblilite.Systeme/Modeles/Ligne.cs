@@ -9,7 +9,6 @@ namespace Fumoblilite.Systeme.Modeles
         public string Numero { get; set; }
         public string Nom { get; set; }
         public string Couleur { get; set; }
-        public string TypeTransport { get; set; } // Bus, Métro, Tramway, etc.
         public bool EstActif { get; set; }
         public DateTime DateCreation { get; set; }
         public DateTime? DateModification { get; set; }
@@ -22,13 +21,12 @@ namespace Fumoblilite.Systeme.Modeles
             EstActif = true;
         }
 
-        public Ligne(int id, string numero, string nom, string couleur, string typeTransport)
+        public Ligne(int id, string numero, string nom, string couleur)
         {
             Id = id;
             Numero = numero;
             Nom = nom;
             Couleur = couleur;
-            TypeTransport = typeTransport;
             EstActif = true;
             Arrets = new List<ArretLigne>();
             DateCreation = DateTime.Now;

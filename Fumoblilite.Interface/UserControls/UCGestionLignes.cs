@@ -507,7 +507,6 @@ namespace GestionTransport.Interface.UserControls
         {
             ChargerLignes();
             ChargerArrets();
-            cboTypeTransport.SelectedIndex = 0; // Sélectionner "Bus" par défaut
         }
 
         private void ChargerLignes()
@@ -523,8 +522,6 @@ namespace GestionTransport.Interface.UserControls
                 dgvLignes.Columns["Numero"].Width = 70;
                 dgvLignes.Columns["Nom"].Width = 150;
                 dgvLignes.Columns["Couleur"].Visible = false;
-                dgvLignes.Columns["TypeTransport"].HeaderText = "Type";
-                dgvLignes.Columns["TypeTransport"].Width = 80;
                 dgvLignes.Columns["EstActif"].HeaderText = "Actif";
                 dgvLignes.Columns["EstActif"].Width = 50;
                 dgvLignes.Columns["DateCreation"].Visible = false;
@@ -561,7 +558,6 @@ namespace GestionTransport.Interface.UserControls
             txtNumero.Text = string.Empty;
             txtNom.Text = string.Empty;
             txtCouleur.Text = "#FF0000"; // Rouge par défaut
-            cboTypeTransport.SelectedIndex = 0; // "Bus" par défaut
             chkEstActif.Checked = true;
             _ligneSelectionnee = null;
             btnSupprimer.Enabled = false;
@@ -580,7 +576,6 @@ namespace GestionTransport.Interface.UserControls
                     txtNumero.Text = _ligneSelectionnee.Numero;
                     txtNom.Text = _ligneSelectionnee.Nom;
                     txtCouleur.Text = _ligneSelectionnee.Couleur ?? "#FF0000";
-                    cboTypeTransport.SelectedItem = _ligneSelectionnee.TypeTransport;
                     chkEstActif.Checked = _ligneSelectionnee.EstActif;
                     btnSupprimer.Enabled = true;
                     
@@ -645,7 +640,6 @@ namespace GestionTransport.Interface.UserControls
                         Numero = txtNumero.Text,
                         Nom = txtNom.Text,
                         Couleur = txtCouleur.Text,
-                        TypeTransport = cboTypeTransport.SelectedItem.ToString(),
                         EstActif = chkEstActif.Checked
                     };
 
@@ -658,7 +652,6 @@ namespace GestionTransport.Interface.UserControls
                     _ligneSelectionnee.Numero = txtNumero.Text;
                     _ligneSelectionnee.Nom = txtNom.Text;
                     _ligneSelectionnee.Couleur = txtCouleur.Text;
-                    _ligneSelectionnee.TypeTransport = cboTypeTransport.SelectedItem.ToString();
                     _ligneSelectionnee.EstActif = chkEstActif.Checked;
 
                     bool resultat = _serviceLigne.Modifier(_ligneSelectionnee);

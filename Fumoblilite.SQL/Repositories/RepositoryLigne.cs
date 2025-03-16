@@ -70,8 +70,8 @@ namespace Fumoblilite.SQL.Repositories
             {
                 connection.Open();
                 string query = @"
-                    INSERT INTO Lignes (Numero, Nom, Couleur, TypeTransport, EstActif, DateCreation, EstSupprime)
-                    VALUES (@Numero, @Nom, @Couleur, @TypeTransport, @EstActif, @DateCreation, 0);
+                    INSERT INTO Lignes (Numero, Nom, Couleur,EstActif, DateCreation, EstSupprime)
+                    VALUES (@Numero, @Nom, @Couleur, @EstActif, @DateCreation, 0);
                     SELECT last_insert_rowid();";
 
                 using (SQLiteCommand command = new SQLiteCommand(query, connection))
@@ -79,7 +79,6 @@ namespace Fumoblilite.SQL.Repositories
                     command.Parameters.AddWithValue("@Numero", ligne.Numero);
                     command.Parameters.AddWithValue("@Nom", ligne.Nom);
                     command.Parameters.AddWithValue("@Couleur", ligne.Couleur ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("@TypeTransport", ligne.TypeTransport);
                     command.Parameters.AddWithValue("@EstActif", ligne.EstActif);
                     command.Parameters.AddWithValue("@DateCreation", ligne.DateCreation);
 
@@ -98,7 +97,6 @@ namespace Fumoblilite.SQL.Repositories
                     SET Numero = @Numero, 
                         Nom = @Nom, 
                         Couleur = @Couleur, 
-                        TypeTransport = @TypeTransport, 
                         EstActif = @EstActif, 
                         DateModification = @DateModification
                     WHERE Id = @Id";
@@ -109,7 +107,6 @@ namespace Fumoblilite.SQL.Repositories
                     command.Parameters.AddWithValue("@Numero", ligne.Numero);
                     command.Parameters.AddWithValue("@Nom", ligne.Nom);
                     command.Parameters.AddWithValue("@Couleur", ligne.Couleur ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("@TypeTransport", ligne.TypeTransport);
                     command.Parameters.AddWithValue("@EstActif", ligne.EstActif);
                     command.Parameters.AddWithValue("@DateModification", ligne.DateModification ?? DateTime.Now);
 
@@ -141,7 +138,6 @@ namespace Fumoblilite.SQL.Repositories
                 Numero = reader["Numero"].ToString(),
                 Nom = reader["Nom"].ToString(),
                 Couleur = reader["Couleur"] != DBNull.Value ? reader["Couleur"].ToString() : null,
-                TypeTransport = reader["TypeTransport"].ToString(),
                 EstActif = Convert.ToBoolean(reader["EstActif"]),
                 DateCreation = Convert.ToDateTime(reader["DateCreation"]),
                 DateModification = reader["DateModification"] != DBNull.Value ? (DateTime?)Convert.ToDateTime(reader["DateModification"]) : null,

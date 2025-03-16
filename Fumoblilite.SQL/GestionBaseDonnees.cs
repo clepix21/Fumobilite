@@ -80,7 +80,6 @@ namespace Fumoblilite.SQL
                         Numero TEXT NOT NULL,
                         Nom TEXT NOT NULL,
                         Couleur TEXT,
-                        TypeTransport TEXT NOT NULL,
                         EstActif INTEGER NOT NULL,
                         DateCreation TEXT NOT NULL,
                         DateModification TEXT,
@@ -180,11 +179,11 @@ namespace Fumoblilite.SQL
 
                 // Insérer quelques lignes de démonstration
                 string insertLignes = @"
-                    INSERT INTO Lignes (Numero, Nom, Couleur, TypeTransport, EstActif, DateCreation)
+                    INSERT INTO Lignes (Numero, Nom, Couleur, EstActif, DateCreation)
                     VALUES 
-                    ('1', 'Ligne 1', '#FF0000', 'Bus', 1, datetime('now')),
-                    ('2', 'Ligne 2', '#00FF00', 'Bus', 1, datetime('now')),
-                    ('A', 'Ligne A', '#0000FF', 'Métro', 1, datetime('now'));";
+                    ('1', 'Ligne 1', '#FF0000', 1, datetime('now')),
+                    ('2', 'Ligne 2', '#00FF00', 1, datetime('now')),
+                    ('A', 'Ligne A', '#0000FF', 1, datetime('now'));";
 
                 using (SQLiteCommand command = new SQLiteCommand(insertLignes, connection))
                 {
