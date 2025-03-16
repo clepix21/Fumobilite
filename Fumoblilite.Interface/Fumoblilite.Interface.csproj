@@ -57,6 +57,10 @@
     <Compile Include="Forms\FormConnexion.Designer.cs">
       <DependentUpon>FormConnexion.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\FormPrincipal.Designer.cs">
+      <SubType>Form</SubType>
+      <DependentUpon>FormPrincipal.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\FormPrincipal.cs">
       <SubType>Form</SubType>
     </Compile>
