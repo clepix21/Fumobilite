@@ -72,6 +72,15 @@
     <Compile Include="UserControls\UCGestionArrets.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="UserControls\UCGestionHoraires.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UCGestionLignes.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UCGestionUtilisateurs.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UserControls\UCRechercheItineraire.cs">
       <SubType>UserControl</SubType>
     </Compile>

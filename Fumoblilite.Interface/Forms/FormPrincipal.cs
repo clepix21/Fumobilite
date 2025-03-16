@@ -2,6 +2,7 @@ using System;
 using System.Windows.Forms;
 using Fumoblilite.Systeme.Modeles;
 using Fumoblilite.Interface.UserControls;
+using GestionTransport.Interface.UserControls;
 
 namespace Fumoblilite.Interface.Forms
 {
@@ -97,7 +98,7 @@ namespace Fumoblilite.Interface.Forms
             // 
             // menuItemLignes
             // 
-            /*this.menuItemLignes.Name = "menuItemLignes";
+            this.menuItemLignes.Name = "menuItemLignes";
             this.menuItemLignes.Size = new System.Drawing.Size(180, 22);
             this.menuItemLignes.Text = "Lignes";
             this.menuItemLignes.Click += new System.EventHandler(this.menuItemLignes_Click);
@@ -114,7 +115,7 @@ namespace Fumoblilite.Interface.Forms
             this.menuItemUtilisateurs.Name = "menuItemUtilisateurs";
             this.menuItemUtilisateurs.Size = new System.Drawing.Size(180, 22);
             this.menuItemUtilisateurs.Text = "Utilisateurs";
-            this.menuItemUtilisateurs.Click += new System.EventHandler(this.menuItemUtilisateurs_Click);*/
+            this.menuItemUtilisateurs.Click += new System.EventHandler(this.menuItemUtilisateurs_Click);
             // 
             // menuConsultation
             // 
@@ -269,7 +270,7 @@ namespace Fumoblilite.Interface.Forms
             ucGestionArrets.Dock = DockStyle.Fill;
             panelContenu.Controls.Add(ucGestionArrets);
         }
-        /*
+        
         private void menuItemLignes_Click(object sender, EventArgs e)
         {
             panelContenu.Controls.Clear();
@@ -293,7 +294,7 @@ namespace Fumoblilite.Interface.Forms
             ucGestionUtilisateurs.Dock = DockStyle.Fill;
             panelContenu.Controls.Add(ucGestionUtilisateurs);
         }
-        */
+        
         private void menuItemReseau_Click(object sender, EventArgs e)
         {
             panelContenu.Controls.Clear();
