@@ -10,6 +10,7 @@ namespace Fumoblilite.Interface.Forms
     {
         private readonly string _connectionString;
         private readonly ServiceAuthentification _serviceAuthentification;
+        public Utilisateur UtilisateurConnecte { get; private set; }
 
         public FormConnexion(string connectionString)
         {
@@ -32,14 +33,12 @@ namespace Fumoblilite.Interface.Forms
             }
 
             Utilisateur utilisateur = _serviceAuthentification.Authentifier(nomUtilisateur, motDePasse);
-
             if (utilisateur != null)
             {
-                this.Hide();
-                FormPrincipal formPrincipal = new FormPrincipal(_connectionString, utilisateur);
-                formPrincipal.FormClosed += (s, args) => this.Close();
-                formPrincipal.Show();
+                UtilisateurConnecte = utilisateur;
+                this.Close();
             }
+
             else
             {
                 MessageBox.Show("Nom d'utilisateur ou mot de passe incorrect.", "Erreur de connexion", MessageBoxButtons.OK, MessageBoxIcon.Error);

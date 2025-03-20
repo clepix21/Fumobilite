@@ -34,8 +34,7 @@ namespace Fumoblilite.Interface
                     MessageBoxIcon.Information);
             }
 
-            // Démarrer l'application avec le formulaire de connexion
-            Application.Run(new FormConnexion(gestionBD.ConnectionString));
+            Application.Run(new FormPrincipal(gestionBD.ConnectionString, null));
         }
     }
 }

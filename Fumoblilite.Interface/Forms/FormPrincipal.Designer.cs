@@ -81,6 +81,7 @@ namespace Fumoblilite.Interface.Forms
             this.menuItemConnexion.Name = "menuItemConnexion";
             this.menuItemConnexion.Size = new System.Drawing.Size(224, 26);
             this.menuItemConnexion.Text = "Connexion";
+            this.menuItemConnexion.Click += new System.EventHandler(this.menuItemConnexion_Click);
             // 
             // menuGestion
             // 
