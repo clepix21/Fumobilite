@@ -19,7 +19,7 @@ namespace Fumoblilite.Interface.Forms
         }
 
         private void FormPrincipal_Load(object sender, EventArgs e)
-        {
+        { 
             if (_utilisateurConnecte != null)
             {
                 lblStatusUtilisateur.Text = $"Utilisateur connecté: {_utilisateurConnecte.Prenom} {_utilisateurConnecte.Nom} ({_utilisateurConnecte.Role})";
