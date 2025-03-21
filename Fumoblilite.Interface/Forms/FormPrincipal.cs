@@ -36,16 +36,16 @@ namespace Fumoblilite.Interface.Forms
                 menuItemUtilisateurs.Visible = false;
             }
 
-            AfficherAccueil();
+            AfficherReseau();
         }
 
 
-        private void AfficherAccueil()
+        private void AfficherReseau()
         {
             panelContenu.Controls.Clear();
-            UCAccueil ucAccueil = new UCAccueil();
-            ucAccueil.Dock = DockStyle.Fill;
-            panelContenu.Controls.Add(ucAccueil);
+            UCConsultationReseau ucConsultationReseau = new UCConsultationReseau(_connectionString);
+            ucConsultationReseau.Dock = DockStyle.Fill;
+            panelContenu.Controls.Add(ucConsultationReseau);
         }
 
         private void menuItemConnexion_Click(object sender, EventArgs e)
