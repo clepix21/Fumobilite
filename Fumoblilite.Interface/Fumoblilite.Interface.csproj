@@ -92,6 +92,10 @@
     <Compile Include="UserControls\UCConsultationReseau.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="UserControls\UCGestionArrets.Designer.cs">
+      <SubType>UserControl</SubType>
+      <DependentUpon>UCGestionArrets.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UCGestionArrets.cs">
       <SubType>UserControl</SubType>
     </Compile>
