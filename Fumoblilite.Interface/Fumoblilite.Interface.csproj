@@ -76,6 +76,10 @@
       <SubType>UserControl</SubType>
       <DependentUpon>UCConsultationHoraires.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UCConsultationLigne.Designer.cs">
+      <SubType>UserControl</SubType>
+      <DependentUpon>UCConsultationLigne.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UCConsultationReseau.Designer.cs">
       <DependentUpon>UCConsultationReseau.cs</DependentUpon>
     </Compile>
