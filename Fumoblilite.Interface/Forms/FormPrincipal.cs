@@ -38,6 +38,7 @@ namespace Fumoblilite.Interface.Forms
                 menuItemArrets.Visible = false;
                 menuItemLignes.Visible = false;
                 menuItemHoraires.Visible = false;
+                menuGestion.Visible = false; 
             }
 
             AfficherReseau();
