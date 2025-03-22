@@ -102,6 +102,10 @@
     <Compile Include="UserControls\UCGestionHoraires.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="UserControls\UCGestionLignes.Designer.cs">
+      <SubType>UserControl</SubType>
+      <DependentUpon>UCGestionLignes.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UCGestionLignes.cs">
       <SubType>UserControl</SubType>
     </Compile>
