@@ -15,6 +15,7 @@ namespace Fumoblilite.Interface.Forms
             InitializeComponent();
             _connectionString = connectionString;
             _utilisateurConnecte = utilisateur;
+            this.FormClosing += FormPrincipal_FormClosing;
         }
 
         private void FormPrincipal_Load(object sender, EventArgs e)
@@ -43,6 +44,11 @@ namespace Fumoblilite.Interface.Forms
             }
 
             AfficherReseau();
+        }
+
+        private void FormPrincipal_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
         }
 
 
