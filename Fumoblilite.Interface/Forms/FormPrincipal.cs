@@ -19,7 +19,7 @@ namespace Fumoblilite.Interface.Forms
         }
 
         private void FormPrincipal_Load(object sender, EventArgs e)
-        { 
+        {
             if (_utilisateurConnecte != null)
             {
                 lblStatusUtilisateur.Text = $"Utilisateur connecté: {_utilisateurConnecte.Prenom} {_utilisateurConnecte.Nom} ({_utilisateurConnecte.Role})";
@@ -31,9 +31,13 @@ namespace Fumoblilite.Interface.Forms
                 menuItemDeconnexion.Visible = false;
             }
 
+            // Masquer les éléments de menu de gestion pour les utilisateurs non administrateurs
             if (_utilisateurConnecte == null || _utilisateurConnecte.Role != "Admin")
             {
                 menuItemUtilisateurs.Visible = false;
+                menuItemArrets.Visible = false;
+                menuItemLignes.Visible = false;
+                menuItemHoraires.Visible = false;
             }
 
             AfficherReseau();
