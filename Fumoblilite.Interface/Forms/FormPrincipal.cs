@@ -65,9 +65,9 @@ namespace Fumoblilite.Interface.Forms
 
         private void menuItemDeconnexion_Click(object sender, EventArgs e)
         {
-            this.Close();
-            FormConnexion formConnexion = new FormConnexion(_connectionString);
-            formConnexion.Show();
+            this.Hide();
+            FormPrincipal formPrincipal = new FormPrincipal(_connectionString, null);
+            formPrincipal.Show();
         }
 
         private void menuItemQuitter_Click(object sender, EventArgs e)
