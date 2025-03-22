@@ -24,11 +24,13 @@ namespace Fumoblilite.Interface.Forms
             {
                 lblStatusUtilisateur.Text = $"Utilisateur connecté: {_utilisateurConnecte.Prenom} {_utilisateurConnecte.Nom} ({_utilisateurConnecte.Role})";
                 menuItemDeconnexion.Visible = true;
+                menuItemConnexion.Visible = false; // Masquer le bouton de connexion
             }
             else
             {
                 lblStatusUtilisateur.Text = "Mode invité";
                 menuItemDeconnexion.Visible = false;
+                menuItemConnexion.Visible = true; // Afficher le bouton de connexion
             }
 
             // Masquer les éléments de menu de gestion pour les utilisateurs non administrateurs
@@ -38,7 +40,7 @@ namespace Fumoblilite.Interface.Forms
                 menuItemArrets.Visible = false;
                 menuItemLignes.Visible = false;
                 menuItemHoraires.Visible = false;
-                menuGestion.Visible = false; 
+                menuGestion.Visible = false;
             }
 
             AfficherReseau();
