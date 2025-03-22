@@ -48,12 +48,15 @@ namespace Fumoblilite.Interface.Forms
 
         private void FormPrincipal_FormClosing(object sender, FormClosingEventArgs e)
         {
-            var message = MessageBox.Show("Êtes-vous sûr de vouloir quitter?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-            if (message == DialogResult.No) {
-                e.Cancel = true;
-            }
-            else {
-                Application.Exit();
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                var message = MessageBox.Show("Êtes-vous sûr de vouloir quitter?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (message == DialogResult.No) {
+                    e.Cancel = true;
+                }
+                else {
+                    Application.Exit();
+                }
             }
         }
 
