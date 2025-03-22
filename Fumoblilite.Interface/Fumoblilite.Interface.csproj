@@ -99,6 +99,10 @@
     <Compile Include="UserControls\UCGestionArrets.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="UserControls\UCGestionHoraires.Designer.cs">
+      <SubType>UserControl</SubType>
+      <DependentUpon>UCGestionHoraires.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UCGestionHoraires.cs">
       <SubType>UserControl</SubType>
     </Compile>
