@@ -8,7 +8,7 @@ using Fumoblilite.SQL.Repositories;
 using Fumoblilite.Systeme.Interfaces;
 using System.Linq;
 
-namespace GestionTransport.Interface.UserControls
+namespace Fumoblilite.Interface.UserControls
 {
     public partial class UCGestionLignes : UserControl
     {

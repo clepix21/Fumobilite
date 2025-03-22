@@ -2,7 +2,6 @@ using System;
 using System.Windows.Forms;
 using Fumoblilite.Systeme.Modeles;
 using Fumoblilite.Interface.UserControls;
-using GestionTransport.Interface.UserControls;
 
 namespace Fumoblilite.Interface.Forms
 {

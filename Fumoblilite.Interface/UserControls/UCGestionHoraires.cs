@@ -7,7 +7,7 @@ using Fumoblilite.Systeme.Services;
 using Fumoblilite.SQL.Repositories;
 using Fumoblilite.Systeme.Interfaces;
 
-namespace GestionTransport.Interface.UserControls
+namespace Fumoblilite.Interface.UserControls
 {
     public partial class UCGestionHoraires : UserControl
     {
@@ -21,13 +21,13 @@ namespace GestionTransport.Interface.UserControls
         {
             InitializeComponent();
             _connectionString = connectionString;
-            
+
             // Initialisation des repositories
             IRepositoryHoraire repositoryHoraire = new RepositoryHoraire(_connectionString);
             IRepositoryLigne repositoryLigne = new RepositoryLigne(_connectionString);
             IRepositoryArret repositoryArret = new RepositoryArret(_connectionString);
             IRepositoryArretLigne repositoryArretLigne = new RepositoryArretLigne(_connectionString, repositoryArret);
-            
+
             // Initialisation des services
             _serviceHoraire = new ServiceHoraire(repositoryHoraire);
             _serviceLigne = new ServiceLigne(repositoryLigne, repositoryArretLigne);
@@ -76,7 +76,7 @@ namespace GestionTransport.Interface.UserControls
             // 
             // grpFiltres
             // 
-            this.grpFiltres.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.grpFiltres.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grpFiltres.Controls.Add(this.btnAfficher);
             this.grpFiltres.Controls.Add(this.cboJour);
@@ -140,8 +140,8 @@ namespace GestionTransport.Interface.UserControls
             // 
             this.dgvHoraires.AllowUserToAddRows = false;
             this.dgvHoraires.AllowUserToDeleteRows = false;
-            this.dgvHoraires.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.dgvHoraires.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgvHoraires.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvHoraires.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -156,7 +156,7 @@ namespace GestionTransport.Interface.UserControls
             // 
             // grpDetails
             // 
-            this.grpDetails.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.grpDetails.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.grpDetails.Controls.Add(this.chkEstActif);
             this.grpDetails.Controls.Add(this.dtpHeure);
@@ -369,15 +369,15 @@ namespace GestionTransport.Interface.UserControls
             try
             {
                 List<Ligne> lignes = _serviceLigne.ObtenirToutes();
-                
+
                 // Configuration du ComboBox de filtre
                 var lignesFiltres = new List<Ligne>(lignes);
                 lignesFiltres.Insert(0, new Ligne { Id = 0, Numero = "Toutes", Nom = "Toutes les lignes" });
-                
+
                 cboLigne.DisplayMember = "Nom";
                 cboLigne.ValueMember = "Id";
                 cboLigne.DataSource = lignesFiltres;
-                
+
                 // Configuration du ComboBox de détail
                 cboLigneDetail.DisplayMember = "Nom";
                 cboLigneDetail.ValueMember = "Id";
@@ -404,17 +404,17 @@ namespace GestionTransport.Interface.UserControls
                     new KeyValuePair<DayOfWeek, string>(DayOfWeek.Saturday, "Samedi"),
                     new KeyValuePair<DayOfWeek, string>(DayOfWeek.Sunday, "Dimanche")
                 };
-                
+
                 // Configuration du ComboBox de filtre
                 cboJour.DisplayMember = "Value";
                 cboJour.ValueMember = "Key";
                 cboJour.DataSource = new List<KeyValuePair<DayOfWeek, string>>(jours);
-                
+
                 // Configuration du ComboBox de détail
                 cboJourDetail.DisplayMember = "Value";
                 cboJourDetail.ValueMember = "Key";
                 cboJourDetail.DataSource = new List<KeyValuePair<DayOfWeek, string>>(jours);
-                
+
                 // Sélectionner le jour actuel
                 cboJour.SelectedValue = DateTime.Today.DayOfWeek;
                 cboJourDetail.SelectedValue = DateTime.Today.DayOfWeek;
@@ -434,7 +434,7 @@ namespace GestionTransport.Interface.UserControls
                     cboArret.DataSource = null;
                     return;
                 }
-                
+
                 // Récupérer les arrêts de la ligne
                 var ligne = _serviceLigne.ObtenirParId(ligneId, true);
                 if (ligne == null || ligne.Arrets == null || ligne.Arrets.Count == 0)
@@ -442,10 +442,10 @@ namespace GestionTransport.Interface.UserControls
                     cboArret.DataSource = null;
                     return;
                 }
-                
+
                 // Récupérer les informations des arrêts
                 var arrets = _serviceArret.ObtenirTous().ToDictionary(a => a.Id);
-                
+
                 // Préparer les données pour l'affichage
                 var arretsAffichage = ligne.Arrets
                     .Where(al => arrets.ContainsKey(al.ArretId))
@@ -456,7 +456,7 @@ namespace GestionTransport.Interface.UserControls
                     })
                     .OrderBy(a => a.Nom)
                     .ToList();
-                
+
                 cboArret.DisplayMember = "Nom";
                 cboArret.ValueMember = "Id";
                 cboArret.DataSource = arretsAffichage;
@@ -473,9 +473,9 @@ namespace GestionTransport.Interface.UserControls
             {
                 int ligneId = (int)cboLigne.SelectedValue;
                 DayOfWeek jour = (DayOfWeek)cboJour.SelectedValue;
-                
+
                 List<Horaire> horaires;
-                
+
                 if (ligneId == 0) // Toutes les lignes
                 {
                     horaires = _serviceHoraire.ObtenirParJour(jour);
@@ -484,18 +484,18 @@ namespace GestionTransport.Interface.UserControls
                 {
                     horaires = _serviceHoraire.ObtenirParLigneEtJour(ligneId, jour);
                 }
-                
+
                 if (horaires.Count == 0)
                 {
                     MessageBox.Show("Aucun horaire trouvé pour les critères spécifiés.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     dgvHoraires.DataSource = null;
                     return;
                 }
-                
+
                 // Récupérer les informations des lignes et des arrêts pour l'affichage
                 var lignes = _serviceLigne.ObtenirToutes().ToDictionary(l => l.Id);
                 var arrets = _serviceArret.ObtenirTous().ToDictionary(a => a.Id);
-                
+
                 // Préparer les données pour l'affichage
                 var horairesAffichage = horaires.Select(h => new
                 {
@@ -507,9 +507,9 @@ namespace GestionTransport.Interface.UserControls
                     Actif = h.EstActif ? "Oui" : "Non",
                     HoraireComplet = h // Pour pouvoir accéder à l'objet complet
                 }).OrderBy(h => h.Ligne).ThenBy(h => h.Arrêt).ThenBy(h => h.Heure).ToList();
-                
+
                 dgvHoraires.DataSource = horairesAffichage;
-                
+
                 // Masquer la colonne de l'objet complet
                 dgvHoraires.Columns["HoraireComplet"].Visible = false;
             }
@@ -528,7 +528,7 @@ namespace GestionTransport.Interface.UserControls
                     // Récupérer l'horaire sélectionné
                     dynamic row = dgvHoraires.SelectedRows[0].DataBoundItem;
                     _horaireSelectionne = row.HoraireComplet;
-                    
+
                     if (_horaireSelectionne != null)
                     {
                         txtId.Text = _horaireSelectionne.Id.ToString();
@@ -649,7 +649,7 @@ namespace GestionTransport.Interface.UserControls
                         if (resultat)
                         {
                             MessageBox.Show("Horaire supprimé avec succès.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            
+
                             // Rafraîchir l'affichage
                             btnAfficher_Click(sender, e);
                             ViderChamps();
@@ -668,4 +668,3 @@ namespace GestionTransport.Interface.UserControls
         }
     }
 }
-
