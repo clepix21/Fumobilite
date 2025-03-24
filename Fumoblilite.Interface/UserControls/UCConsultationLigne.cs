@@ -38,6 +38,7 @@ namespace Fumoblilite.Interface.UserControls
 
         private void UCConsultationLigne_Load(object sender, EventArgs e)
         {
+            // Charger les lignes et les jours lors du chargement du contrôle
             ChargerLignes();
             ChargerJours();
         }
@@ -46,6 +47,7 @@ namespace Fumoblilite.Interface.UserControls
         {
             try
             {
+                // Obtenir toutes les lignes et les assigner à la source de données du comboBox
                 List<Ligne> lignes = _serviceLigne.ObtenirToutes();
 
                 cboLigne.DisplayMember = "Nom";
@@ -54,6 +56,7 @@ namespace Fumoblilite.Interface.UserControls
             }
             catch (Exception ex)
             {
+                // Afficher un message d'erreur en cas d'exception
                 MessageBox.Show($"Erreur lors du chargement des lignes : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -64,15 +67,15 @@ namespace Fumoblilite.Interface.UserControls
             {
                 // Créer une liste des jours de la semaine
                 var jours = new List<KeyValuePair<DayOfWeek, string>>
-                {
-                    new KeyValuePair<DayOfWeek, string>(DayOfWeek.Monday, "Lundi"),
-                    new KeyValuePair<DayOfWeek, string>(DayOfWeek.Tuesday, "Mardi"),
-                    new KeyValuePair<DayOfWeek, string>(DayOfWeek.Wednesday, "Mercredi"),
-                    new KeyValuePair<DayOfWeek, string>(DayOfWeek.Thursday, "Jeudi"),
-                    new KeyValuePair<DayOfWeek, string>(DayOfWeek.Friday, "Vendredi"),
-                    new KeyValuePair<DayOfWeek, string>(DayOfWeek.Saturday, "Samedi"),
-                    new KeyValuePair<DayOfWeek, string>(DayOfWeek.Sunday, "Dimanche")
-                };
+                    {
+                        new KeyValuePair<DayOfWeek, string>(DayOfWeek.Monday, "Lundi"),
+                        new KeyValuePair<DayOfWeek, string>(DayOfWeek.Tuesday, "Mardi"),
+                        new KeyValuePair<DayOfWeek, string>(DayOfWeek.Wednesday, "Mercredi"),
+                        new KeyValuePair<DayOfWeek, string>(DayOfWeek.Thursday, "Jeudi"),
+                        new KeyValuePair<DayOfWeek, string>(DayOfWeek.Friday, "Vendredi"),
+                        new KeyValuePair<DayOfWeek, string>(DayOfWeek.Saturday, "Samedi"),
+                        new KeyValuePair<DayOfWeek, string>(DayOfWeek.Sunday, "Dimanche")
+                    };
 
                 cboJour.DisplayMember = "Value";
                 cboJour.ValueMember = "Key";
@@ -83,6 +86,7 @@ namespace Fumoblilite.Interface.UserControls
             }
             catch (Exception ex)
             {
+                // Afficher un message d'erreur en cas d'exception
                 MessageBox.Show($"Erreur lors du chargement des jours : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -91,29 +95,31 @@ namespace Fumoblilite.Interface.UserControls
         {
             if (cboLigne.SelectedItem == null)
             {
+                // Afficher un message d'avertissement si aucune ligne n'est sélectionnée
                 MessageBox.Show("Veuillez sélectionner une ligne.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             try
             {
+                // Obtenir l'ID de la ligne sélectionnée et charger ses détails
                 int ligneId = (int)cboLigne.SelectedValue;
                 _ligneSelectionnee = _serviceLigne.ObtenirParId(ligneId, true);
 
                 if (_ligneSelectionnee == null)
                 {
+                    // Afficher un message d'erreur si la ligne sélectionnée n'existe pas
                     MessageBox.Show("La ligne sélectionnée n'existe pas.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
-                // Afficher les arrêts de la ligne
+                // Afficher les arrêts et les horaires de la ligne sélectionnée
                 AfficherArrets();
-
-                // Afficher les horaires de la ligne pour le jour sélectionné
                 AfficherHoraires();
             }
             catch (Exception ex)
             {
+                // Afficher un message d'erreur en cas d'exception
                 MessageBox.Show($"Erreur lors de l'affichage des détails de la ligne : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -124,6 +130,7 @@ namespace Fumoblilite.Interface.UserControls
             {
                 if (_ligneSelectionnee == null || _ligneSelectionnee.Arrets == null)
                 {
+                    // Si aucune ligne n'est sélectionnée ou si elle n'a pas d'arrêts, vider la source de données du DataGridView
                     dgvArrets.DataSource = null;
                     return;
                 }
@@ -142,10 +149,12 @@ namespace Fumoblilite.Interface.UserControls
                     Accessible = arrets.ContainsKey(al.ArretId) && arrets[al.ArretId].EstAccessible ? "Oui" : "Non"
                 }).OrderBy(a => a.Ordre).ToList();
 
+                // Assigner les données préparées à la source de données du DataGridView
                 dgvArrets.DataSource = arretsAffichage;
             }
             catch (Exception ex)
             {
+                // Afficher un message d'erreur en cas d'exception
                 MessageBox.Show($"Erreur lors de l'affichage des arrêts : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -156,10 +165,12 @@ namespace Fumoblilite.Interface.UserControls
             {
                 if (_ligneSelectionnee == null)
                 {
+                    // Si aucune ligne n'est sélectionnée, vider la source de données du DataGridView
                     dgvHoraires.DataSource = null;
                     return;
                 }
 
+                // Obtenir le jour sélectionné
                 DayOfWeek jour = (DayOfWeek)cboJour.SelectedValue;
 
                 // Récupérer les horaires de la ligne pour le jour sélectionné
@@ -167,6 +178,7 @@ namespace Fumoblilite.Interface.UserControls
 
                 if (horaires.Count == 0)
                 {
+                    // Si aucun horaire n'est trouvé, vider la source de données du DataGridView
                     dgvHoraires.DataSource = null;
                     return;
                 }
@@ -182,10 +194,12 @@ namespace Fumoblilite.Interface.UserControls
                     Actif = h.EstActif ? "Oui" : "Non"
                 }).OrderBy(h => h.Arrêt).ThenBy(h => h.Heure).ToList();
 
+                // Assigner les données préparées à la source de données du DataGridView
                 dgvHoraires.DataSource = horairesAffichage;
             }
             catch (Exception ex)
             {
+                // Afficher un message d'erreur en cas d'exception
                 MessageBox.Show($"Erreur lors de l'affichage des horaires : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
@@ -194,6 +208,7 @@ namespace Fumoblilite.Interface.UserControls
         {
             if (_ligneSelectionnee != null)
             {
+                // Afficher les horaires lorsque le jour sélectionné change
                 AfficherHoraires();
             }
         }
