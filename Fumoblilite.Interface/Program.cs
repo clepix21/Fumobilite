@@ -24,7 +24,8 @@ namespace Fumoblilite.Interface
             // Initialisation de la base de données
             GestionBaseDonnees gestionBD = new GestionBaseDonnees(cheminBaseDonnees);
             bool nouvelleBaseDonnees = gestionBD.CreerBaseDonneesSiNonExistante();
-            //gestionBD.CreerTables();
+            //gestionBD.InsererDonneesInitiales();
+
 
             if (nouvelleBaseDonnees)
             {
