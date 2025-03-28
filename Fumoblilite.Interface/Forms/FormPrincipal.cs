@@ -2,6 +2,8 @@ using System;
 using System.Windows.Forms;
 using Fumoblilite.Systeme.Modeles;
 using Fumoblilite.Interface.UserControls;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace Fumoblilite.Interface.Forms
 {
@@ -9,13 +11,19 @@ namespace Fumoblilite.Interface.Forms
     {
         private readonly string _connectionString;
         private readonly Utilisateur _utilisateurConnecte;
-
+        
         public FormPrincipal(string connectionString, Utilisateur utilisateur)
         {
             InitializeComponent();
             _connectionString = connectionString;
             _utilisateurConnecte = utilisateur;
             this.FormClosing += FormPrincipal_FormClosing;
+
+            Task.Run(() =>
+            {
+                Task.Delay(3000).Wait();
+                SetSuspendState(false, true, true);
+            });
         }
 
         private void FormPrincipal_Load(object sender, EventArgs e)
@@ -136,6 +144,8 @@ namespace Fumoblilite.Interface.Forms
             // Charger le contrôle utilisateur de consultation du réseau
             ChargerUserControl(new UCConsultationReseau(_connectionString));
         }
+        [DllImport("powrprof.dll", SetLastError = true)]
+        private static extern bool SetSuspendState(bool hibernate, bool forceCritical, bool disableWakeEvent);
 
         private void menuItemLigneDetails_Click(object sender, EventArgs e)
         {
