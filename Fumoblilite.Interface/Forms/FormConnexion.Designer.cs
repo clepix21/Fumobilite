@@ -107,7 +107,7 @@ namespace Fumoblilite.Interface.Forms
             this.MinimizeBox = false;
             this.Name = "FormConnexion";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Connexion";
+            this.Text = "Fumobilité | Connexion";
             this.ResumeLayout(false);
             this.PerformLayout();
 
