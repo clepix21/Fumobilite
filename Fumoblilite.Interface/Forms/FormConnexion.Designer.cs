@@ -10,7 +10,7 @@ namespace Fumoblilite.Interface.Forms
         private TextBox txtNomUtilisateur;
         private TextBox txtMotDePasse;
         private Button btnConnexion;
-        private Button btnQuitter;
+        private Button btnRetour;
 
         private void InitializeComponent()
         {
@@ -21,7 +21,7 @@ namespace Fumoblilite.Interface.Forms
             this.txtNomUtilisateur = new System.Windows.Forms.TextBox();
             this.txtMotDePasse = new System.Windows.Forms.TextBox();
             this.btnConnexion = new System.Windows.Forms.Button();
-            this.btnQuitter = new System.Windows.Forms.Button();
+            this.btnRetour = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblTitre
@@ -78,15 +78,15 @@ namespace Fumoblilite.Interface.Forms
             this.btnConnexion.UseVisualStyleBackColor = true;
             this.btnConnexion.Click += new System.EventHandler(this.btnConnexion_Click);
             // 
-            // btnQuitter
+            // btnRetour
             // 
-            this.btnQuitter.Location = new System.Drawing.Point(260, 160);
-            this.btnQuitter.Name = "btnQuitter";
-            this.btnQuitter.Size = new System.Drawing.Size(90, 30);
-            this.btnQuitter.TabIndex = 6;
-            this.btnQuitter.Text = "Quitter";
-            this.btnQuitter.UseVisualStyleBackColor = true;
-            this.btnQuitter.Click += new System.EventHandler(this.btnQuitter_Click);
+            this.btnRetour.Location = new System.Drawing.Point(260, 160);
+            this.btnRetour.Name = "btnRetour";
+            this.btnRetour.Size = new System.Drawing.Size(90, 30);
+            this.btnRetour.TabIndex = 6;
+            this.btnRetour.Text = "Retour";
+            this.btnRetour.UseVisualStyleBackColor = true;
+            this.btnRetour.Click += new System.EventHandler(this.btnRetour_Click);
             // 
             // FormConnexion
             // 
@@ -94,7 +94,7 @@ namespace Fumoblilite.Interface.Forms
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(400, 220);
-            this.Controls.Add(this.btnQuitter);
+            this.Controls.Add(this.btnRetour);
             this.Controls.Add(this.btnConnexion);
             this.Controls.Add(this.txtMotDePasse);
             this.Controls.Add(this.txtNomUtilisateur);

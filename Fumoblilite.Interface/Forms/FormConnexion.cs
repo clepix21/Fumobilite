@@ -52,10 +52,11 @@ namespace Fumoblilite.Interface.Forms
             }
         }
 
-        // Gestionnaire d'événements pour le clic sur le bouton quitter
-        private void btnQuitter_Click(object sender, EventArgs e)
+        // Gestionnaire d'événements pour le clic sur le bouton retour
+        private void btnRetour_Click(object sender, EventArgs e)
         {
-            Application.Exit(); // Quitter l'application
+            this.DialogResult = DialogResult.Cancel;
+            this.Close();
         }
     }
 }
