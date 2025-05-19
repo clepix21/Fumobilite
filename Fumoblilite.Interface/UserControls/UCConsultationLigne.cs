@@ -18,6 +18,17 @@ namespace Fumoblilite.Interface.UserControls
         private readonly ServiceHoraire _serviceHoraire;
 
         private Ligne _ligneSelectionnee;
+        private List<ArretLigne> _arretsAffiches;
+        private List<Horaire> _horairesAffiches;
+
+        // Couleurs pour le design moderne
+        private readonly Color _couleurPrimaire = Color.FromArgb(0, 120, 215);
+        private readonly Color _couleurSecondaire = Color.FromArgb(0, 99, 177);
+        private readonly Color _couleurAccent = Color.FromArgb(255, 185, 0);
+        private readonly Color _couleurTexte = Color.FromArgb(51, 51, 51);
+        private readonly Color _couleurFond = Color.White;
+        private readonly Color _couleurFondAlterne = Color.FromArgb(245, 245, 245);
+        private readonly Color _couleurBordure = Color.FromArgb(200, 200, 200);
 
         public UCConsultationLigne(string connectionString)
         {
@@ -38,9 +49,64 @@ namespace Fumoblilite.Interface.UserControls
 
         private void UCConsultationLigne_Load(object sender, EventArgs e)
         {
+            // Appliquer le style moderne
+            StyleModerne();
+
             // Charger les lignes et les jours lors du chargement du contrôle
             ChargerLignes();
             ChargerJours();
+        }
+
+        private void StyleModerne()
+        {
+            // Style du titre
+            lblTitre.ForeColor = _couleurPrimaire;
+            lblTitre.Font = new Font("Segoe UI", 16, FontStyle.Bold);
+
+            // Style des labels
+            lblLigne.Font = new Font("Segoe UI", 9);
+            lblLigne.ForeColor = _couleurTexte;
+
+            // Style du combobox
+            cboLigne.Font = new Font("Segoe UI", 9);
+            cboLigne.FlatStyle = FlatStyle.Flat;
+
+            // Style du bouton
+            btnAfficher.FlatStyle = FlatStyle.Flat;
+            btnAfficher.BackColor = _couleurPrimaire;
+            btnAfficher.ForeColor = Color.White;
+            btnAfficher.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+            btnAfficher.FlatAppearance.BorderSize = 0;
+            btnAfficher.Cursor = Cursors.Hand;
+
+            // Style des onglets
+            tabDetails.Font = new Font("Segoe UI", 9);
+
+            // Style des panneaux d'en-tête
+            pnlHeaderArrets.BackColor = _couleurPrimaire;
+            pnlHeaderHoraires.BackColor = _couleurPrimaire;
+
+            foreach (Label lbl in pnlHeaderArrets.Controls.OfType<Label>())
+            {
+                lbl.ForeColor = Color.White;
+                lbl.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+            }
+
+            foreach (Label lbl in pnlHeaderHoraires.Controls.OfType<Label>())
+            {
+                lbl.ForeColor = Color.White;
+                lbl.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+            }
+
+            // Style des FlowLayoutPanels
+            flpArrets.BackColor = _couleurFond;
+            flpHoraires.BackColor = _couleurFond;
+
+            // Style du combobox de jour
+            cboJour.Font = new Font("Segoe UI", 9);
+            cboJour.FlatStyle = FlatStyle.Flat;
+            lblJour.Font = new Font("Segoe UI", 9);
+            lblJour.ForeColor = _couleurTexte;
         }
 
         private void ChargerLignes()
@@ -128,10 +194,10 @@ namespace Fumoblilite.Interface.UserControls
         {
             try
             {
+                flpArrets.Controls.Clear();
+
                 if (_ligneSelectionnee == null || _ligneSelectionnee.Arrets == null)
                 {
-                    // Si aucune ligne n'est sélectionnée ou si elle n'a pas d'arrêts, vider la source de données du DataGridView
-                    dgvArrets.DataSource = null;
                     return;
                 }
 
@@ -139,18 +205,106 @@ namespace Fumoblilite.Interface.UserControls
                 var arrets = _serviceArret.ObtenirTous().ToDictionary(a => a.Id);
 
                 // Préparer les données pour l'affichage
-                var arretsAffichage = _ligneSelectionnee.Arrets.Select(al => new
-                {
-                    Ordre = al.Ordre,
-                    Nom = arrets.ContainsKey(al.ArretId) ? arrets[al.ArretId].Nom : $"Arrêt {al.ArretId}",
-                    Adresse = arrets.ContainsKey(al.ArretId) ? arrets[al.ArretId].Adresse : "",
-                    TempsArret = $"{al.TempsArretMinutes} min",
-                    TempsTrajet = $"{al.TempsTrajetSuivantMinutes} min",
-                    Accessible = arrets.ContainsKey(al.ArretId) && arrets[al.ArretId].EstAccessible ? "Oui" : "Non"
-                }).OrderBy(a => a.Ordre).ToList();
+                _arretsAffiches = _ligneSelectionnee.Arrets.OrderBy(al => al.Ordre).ToList();
 
-                // Assigner les données préparées à la source de données du DataGridView
-                dgvArrets.DataSource = arretsAffichage;
+                bool alternerCouleur = false;
+
+                foreach (var arretLigne in _arretsAffiches)
+                {
+                    if (!arrets.ContainsKey(arretLigne.ArretId))
+                        continue;
+
+                    var arret = arrets[arretLigne.ArretId];
+
+                    // Créer un panel pour l'arrêt
+                    Panel pnlArret = new Panel
+                    {
+                        Width = flpArrets.Width - 25,
+                        Height = 80,
+                        Margin = new Padding(0, 0, 0, 5),
+                        BackColor = alternerCouleur ? _couleurFondAlterne : _couleurFond,
+                        Padding = new Padding(10)
+                    };
+
+                    // Ajouter une bordure colorée à gauche
+                    Panel pnlBordure = new Panel
+                    {
+                        Width = 5,
+                        Height = 80,
+                        BackColor = arret.EstAccessible ? _couleurPrimaire : _couleurBordure,
+                        Dock = DockStyle.Left
+                    };
+                    pnlArret.Controls.Add(pnlBordure);
+
+                    // Ajouter l'ordre
+                    Label lblOrdre = new Label
+                    {
+                        Text = arretLigne.Ordre.ToString(),
+                        Font = new Font("Segoe UI", 12, FontStyle.Bold),
+                        ForeColor = _couleurPrimaire,
+                        AutoSize = true,
+                        Location = new Point(15, 10)
+                    };
+                    pnlArret.Controls.Add(lblOrdre);
+
+                    // Ajouter le nom de l'arrêt
+                    Label lblNom = new Label
+                    {
+                        Text = arret.Nom,
+                        Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                        ForeColor = _couleurTexte,
+                        AutoSize = true,
+                        Location = new Point(50, 10)
+                    };
+                    pnlArret.Controls.Add(lblNom);
+
+                    // Ajouter l'adresse
+                    Label lblAdresse = new Label
+                    {
+                        Text = arret.Adresse,
+                        Font = new Font("Segoe UI", 8),
+                        ForeColor = Color.Gray,
+                        AutoSize = true,
+                        Location = new Point(50, 30)
+                    };
+                    pnlArret.Controls.Add(lblAdresse);
+
+                    // Ajouter les temps
+                    Label lblTemps = new Label
+                    {
+                        Text = $"Temps d'arrêt: {arretLigne.TempsArretMinutes} min | Temps vers prochain: {arretLigne.TempsTrajetSuivantMinutes} min",
+                        Font = new Font("Segoe UI", 8),
+                        ForeColor = Color.DarkGray,
+                        AutoSize = true,
+                        Location = new Point(50, 50)
+                    };
+                    pnlArret.Controls.Add(lblTemps);
+
+                    // Ajouter un indicateur d'accessibilité
+                    if (arret.EstAccessible)
+                    {
+                        Label lblAccessible = new Label
+                        {
+                            Text = "♿",
+                            Font = new Font("Segoe UI", 12),
+                            ForeColor = _couleurPrimaire,
+                            AutoSize = true,
+                            Location = new Point(pnlArret.Width - 40, 10)
+                        };
+                        pnlArret.Controls.Add(lblAccessible);
+                    }
+
+                    // Ajouter des effets de survol
+                    pnlArret.MouseEnter += (s, ev) => {
+                        ((Panel)s).BackColor = Color.FromArgb(240, 240, 250);
+                    };
+                    pnlArret.MouseLeave += (s, ev) => {
+                        ((Panel)s).BackColor = alternerCouleur ? _couleurFondAlterne : _couleurFond;
+                    };
+
+                    flpArrets.Controls.Add(pnlArret);
+                    alternerCouleur = !alternerCouleur;
+                }
             }
             catch (Exception ex)
             {
@@ -163,10 +317,10 @@ namespace Fumoblilite.Interface.UserControls
         {
             try
             {
+                flpHoraires.Controls.Clear();
+
                 if (_ligneSelectionnee == null)
                 {
-                    // Si aucune ligne n'est sélectionnée, vider la source de données du DataGridView
-                    dgvHoraires.DataSource = null;
                     return;
                 }
 
@@ -174,28 +328,118 @@ namespace Fumoblilite.Interface.UserControls
                 DayOfWeek jour = (DayOfWeek)cboJour.SelectedValue;
 
                 // Récupérer les horaires de la ligne pour le jour sélectionné
-                var horaires = _serviceHoraire.ObtenirParLigneEtJour(_ligneSelectionnee.Id, jour);
+                _horairesAffiches = _serviceHoraire.ObtenirParLigneEtJour(_ligneSelectionnee.Id, jour);
 
-                if (horaires.Count == 0)
+                if (_horairesAffiches.Count == 0)
                 {
-                    // Si aucun horaire n'est trouvé, vider la source de données du DataGridView
-                    dgvHoraires.DataSource = null;
+                    Label lblAucunHoraire = new Label
+                    {
+                        Text = "Aucun horaire disponible pour ce jour.",
+                        Font = new Font("Segoe UI", 10),
+                        ForeColor = _couleurTexte,
+                        AutoSize = true,
+                        Margin = new Padding(10)
+                    };
+                    flpHoraires.Controls.Add(lblAucunHoraire);
                     return;
                 }
 
                 // Récupérer les informations des arrêts
                 var arrets = _serviceArret.ObtenirTous().ToDictionary(a => a.Id);
 
-                // Préparer les données pour l'affichage
-                var horairesAffichage = horaires.Select(h => new
-                {
-                    Arrêt = arrets.ContainsKey(h.ArretId) ? arrets[h.ArretId].Nom : $"Arrêt {h.ArretId}",
-                    Heure = h.HeureDepart.ToString(@"hh\:mm"),
-                    Actif = h.EstActif ? "Oui" : "Non"
-                }).OrderBy(h => h.Arrêt).ThenBy(h => h.Heure).ToList();
+                // Regrouper les horaires par arrêt
+                var horairesParArret = _horairesAffiches
+                    .GroupBy(h => h.ArretId)
+                    .OrderBy(g => g.Key);
 
-                // Assigner les données préparées à la source de données du DataGridView
-                dgvHoraires.DataSource = horairesAffichage;
+                bool alternerCouleur = false;
+
+                foreach (var groupe in horairesParArret)
+                {
+                    if (!arrets.ContainsKey(groupe.Key))
+                        continue;
+
+                    var arret = arrets[groupe.Key];
+
+                    // Créer un panel pour l'arrêt
+                    Panel pnlArret = new Panel
+                    {
+                        Width = flpHoraires.Width - 25,
+                        Height = 100,
+                        Margin = new Padding(0, 0, 0, 10),
+                        BackColor = alternerCouleur ? _couleurFondAlterne : _couleurFond,
+                        Padding = new Padding(10)
+                    };
+
+                    // Ajouter une bordure colorée à gauche
+                    Panel pnlBordure = new Panel
+                    {
+                        Width = 5,
+                        Height = 100,
+                        BackColor = _couleurPrimaire,
+                        Dock = DockStyle.Left
+                    };
+                    pnlArret.Controls.Add(pnlBordure);
+
+                    // Ajouter le nom de l'arrêt
+                    Label lblNom = new Label
+                    {
+                        Text = arret.Nom,
+                        Font = new Font("Segoe UI", 11, FontStyle.Bold),
+                        ForeColor = _couleurTexte,
+                        AutoSize = true,
+                        Location = new Point(15, 10)
+                    };
+                    pnlArret.Controls.Add(lblNom);
+
+                    // Ajouter un FlowLayoutPanel pour les heures
+                    FlowLayoutPanel flpHeures = new FlowLayoutPanel
+                    {
+                        FlowDirection = FlowDirection.LeftToRight,
+                        WrapContents = true,
+                        Width = pnlArret.Width - 30,
+                        Height = 50,
+                        Location = new Point(15, 40),
+                        BackColor = Color.Transparent
+                    };
+                    pnlArret.Controls.Add(flpHeures);
+
+                    // Ajouter les heures
+                    foreach (var horaire in groupe.OrderBy(h => h.HeureDepart))
+                    {
+                        Panel pnlHeure = new Panel
+                        {
+                            Width = 70,
+                            Height = 30,
+                            Margin = new Padding(0, 0, 5, 5),
+                            BackColor = horaire.EstActif ? Color.FromArgb(240, 240, 250) : Color.FromArgb(245, 245, 245),
+                            BorderStyle = BorderStyle.FixedSingle
+                        };
+
+                        Label lblHeure = new Label
+                        {
+                            Text = horaire.HeureDepart.ToString(@"hh\:mm"),
+                            Font = new Font("Segoe UI", 9, horaire.EstActif ? FontStyle.Bold : FontStyle.Regular),
+                            ForeColor = horaire.EstActif ? _couleurPrimaire : Color.Gray,
+                            TextAlign = ContentAlignment.MiddleCenter,
+                            Dock = DockStyle.Fill
+                        };
+                        pnlHeure.Controls.Add(lblHeure);
+
+                        flpHeures.Controls.Add(pnlHeure);
+                    }
+
+                    // Ajouter des effets de survol
+                    pnlArret.MouseEnter += (s, ev) => {
+                        ((Panel)s).BackColor = Color.FromArgb(240, 240, 250);
+                    };
+                    pnlArret.MouseLeave += (s, ev) => {
+                        ((Panel)s).BackColor = alternerCouleur ? _couleurFondAlterne : _couleurFond;
+                    };
+
+                    flpHoraires.Controls.Add(pnlArret);
+                    alternerCouleur = !alternerCouleur;
+                }
             }
             catch (Exception ex)
             {
