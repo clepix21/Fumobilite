@@ -9,7 +9,8 @@ namespace Fumoblilite.Interface.UserControls
         private System.Windows.Forms.Label lblJour;
         private System.Windows.Forms.ComboBox cboJour;
         private System.Windows.Forms.Button btnAfficher;
-        private System.Windows.Forms.DataGridView dgvHoraires;
+        private System.Windows.Forms.FlowLayoutPanel flpHoraires;
+        private System.Windows.Forms.Panel pnlHeader;
 
         private void InitializeComponent()
         {
@@ -20,9 +21,9 @@ namespace Fumoblilite.Interface.UserControls
             this.lblJour = new System.Windows.Forms.Label();
             this.cboJour = new System.Windows.Forms.ComboBox();
             this.btnAfficher = new System.Windows.Forms.Button();
-            this.dgvHoraires = new System.Windows.Forms.DataGridView();
+            this.flpHoraires = new System.Windows.Forms.FlowLayoutPanel();
+            this.pnlHeader = new System.Windows.Forms.Panel();
             this.grpFiltres.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvHoraires)).BeginInit();
             this.SuspendLayout();
             // 
             // lblTitre
@@ -89,34 +90,49 @@ namespace Fumoblilite.Interface.UserControls
             // 
             // btnAfficher
             // 
+            this.btnAfficher.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(80)))));
+            this.btnAfficher.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAfficher.ForeColor = System.Drawing.Color.White;
             this.btnAfficher.Location = new System.Drawing.Point(600, 25);
             this.btnAfficher.Name = "btnAfficher";
             this.btnAfficher.Size = new System.Drawing.Size(120, 25);
             this.btnAfficher.TabIndex = 4;
             this.btnAfficher.Text = "Afficher";
-            this.btnAfficher.UseVisualStyleBackColor = true;
+            this.btnAfficher.UseVisualStyleBackColor = false;
             this.btnAfficher.Click += new System.EventHandler(this.btnAfficher_Click);
             // 
-            // dgvHoraires
+            // flpHoraires
             // 
-            this.dgvHoraires.AllowUserToAddRows = false;
-            this.dgvHoraires.AllowUserToDeleteRows = false;
-            this.dgvHoraires.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.flpHoraires.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvHoraires.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvHoraires.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvHoraires.Location = new System.Drawing.Point(15, 160);
-            this.dgvHoraires.Name = "dgvHoraires";
-            this.dgvHoraires.ReadOnly = true;
-            this.dgvHoraires.Size = new System.Drawing.Size(770, 275);
-            this.dgvHoraires.TabIndex = 2;
+            this.flpHoraires.AutoScroll = true;
+            this.flpHoraires.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(245)))), ((int)(((byte)(245)))), ((int)(((byte)(250)))));
+            this.flpHoraires.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flpHoraires.Location = new System.Drawing.Point(15, 160);
+            this.flpHoraires.Name = "flpHoraires";
+            this.flpHoraires.Padding = new System.Windows.Forms.Padding(10);
+            this.flpHoraires.Size = new System.Drawing.Size(770, 275);
+            this.flpHoraires.TabIndex = 2;
+            this.flpHoraires.WrapContents = false;
+            // 
+            // pnlHeader
+            // 
+            this.pnlHeader.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(80)))));
+            this.pnlHeader.Location = new System.Drawing.Point(15, 160);
+            this.pnlHeader.Name = "pnlHeader";
+            this.pnlHeader.Size = new System.Drawing.Size(770, 0);
+            this.pnlHeader.TabIndex = 3;
             // 
             // UCConsultationHoraires
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.dgvHoraires);
+            this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.pnlHeader);
+            this.Controls.Add(this.flpHoraires);
             this.Controls.Add(this.grpFiltres);
             this.Controls.Add(this.lblTitre);
             this.Name = "UCConsultationHoraires";
@@ -124,7 +140,6 @@ namespace Fumoblilite.Interface.UserControls
             this.Load += new System.EventHandler(this.UCConsultationHoraires_Load);
             this.grpFiltres.ResumeLayout(false);
             this.grpFiltres.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvHoraires)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
         }
