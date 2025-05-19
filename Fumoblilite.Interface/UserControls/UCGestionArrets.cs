@@ -1,6 +1,7 @@
 using System;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using System.Drawing;
 using Fumoblilite.Systeme.Modeles;
 using Fumoblilite.Systeme.Services;
 using Fumoblilite.SQL.Repositories;
@@ -12,6 +13,16 @@ namespace Fumoblilite.Interface.UserControls
         private readonly string _connectionString;
         private readonly ServiceArret _serviceArret;
         private Arret _arretSelectionne;
+        private List<Arret> _arrets;
+
+        // Couleurs pour le design moderne
+        private readonly Color _couleurPrimaire = Color.FromArgb(0, 120, 215);
+        private readonly Color _couleurSecondaire = Color.FromArgb(0, 99, 177);
+        private readonly Color _couleurAccent = Color.FromArgb(255, 185, 0);
+        private readonly Color _couleurTexte = Color.FromArgb(51, 51, 51);
+        private readonly Color _couleurFond = Color.White;
+        private readonly Color _couleurFondAlterne = Color.FromArgb(245, 245, 245);
+        private readonly Color _couleurBordure = Color.FromArgb(200, 200, 200);
 
         public UCGestionArrets(string connectionString)
         {
@@ -24,31 +35,236 @@ namespace Fumoblilite.Interface.UserControls
 
         private void UCGestionArrets_Load(object sender, EventArgs e)
         {
+            // Appliquer le style moderne
+            StyleModerne();
+
             ChargerArrets();
+        }
+
+        private void StyleModerne()
+        {
+            // Style du titre
+            lblTitre.ForeColor = _couleurPrimaire;
+            lblTitre.Font = new Font("Segoe UI", 16, FontStyle.Bold);
+
+            // Style des labels dans le groupe de détails
+            foreach (Control ctrl in grpDetails.Controls)
+            {
+                if (ctrl is Label)
+                {
+                    ctrl.Font = new Font("Segoe UI", 9);
+                    ctrl.ForeColor = _couleurTexte;
+                }
+                else if (ctrl is TextBox)
+                {
+                    ctrl.Font = new Font("Segoe UI", 9);
+                    ((TextBox)ctrl).BorderStyle = BorderStyle.FixedSingle;
+                }
+            }
+
+            // Style du groupe de détails
+            grpDetails.Font = new Font("Segoe UI", 9);
+            grpDetails.ForeColor = _couleurTexte;
+
+            // Style des boutons
+            btnNouveau.FlatStyle = FlatStyle.Flat;
+            btnNouveau.BackColor = Color.FromArgb(240, 240, 240);
+            btnNouveau.ForeColor = _couleurTexte;
+            btnNouveau.Font = new Font("Segoe UI", 9);
+            btnNouveau.FlatAppearance.BorderColor = _couleurBordure;
+            btnNouveau.Cursor = Cursors.Hand;
+
+            btnEnregistrer.FlatStyle = FlatStyle.Flat;
+            btnEnregistrer.BackColor = _couleurPrimaire;
+            btnEnregistrer.ForeColor = Color.White;
+            btnEnregistrer.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+            btnEnregistrer.FlatAppearance.BorderSize = 0;
+            btnEnregistrer.Cursor = Cursors.Hand;
+
+            btnSupprimer.FlatStyle = FlatStyle.Flat;
+            btnSupprimer.BackColor = Color.FromArgb(232, 17, 35);
+            btnSupprimer.ForeColor = Color.White;
+            btnSupprimer.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+            btnSupprimer.FlatAppearance.BorderSize = 0;
+            btnSupprimer.Cursor = Cursors.Hand;
+
+            // Style du panel d'en-tête
+            pnlHeader.BackColor = _couleurPrimaire;
+
+            foreach (Label lbl in pnlHeader.Controls)
+            {
+                lbl.ForeColor = Color.White;
+                lbl.Font = new Font("Segoe UI", 9, FontStyle.Bold);
+            }
+
+            // Style du FlowLayoutPanel
+            flpArrets.BackColor = _couleurFond;
         }
 
         private void ChargerArrets()
         {
             try
             {
-                List<Arret> arrets = _serviceArret.ObtenirTous();
-                dgvArrets.DataSource = arrets;
-
-                // Configurer l'affichage des colonnes
-                dgvArrets.Columns["Id"].Width = 50;
-                dgvArrets.Columns["Nom"].Width = 150;
-                dgvArrets.Columns["Adresse"].Width = 200;
-                dgvArrets.Columns["Latitude"].Width = 80;
-                dgvArrets.Columns["Longitude"].Width = 80;
-                dgvArrets.Columns["EstAccessible"].HeaderText = "Accessible";
-                dgvArrets.Columns["DateCreation"].Visible = false;
-                dgvArrets.Columns["DateModification"].Visible = false;
-
+                _arrets = _serviceArret.ObtenirTous();
+                AfficherArrets();
                 ViderChamps();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Erreur lors du chargement des arrêts : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void AfficherArrets()
+        {
+            flpArrets.Controls.Clear();
+
+            if (_arrets == null || _arrets.Count == 0)
+            {
+                Label lblAucunArret = new Label
+                {
+                    Text = "Aucun arrêt disponible.",
+                    Font = new Font("Segoe UI", 10),
+                    ForeColor = _couleurTexte,
+                    AutoSize = true,
+                    Margin = new Padding(10)
+                };
+                flpArrets.Controls.Add(lblAucunArret);
+                return;
+            }
+
+            bool alternerCouleur = false;
+
+            foreach (var arret in _arrets)
+            {
+                // Créer un panel pour l'arrêt
+                Panel pnlArret = new Panel
+                {
+                    Width = flpArrets.Width - 25,
+                    Height = 80,
+                    Margin = new Padding(0, 0, 0, 5),
+                    BackColor = alternerCouleur ? _couleurFondAlterne : _couleurFond,
+                    Padding = new Padding(10),
+                    Tag = arret // Stocker l'objet arret pour la sélection
+                };
+
+                // Ajouter une bordure colorée à gauche
+                Panel pnlBordure = new Panel
+                {
+                    Width = 5,
+                    Height = 80,
+                    BackColor = arret.EstAccessible ? _couleurPrimaire : _couleurBordure,
+                    Dock = DockStyle.Left
+                };
+                pnlArret.Controls.Add(pnlBordure);
+
+                // Ajouter l'ID
+                Label lblId = new Label
+                {
+                    Text = arret.Id.ToString(),
+                    Font = new Font("Segoe UI", 9),
+                    ForeColor = Color.Gray,
+                    AutoSize = true,
+                    Location = new Point(15, 10)
+                };
+                pnlArret.Controls.Add(lblId);
+
+                // Ajouter le nom de l'arrêt
+                Label lblNom = new Label
+                {
+                    Text = arret.Nom,
+                    Font = new Font("Segoe UI", 11, FontStyle.Bold),
+                    ForeColor = _couleurTexte,
+                    AutoSize = true,
+                    Location = new Point(50, 8)
+                };
+                pnlArret.Controls.Add(lblNom);
+
+                // Ajouter l'adresse
+                Label lblAdresse = new Label
+                {
+                    Text = arret.Adresse,
+                    Font = new Font("Segoe UI", 8),
+                    ForeColor = Color.Gray,
+                    AutoSize = true,
+                    Location = new Point(50, 30)
+                };
+                pnlArret.Controls.Add(lblAdresse);
+
+                // Ajouter les coordonnées
+                Label lblCoords = new Label
+                {
+                    Text = $"Lat: {arret.Latitude}, Long: {arret.Longitude}",
+                    Font = new Font("Segoe UI", 8),
+                    ForeColor = Color.DarkGray,
+                    AutoSize = true,
+                    Location = new Point(50, 50)
+                };
+                pnlArret.Controls.Add(lblCoords);
+
+                // Ajouter un indicateur d'accessibilité
+                if (arret.EstAccessible)
+                {
+                    Label lblAccessible = new Label
+                    {
+                        Text = "♿",
+                        Font = new Font("Segoe UI", 12),
+                        ForeColor = _couleurPrimaire,
+                        AutoSize = true,
+                        Location = new Point(pnlArret.Width - 40, 10)
+                    };
+                    pnlArret.Controls.Add(lblAccessible);
+                }
+
+                // Ajouter des effets de survol
+                pnlArret.MouseEnter += (s, ev) => {
+                    ((Panel)s).BackColor = Color.FromArgb(240, 240, 250);
+                };
+                pnlArret.MouseLeave += (s, ev) => {
+                    if (_arretSelectionne != null && _arretSelectionne.Id == ((Arret)((Panel)s).Tag).Id)
+                    {
+                        ((Panel)s).BackColor = _couleurPrimaire.GetBrightness() > 0.5 ? Color.FromArgb(230, 240, 250) : Color.FromArgb(0, 120, 215, 40);
+                    }
+                    else
+                    {
+                        ((Panel)s).BackColor = alternerCouleur ? _couleurFondAlterne : _couleurFond;
+                    }
+                };
+
+                // Ajouter un événement de clic pour la sélection
+                pnlArret.Click += (s, ev) => {
+                    SelectionnerArret((Arret)((Panel)s).Tag);
+
+                    // Mettre à jour l'apparence de tous les panneaux
+                    foreach (Panel p in flpArrets.Controls)
+                    {
+                        if (p.Tag != null && p.Tag is Arret)
+                        {
+                            bool isSelected = _arretSelectionne != null && _arretSelectionne.Id == ((Arret)p.Tag).Id;
+                            p.BackColor = isSelected
+                                ? _couleurPrimaire.GetBrightness() > 0.5 ? Color.FromArgb(230, 240, 250) : Color.FromArgb(0, 120, 215, 40)
+                                : (p == s) ? Color.FromArgb(240, 240, 250) : (flpArrets.Controls.IndexOf(p) % 2 == 1) ? _couleurFondAlterne : _couleurFond;
+                        }
+                    }
+                };
+
+                flpArrets.Controls.Add(pnlArret);
+                alternerCouleur = !alternerCouleur;
+            }
+        }
+
+        private void SelectionnerArret(Arret arret)
+        {
+            _arretSelectionne = arret;
+            if (_arretSelectionne != null)
+            {
+                txtId.Text = _arretSelectionne.Id.ToString();
+                txtNom.Text = _arretSelectionne.Nom;
+                txtAdresse.Text = _arretSelectionne.Adresse;
+                txtLatitude.Text = _arretSelectionne.Latitude.ToString();
+                txtLongitude.Text = _arretSelectionne.Longitude.ToString();
+                chkEstAccessible.Checked = _arretSelectionne.EstAccessible;
+                btnSupprimer.Enabled = true;
             }
         }
 
@@ -62,23 +278,13 @@ namespace Fumoblilite.Interface.UserControls
             chkEstAccessible.Checked = false;
             _arretSelectionne = null;
             btnSupprimer.Enabled = false;
-        }
 
-        private void dgvArrets_SelectionChanged(object sender, EventArgs e)
-        {
-            if (dgvArrets.SelectedRows.Count > 0)
+            // Réinitialiser l'apparence des panneaux
+            foreach (Panel p in flpArrets.Controls)
             {
-                int id = Convert.ToInt32(dgvArrets.SelectedRows[0].Cells["Id"].Value);
-                _arretSelectionne = _serviceArret.ObtenirParId(id);
-                if (_arretSelectionne != null)
+                if (p.Tag != null && p.Tag is Arret)
                 {
-                    txtId.Text = _arretSelectionne.Id.ToString();
-                    txtNom.Text = _arretSelectionne.Nom;
-                    txtAdresse.Text = _arretSelectionne.Adresse;
-                    txtLatitude.Text = _arretSelectionne.Latitude.ToString();
-                    txtLongitude.Text = _arretSelectionne.Longitude.ToString();
-                    chkEstAccessible.Checked = _arretSelectionne.EstAccessible;
-                    btnSupprimer.Enabled = true;
+                    p.BackColor = (flpArrets.Controls.IndexOf(p) % 2 == 1) ? _couleurFondAlterne : _couleurFond;
                 }
             }
         }
@@ -177,4 +383,3 @@ namespace Fumoblilite.Interface.UserControls
         }
     }
 }
-
