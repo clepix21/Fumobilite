@@ -7,6 +7,7 @@ using Fumoblilite.Systeme.Modeles;
 using Fumoblilite.Systeme.Services;
 using Fumoblilite.SQL.Repositories;
 using Fumoblilite.Systeme.Interfaces;
+using System.Drawing.Drawing2D;
 
 namespace Fumoblilite.Interface.UserControls
 {
@@ -19,6 +20,12 @@ namespace Fumoblilite.Interface.UserControls
         private List<Ligne> _lignes;
         private List<Arret> _arrets;
         private Dictionary<int, bool> _lignesVisibles = new Dictionary<int, bool>();
+        private Dictionary<int, Panel> _cartesLignes = new Dictionary<int, Panel>();
+        private Dictionary<int, Point> _coordonneesArrets;
+        private float _zoomFactor = 1.0f;
+        private Point _panOffset = new Point(0, 0);
+        private Point _lastMousePosition;
+        private bool _isPanning = false;
 
         public UCConsultationReseau(string connectionString)
         {
@@ -37,7 +44,89 @@ namespace Fumoblilite.Interface.UserControls
 
         private void UCConsultationReseau_Load(object sender, EventArgs e)
         {
+            // Configurer les contrôles
+            ConfigurerControles();
+
+            // Charger les données
             ChargerDonnees();
+        }
+
+        private void ConfigurerControles()
+        {
+            // Configurer le panel de réseau pour le zoom et le pan
+            pnlReseau.MouseWheel += PnlReseau_MouseWheel;
+            pnlReseau.MouseDown += PnlReseau_MouseDown;
+            pnlReseau.MouseMove += PnlReseau_MouseMove;
+            pnlReseau.MouseUp += PnlReseau_MouseUp;
+
+            // Ajouter des boutons de zoom
+            btnZoomIn.Click += (s, e) => {
+                _zoomFactor *= 1.2f;
+                pnlReseau.Invalidate();
+            };
+
+            btnZoomOut.Click += (s, e) => {
+                _zoomFactor /= 1.2f;
+                if (_zoomFactor < 0.1f) _zoomFactor = 0.1f;
+                pnlReseau.Invalidate();
+            };
+
+            btnResetZoom.Click += (s, e) => {
+                _zoomFactor = 1.0f;
+                _panOffset = new Point(0, 0);
+                pnlReseau.Invalidate();
+            };
+        }
+
+        private void PnlReseau_MouseWheel(object sender, MouseEventArgs e)
+        {
+            float oldZoom = _zoomFactor;
+
+            // Ajuster le facteur de zoom
+            if (e.Delta > 0)
+                _zoomFactor *= 1.1f;
+            else
+                _zoomFactor /= 1.1f;
+
+            // Limiter le zoom minimum
+            if (_zoomFactor < 0.1f) _zoomFactor = 0.1f;
+
+            // Ajuster le décalage pour zoomer vers le curseur
+            Point mousePos = e.Location;
+            _panOffset.X = mousePos.X - (int)((mousePos.X - _panOffset.X) * (_zoomFactor / oldZoom));
+            _panOffset.Y = mousePos.Y - (int)((mousePos.Y - _panOffset.Y) * (_zoomFactor / oldZoom));
+
+            pnlReseau.Invalidate();
+        }
+
+        private void PnlReseau_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                _isPanning = true;
+                _lastMousePosition = e.Location;
+                pnlReseau.Cursor = Cursors.Hand;
+            }
+        }
+
+        private void PnlReseau_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (_isPanning)
+            {
+                _panOffset.X += e.X - _lastMousePosition.X;
+                _panOffset.Y += e.Y - _lastMousePosition.Y;
+                _lastMousePosition = e.Location;
+                pnlReseau.Invalidate();
+            }
+        }
+
+        private void PnlReseau_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                _isPanning = false;
+                pnlReseau.Cursor = Cursors.Default;
+            }
         }
 
         private void ChargerDonnees()
@@ -54,12 +143,19 @@ namespace Fumoblilite.Interface.UserControls
                     _lignesVisibles[ligne.Id] = true;
                 }
 
-                // Remplir la liste des lignes
-                lstLignes.Items.Clear();
+                // Remplir le FlowLayoutPanel des lignes
+                flpLignes.Controls.Clear();
+                _cartesLignes.Clear();
+
                 foreach (var ligne in _lignes)
                 {
-                    lstLignes.Items.Add($"{ligne.Numero} - {ligne.Nom}", true);
+                    Panel carteLigne = CreerCarteLigne(ligne);
+                    flpLignes.Controls.Add(carteLigne);
+                    _cartesLignes[ligne.Id] = carteLigne;
                 }
+
+                // Calculer les coordonnées des arrêts
+                _coordonneesArrets = CalculerCoordonneesArrets();
 
                 // Rafraîchir l'affichage du réseau
                 pnlReseau.Invalidate();
@@ -70,41 +166,92 @@ namespace Fumoblilite.Interface.UserControls
             }
         }
 
-        private void lstLignes_ItemCheck(object sender, ItemCheckEventArgs e)
+        private Panel CreerCarteLigne(Ligne ligne)
         {
-            // Mettre à jour la visibilité de la ligne
-            if (e.Index >= 0 && e.Index < _lignes.Count)
+            // Créer un panel pour la carte
+            Panel panel = new Panel
             {
-                _lignesVisibles[_lignes[e.Index].Id] = (e.NewValue == CheckState.Checked);
+                Width = flpLignes.Width - 25,
+                Height = 50,
+                Margin = new Padding(5),
+                BorderStyle = BorderStyle.FixedSingle,
+                Tag = ligne
+            };
 
-                // Rafraîchir l'affichage du réseau
-                pnlReseau.Invalidate();
-            }
-        }
+            // Ajouter une bordure colorée à gauche selon la couleur de la ligne
+            Panel bordureGauche = new Panel
+            {
+                Width = 10,
+                Height = panel.Height,
+                Dock = DockStyle.Left
+            };
 
-        private void pnlReseau_Paint(object sender, PaintEventArgs e)
-        {
             try
             {
-                if (_lignes == null || _arrets == null)
-                    return;
-
-                Graphics g = e.Graphics;
-                g.Clear(Color.White);
-
-                // Calculer les coordonnées des arrêts sur le panel
-                Dictionary<int, Point> coordonneesArrets = CalculerCoordonneesArrets();
-
-                // Dessiner les lignes
-                DessinerLignes(g, coordonneesArrets);
-
-                // Dessiner les arrêts
-                DessinerArrets(g, coordonneesArrets);
+                if (!string.IsNullOrEmpty(ligne.Couleur))
+                {
+                    string hexColor = ligne.Couleur.TrimStart('#');
+                    if (hexColor.Length == 6)
+                    {
+                        int r = Convert.ToInt32(hexColor.Substring(0, 2), 16);
+                        int g = Convert.ToInt32(hexColor.Substring(2, 2), 16);
+                        int b = Convert.ToInt32(hexColor.Substring(4, 2), 16);
+                        bordureGauche.BackColor = Color.FromArgb(r, g, b);
+                    }
+                    else
+                    {
+                        bordureGauche.BackColor = Color.Gray;
+                    }
+                }
+                else
+                {
+                    bordureGauche.BackColor = Color.Gray;
+                }
             }
-            catch (Exception ex)
+            catch
             {
-                MessageBox.Show($"Erreur lors de l'affichage du réseau : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                bordureGauche.BackColor = Color.Gray;
             }
+
+            panel.Controls.Add(bordureGauche);
+
+            // Ajouter les informations de la ligne
+            Label lblNumero = new Label
+            {
+                Text = ligne.Numero,
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                AutoSize = true,
+                Location = new Point(20, 5)
+            };
+            panel.Controls.Add(lblNumero);
+
+            Label lblNom = new Label
+            {
+                Text = ligne.Nom,
+                Font = new Font("Segoe UI", 9),
+                AutoSize = true,
+                Location = new Point(20, 25)
+            };
+            panel.Controls.Add(lblNom);
+
+            // Ajouter une case à cocher pour la visibilité
+            CheckBox chkVisible = new CheckBox
+            {
+                Checked = _lignesVisibles[ligne.Id],
+                Text = "",
+                Location = new Point(panel.Width - 30, 15),
+                Width = 20,
+                Height = 20
+            };
+
+            chkVisible.CheckedChanged += (sender, e) => {
+                _lignesVisibles[ligne.Id] = chkVisible.Checked;
+                pnlReseau.Invalidate();
+            };
+
+            panel.Controls.Add(chkVisible);
+
+            return panel;
         }
 
         private Dictionary<int, Point> CalculerCoordonneesArrets()
@@ -146,7 +293,40 @@ namespace Fumoblilite.Interface.UserControls
             return coordonnees;
         }
 
-        private void DessinerLignes(Graphics g, Dictionary<int, Point> coordonneesArrets)
+        private void pnlReseau_Paint(object sender, PaintEventArgs e)
+        {
+            try
+            {
+                if (_lignes == null || _arrets == null || _coordonneesArrets == null)
+                    return;
+
+                Graphics g = e.Graphics;
+                g.Clear(Color.White);
+
+                // Activer l'antialiasing pour un rendu plus lisse
+                g.SmoothingMode = SmoothingMode.AntiAlias;
+
+                // Appliquer le zoom et le décalage
+                g.TranslateTransform(_panOffset.X, _panOffset.Y);
+                g.ScaleTransform(_zoomFactor, _zoomFactor);
+
+                // Dessiner les lignes
+                DessinerLignes(g);
+
+                // Dessiner les arrêts
+                DessinerArrets(g);
+
+                // Afficher le facteur de zoom
+                g.ResetTransform();
+                g.DrawString($"Zoom: {_zoomFactor:F1}x", new Font("Arial", 8), Brushes.Black, 10, 10);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de l'affichage du réseau : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void DessinerLignes(Graphics g)
         {
             foreach (var ligne in _lignes)
             {
@@ -172,10 +352,10 @@ namespace Fumoblilite.Interface.UserControls
                     int arretId1 = arretsOrdonnes[i].ArretId;
                     int arretId2 = arretsOrdonnes[i + 1].ArretId;
 
-                    if (coordonneesArrets.ContainsKey(arretId1) && coordonneesArrets.ContainsKey(arretId2))
+                    if (_coordonneesArrets.ContainsKey(arretId1) && _coordonneesArrets.ContainsKey(arretId2))
                     {
-                        Point p1 = coordonneesArrets[arretId1];
-                        Point p2 = coordonneesArrets[arretId2];
+                        Point p1 = _coordonneesArrets[arretId1];
+                        Point p2 = _coordonneesArrets[arretId2];
 
                         g.DrawLine(styloLigne, p1, p2);
                     }
@@ -185,7 +365,7 @@ namespace Fumoblilite.Interface.UserControls
             }
         }
 
-        private void DessinerArrets(Graphics g, Dictionary<int, Point> coordonneesArrets)
+        private void DessinerArrets(Graphics g)
         {
             // Créer un stylo et une brosse pour dessiner les arrêts
             Pen styloArret = new Pen(Color.Black, 1);
@@ -196,9 +376,9 @@ namespace Fumoblilite.Interface.UserControls
 
             foreach (var arret in _arrets)
             {
-                if (coordonneesArrets.ContainsKey(arret.Id))
+                if (_coordonneesArrets.ContainsKey(arret.Id))
                 {
-                    Point p = coordonneesArrets[arret.Id];
+                    Point p = _coordonneesArrets[arret.Id];
 
                     // Dessiner le cercle de l'arrêt
                     g.FillEllipse(arret.EstAccessible ? brosseArretAccessible : brosseArret, p.X - 5, p.Y - 5, 10, 10);
