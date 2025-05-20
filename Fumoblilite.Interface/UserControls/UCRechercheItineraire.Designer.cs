@@ -50,6 +50,7 @@ namespace Fumoblilite.Interface.UserControls
             this.lblTitre.Size = new System.Drawing.Size(196, 24);
             this.lblTitre.TabIndex = 0;
             this.lblTitre.Text = "Recherche d\'itinéraire";
+            this.lblTitre.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
             // 
             // grpRecherche
             // 
@@ -169,7 +170,7 @@ namespace Fumoblilite.Interface.UserControls
             // 
             // btnRechercher
             // 
-            this.btnRechercher.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            this.btnRechercher.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
             this.btnRechercher.FlatAppearance.BorderSize = 0;
             this.btnRechercher.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRechercher.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
