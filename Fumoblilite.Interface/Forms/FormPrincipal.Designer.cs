@@ -51,6 +51,8 @@ namespace Fumoblilite.Interface.Forms
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(284, 24);
             this.menuStrip.TabIndex = 2;
+            this.menuStrip.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
+            this.menuStrip.ForeColor = System.Drawing.Color.White;
             // 
             // menuFichier
             // 
@@ -61,6 +63,7 @@ namespace Fumoblilite.Interface.Forms
             this.menuFichier.Name = "menuFichier";
             this.menuFichier.Size = new System.Drawing.Size(54, 20);
             this.menuFichier.Text = "Fichier";
+            this.menuFichier.ForeColor = System.Drawing.Color.White;
             // 
             // menuItemConnexion
             // 
@@ -73,7 +76,7 @@ namespace Fumoblilite.Interface.Forms
             // 
             this.menuItemDeconnexion.Name = "menuItemDeconnexion";
             this.menuItemDeconnexion.Size = new System.Drawing.Size(144, 22);
-            this.menuItemDeconnexion.Text = "Déconnexion";
+            this.menuItemDeconnexion.Text = "Dconnexion";
             this.menuItemDeconnexion.Click += new System.EventHandler(this.menuItemDeconnexion_Click);
             // 
             // menuItemQuitter
@@ -93,12 +96,13 @@ namespace Fumoblilite.Interface.Forms
             this.menuGestion.Name = "menuGestion";
             this.menuGestion.Size = new System.Drawing.Size(59, 20);
             this.menuGestion.Text = "Gestion";
+            this.menuGestion.ForeColor = System.Drawing.Color.White;
             // 
             // menuItemArrets
             // 
             this.menuItemArrets.Name = "menuItemArrets";
             this.menuItemArrets.Size = new System.Drawing.Size(132, 22);
-            this.menuItemArrets.Text = "Arrêts";
+            this.menuItemArrets.Text = "Arrts";
             this.menuItemArrets.Click += new System.EventHandler(this.menuItemArrets_Click);
             // 
             // menuItemLignes
@@ -131,19 +135,20 @@ namespace Fumoblilite.Interface.Forms
             this.menuConsultation.Name = "menuConsultation";
             this.menuConsultation.Size = new System.Drawing.Size(87, 20);
             this.menuConsultation.Text = "Consultation";
+            this.menuConsultation.ForeColor = System.Drawing.Color.White;
             // 
             // menuItemReseau
             // 
             this.menuItemReseau.Name = "menuItemReseau";
             this.menuItemReseau.Size = new System.Drawing.Size(171, 22);
-            this.menuItemReseau.Text = "Réseau complet";
+            this.menuItemReseau.Text = "Rseau complet";
             this.menuItemReseau.Click += new System.EventHandler(this.menuItemReseau_Click);
             // 
             // menuItemLigneDetails
             // 
             this.menuItemLigneDetails.Name = "menuItemLigneDetails";
             this.menuItemLigneDetails.Size = new System.Drawing.Size(171, 22);
-            this.menuItemLigneDetails.Text = "Détails d\'une ligne";
+            this.menuItemLigneDetails.Text = "Dtails d\'une ligne";
             this.menuItemLigneDetails.Click += new System.EventHandler(this.menuItemLigneDetails_Click);
             // 
             // menuItemHorairesJournee
@@ -160,12 +165,13 @@ namespace Fumoblilite.Interface.Forms
             this.menuRecherche.Name = "menuRecherche";
             this.menuRecherche.Size = new System.Drawing.Size(74, 20);
             this.menuRecherche.Text = "Recherche";
+            this.menuRecherche.ForeColor = System.Drawing.Color.White;
             // 
             // menuItemItineraire
             // 
             this.menuItemItineraire.Name = "menuItemItineraire";
             this.menuItemItineraire.Size = new System.Drawing.Size(120, 22);
-            this.menuItemItineraire.Text = "Itinéraire";
+            this.menuItemItineraire.Text = "Itinraire";
             this.menuItemItineraire.Click += new System.EventHandler(this.menuItemItineraire_Click);
             // 
             // statusStrip
@@ -177,12 +183,14 @@ namespace Fumoblilite.Interface.Forms
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(284, 22);
             this.statusStrip.TabIndex = 1;
+            this.statusStrip.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
             // 
             // lblStatusUtilisateur
             // 
             this.lblStatusUtilisateur.Name = "lblStatusUtilisateur";
             this.lblStatusUtilisateur.Size = new System.Drawing.Size(118, 17);
-            this.lblStatusUtilisateur.Text = "Utilisateur connecté: ";
+            this.lblStatusUtilisateur.Text = "Utilisateur connect: ";
+            this.lblStatusUtilisateur.ForeColor = System.Drawing.Color.White;
             // 
             // panelContenu
             // 
