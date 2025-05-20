@@ -34,6 +34,7 @@ namespace Fumoblilite.Interface.Forms
             this.lblTitre.TabIndex = 0;
             this.lblTitre.Text = "Gestion de Transport en Commun";
             this.lblTitre.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblTitre.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
             // 
             // lblNomUtilisateur
             // 
@@ -77,6 +78,10 @@ namespace Fumoblilite.Interface.Forms
             this.btnConnexion.Text = "Connexion";
             this.btnConnexion.UseVisualStyleBackColor = true;
             this.btnConnexion.Click += new System.EventHandler(this.btnConnexion_Click);
+            this.btnConnexion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
+            this.btnConnexion.FlatAppearance.BorderSize = 0;
+            this.btnConnexion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnConnexion.ForeColor = System.Drawing.Color.White;
             // 
             // btnRetour
             // 
@@ -87,6 +92,10 @@ namespace Fumoblilite.Interface.Forms
             this.btnRetour.Text = "Retour";
             this.btnRetour.UseVisualStyleBackColor = true;
             this.btnRetour.Click += new System.EventHandler(this.btnRetour_Click);
+            this.btnRetour.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.btnRetour.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
+            this.btnRetour.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRetour.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
             // 
             // FormConnexion
             // 
