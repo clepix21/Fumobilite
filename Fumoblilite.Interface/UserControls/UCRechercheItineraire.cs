@@ -16,6 +16,7 @@ namespace Fumoblilite.Interface.UserControls
         private readonly ServiceItineraire _serviceItineraire;
         private readonly ServiceArret _serviceArret;
         private readonly ServiceLigne _serviceLigne;
+        private Panel _selectedItinerairePanel;
 
         public UCRechercheItineraire(string connectionString)
         {
@@ -97,31 +98,20 @@ namespace Fumoblilite.Interface.UserControls
                 if (itineraires.Count == 0)
                 {
                     MessageBox.Show("Aucun itinéraire trouvé pour les critères spécifiés.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    dgvItineraires.DataSource = null;
-                    lblDetailsItineraire.Text = "Aucun itinéraire trouvé";
+                    flpItineraires.Controls.Clear();
+                    pnlDetailsItineraire.Controls.Clear();
+                    Label lblAucun = new Label
+                    {
+                        Text = "Aucun itinéraire trouvé",
+                        AutoSize = true,
+                        Location = new Point(10, 10)
+                    };
+                    pnlDetailsItineraire.Controls.Add(lblAucun);
                     return;
                 }
 
-                // Préparer les données pour l'affichage dans le DataGridView
-                var itinerairesAffichage = itineraires.Select(i => new
-                {
-                    Départ = i.HeureDepart.ToShortTimeString(),
-                    Arrivée = i.HeureArrivee.ToShortTimeString(),
-                    Durée = $"{i.DureeMinutes} min",
-                    Changements = i.NombreChangements,
-                    ItineraireComplet = i // Pour pouvoir accéder à l'objet complet
-                }).ToList();
-
-                dgvItineraires.DataSource = itinerairesAffichage;
-
-                // Masquer la colonne de l'objet complet
-                dgvItineraires.Columns["ItineraireComplet"].Visible = false;
-
-                // Sélectionner le premier itinéraire
-                if (dgvItineraires.Rows.Count > 0)
-                {
-                    dgvItineraires.Rows[0].Selected = true;
-                }
+                // Afficher les itinéraires
+                AfficherItineraires(itineraires);
             }
             catch (Exception ex)
             {
@@ -129,28 +119,109 @@ namespace Fumoblilite.Interface.UserControls
             }
         }
 
-        private void dgvItineraires_SelectionChanged(object sender, EventArgs e)
+        private void AfficherItineraires(List<Itineraire> itineraires)
         {
-            if (dgvItineraires.SelectedRows.Count > 0 && dgvItineraires.DataSource != null)
-            {
-                try
-                {
-                    // Récupérer l'itinéraire sélectionné
-                    dynamic row = dgvItineraires.SelectedRows[0].DataBoundItem;
-                    Itineraire itineraire = row.ItineraireComplet;
+            flpItineraires.SuspendLayout();
+            flpItineraires.Controls.Clear();
+            _selectedItinerairePanel = null;
 
-                    // Afficher les détails de l'itinéraire
-                    AfficherDetailsItineraire(itineraire);
-                }
-                catch (Exception ex)
-                {
-                    lblDetailsItineraire.Text = $"Erreur lors de l'affichage des détails : {ex.Message}";
-                }
-            }
-            else
+            foreach (var itineraire in itineraires)
             {
-                lblDetailsItineraire.Text = "Sélectionnez un itinéraire à gauche";
+                Panel panel = CreerCarteItineraire(itineraire);
+                flpItineraires.Controls.Add(panel);
             }
+
+            flpItineraires.ResumeLayout();
+
+            // Sélectionner le premier itinéraire
+            if (flpItineraires.Controls.Count > 0)
+            {
+                SelectionnerItineraire((Panel)flpItineraires.Controls[0]);
+            }
+        }
+
+        private Panel CreerCarteItineraire(Itineraire itineraire)
+        {
+            // Créer un panel pour la carte
+            Panel panel = new Panel
+            {
+                Width = flpItineraires.Width - 25,
+                Height = 80,
+                Margin = new Padding(5),
+                BorderStyle = BorderStyle.FixedSingle,
+                Tag = itineraire
+            };
+
+            // Ajouter les informations de l'itinéraire
+            Label lblHeures = new Label
+            {
+                Text = $"{itineraire.HeureDepart.ToShortTimeString()} - {itineraire.HeureArrivee.ToShortTimeString()}",
+                Font = new Font("Segoe UI", 12, FontStyle.Bold),
+                AutoSize = true,
+                Location = new Point(10, 10)
+            };
+            panel.Controls.Add(lblHeures);
+
+            Label lblDuree = new Label
+            {
+                Text = $"Durée: {itineraire.DureeMinutes} min",
+                Font = new Font("Segoe UI", 9),
+                AutoSize = true,
+                Location = new Point(10, 35)
+            };
+            panel.Controls.Add(lblDuree);
+
+            Label lblChangements = new Label
+            {
+                Text = $"Changements: {itineraire.NombreChangements}",
+                Font = new Font("Segoe UI", 9),
+                AutoSize = true,
+                Location = new Point(10, 55)
+            };
+            panel.Controls.Add(lblChangements);
+
+            // Ajouter un indicateur visuel pour les changements
+            int x = panel.Width - 30;
+            for (int i = 0; i < itineraire.Etapes.Count; i++)
+            {
+                Panel indicateur = new Panel
+                {
+                    Width = 15,
+                    Height = 15,
+                    BackColor = ColorTranslator.FromHtml(itineraire.Etapes[i].CouleurLigne ?? "#808080"),
+                    Location = new Point(x, 10)
+                };
+                panel.Controls.Add(indicateur);
+                x -= 20;
+            }
+
+            // Ajouter un gestionnaire d'événements pour la sélection
+            panel.Click += (sender, e) => SelectionnerItineraire(panel);
+            foreach (Control control in panel.Controls)
+            {
+                control.Click += (sender, e) => SelectionnerItineraire(panel);
+            }
+
+            return panel;
+        }
+
+        private void SelectionnerItineraire(Panel panel)
+        {
+            // Désélectionner le panel précédemment sélectionné
+            if (_selectedItinerairePanel != null)
+            {
+                _selectedItinerairePanel.BackColor = SystemColors.Control;
+            }
+
+            // Sélectionner le nouveau panel
+            _selectedItinerairePanel = panel;
+            _selectedItinerairePanel.BackColor = Color.FromArgb(230, 240, 250);
+
+            // Récupérer l'itinéraire associé au panel
+            Itineraire itineraire = (Itineraire)panel.Tag;
+
+            // Afficher les détails de l'itinéraire
+            AfficherDetailsItineraire(itineraire);
         }
 
         private void AfficherDetailsItineraire(Itineraire itineraire)
@@ -165,22 +236,42 @@ namespace Fumoblilite.Interface.UserControls
             };
 
             // Ajouter un en-tête
+            Panel pnlEnTete = new Panel
+            {
+                Width = pnlDetailsItineraire.Width - 20,
+                Height = 70,
+                Margin = new Padding(5),
+                BorderStyle = BorderStyle.None
+            };
+
             Label lblEnTete = new Label
             {
                 Text = $"Départ : {itineraire.HeureDepart.ToShortTimeString()} - Arrivée : {itineraire.HeureArrivee.ToShortTimeString()}",
-                Font = new Font(Font.FontFamily, 10, FontStyle.Bold),
+                Font = new Font("Segoe UI", 12, FontStyle.Bold),
                 AutoSize = true,
-                Margin = new Padding(5)
+                Location = new Point(5, 5)
             };
-            flpEtapes.Controls.Add(lblEnTete);
+            pnlEnTete.Controls.Add(lblEnTete);
 
             Label lblDuree = new Label
             {
                 Text = $"Durée : {itineraire.DureeMinutes} minutes - Changements : {itineraire.NombreChangements}",
+                Font = new Font("Segoe UI", 9),
                 AutoSize = true,
-                Margin = new Padding(5)
+                Location = new Point(5, 30)
             };
-            flpEtapes.Controls.Add(lblDuree);
+            pnlEnTete.Controls.Add(lblDuree);
+
+            Label lblArrets = new Label
+            {
+                Text = $"De {itineraire.Etapes.First().NomArretDepart} à {itineraire.Etapes.Last().NomArretArrivee}",
+                Font = new Font("Segoe UI", 9),
+                AutoSize = true,
+                Location = new Point(5, 50)
+            };
+            pnlEnTete.Controls.Add(lblArrets);
+
+            flpEtapes.Controls.Add(pnlEnTete);
 
             // Ajouter une ligne de séparation
             Panel pnlSeparator = new Panel
@@ -198,8 +289,8 @@ namespace Fumoblilite.Interface.UserControls
                 // Créer un panel pour l'étape
                 Panel pnlEtape = new Panel
                 {
-                    Width = pnlDetailsItineraire.Width - 20,
-                    Height = 80,
+                    Width = pnlDetailsItineraire.Width - 30,
+                    Height = 100,
                     Margin = new Padding(5),
                     BorderStyle = BorderStyle.FixedSingle
                 };
@@ -218,27 +309,38 @@ namespace Fumoblilite.Interface.UserControls
                 Label lblLigne = new Label
                 {
                     Text = $"Ligne {etape.NomLigne}",
-                    Font = new Font(Font.FontFamily, 9, FontStyle.Bold),
-                    Location = new Point(20, 5),
+                    Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                    Location = new Point(20, 10),
                     AutoSize = true
                 };
                 pnlEtape.Controls.Add(lblLigne);
 
-                Label lblArrets = new Label
+                Label lblArretDepart = new Label
                 {
-                    Text = $"De {etape.NomArretDepart} à {etape.NomArretArrivee}",
-                    Location = new Point(20, 25),
+                    Text = $"Départ: {etape.NomArretDepart} à {etape.HeureDepart.ToShortTimeString()}",
+                    Font = new Font("Segoe UI", 9),
+                    Location = new Point(20, 35),
                     AutoSize = true
                 };
-                pnlEtape.Controls.Add(lblArrets);
+                pnlEtape.Controls.Add(lblArretDepart);
 
-                Label lblHoraires = new Label
+                Label lblArretArrivee = new Label
                 {
-                    Text = $"{etape.HeureDepart.ToShortTimeString()} - {etape.HeureArrivee.ToShortTimeString()} ({etape.DureeMinutes} min)",
-                    Location = new Point(20, 45),
+                    Text = $"Arrivée: {etape.NomArretArrivee} à {etape.HeureArrivee.ToShortTimeString()}",
+                    Font = new Font("Segoe UI", 9),
+                    Location = new Point(20, 55),
                     AutoSize = true
                 };
-                pnlEtape.Controls.Add(lblHoraires);
+                pnlEtape.Controls.Add(lblArretArrivee);
+
+                Label lblDureeEtape = new Label
+                {
+                    Text = $"Durée: {etape.DureeMinutes} min",
+                    Font = new Font("Segoe UI", 9),
+                    Location = new Point(20, 75),
+                    AutoSize = true
+                };
+                pnlEtape.Controls.Add(lblDureeEtape);
 
                 flpEtapes.Controls.Add(pnlEtape);
             }
