@@ -1,11 +1,12 @@
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace Fumoblilite.Interface.UserControls
 {
     partial class UCGestionUtilisateurs
     {
         private System.Windows.Forms.Label lblTitre;
-        private System.Windows.Forms.DataGridView dgvUtilisateurs;
+        private System.Windows.Forms.FlowLayoutPanel flpUtilisateurs;
         private System.Windows.Forms.GroupBox grpDetails;
         private System.Windows.Forms.Label lblId;
         private System.Windows.Forms.TextBox txtId;
@@ -25,11 +26,13 @@ namespace Fumoblilite.Interface.UserControls
         private System.Windows.Forms.Button btnNouveau;
         private System.Windows.Forms.Button btnEnregistrer;
         private System.Windows.Forms.Button btnSupprimer;
+        private System.Windows.Forms.TextBox txtRecherche;
+        private System.Windows.Forms.Label lblRecherche;
 
         private void InitializeComponent()
         {
             this.lblTitre = new System.Windows.Forms.Label();
-            this.dgvUtilisateurs = new System.Windows.Forms.DataGridView();
+            this.flpUtilisateurs = new System.Windows.Forms.FlowLayoutPanel();
             this.grpDetails = new System.Windows.Forms.GroupBox();
             this.lblId = new System.Windows.Forms.Label();
             this.txtId = new System.Windows.Forms.TextBox();
@@ -49,7 +52,8 @@ namespace Fumoblilite.Interface.UserControls
             this.btnNouveau = new System.Windows.Forms.Button();
             this.btnEnregistrer = new System.Windows.Forms.Button();
             this.btnSupprimer = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvUtilisateurs)).BeginInit();
+            this.txtRecherche = new System.Windows.Forms.TextBox();
+            this.lblRecherche = new System.Windows.Forms.Label();
             this.grpDetails.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -63,23 +67,34 @@ namespace Fumoblilite.Interface.UserControls
             this.lblTitre.TabIndex = 0;
             this.lblTitre.Text = "Gestion des utilisateurs";
             // 
-            // dgvUtilisateurs
+            // lblRecherche
             // 
-            this.dgvUtilisateurs.AllowUserToAddRows = false;
-            this.dgvUtilisateurs.AllowUserToDeleteRows = false;
-            this.dgvUtilisateurs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvUtilisateurs.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvUtilisateurs.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvUtilisateurs.Location = new System.Drawing.Point(15, 50);
-            this.dgvUtilisateurs.MultiSelect = false;
-            this.dgvUtilisateurs.Name = "dgvUtilisateurs";
-            this.dgvUtilisateurs.ReadOnly = true;
-            this.dgvUtilisateurs.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvUtilisateurs.Size = new System.Drawing.Size(450, 385);
-            this.dgvUtilisateurs.TabIndex = 1;
-            this.dgvUtilisateurs.SelectionChanged += new System.EventHandler(this.dgvUtilisateurs_SelectionChanged);
+            this.lblRecherche.AutoSize = true;
+            this.lblRecherche.Location = new System.Drawing.Point(17, 50);
+            this.lblRecherche.Name = "lblRecherche";
+            this.lblRecherche.Size = new System.Drawing.Size(69, 13);
+            this.lblRecherche.TabIndex = 1;
+            this.lblRecherche.Text = "Rechercher :";
+            // 
+            // txtRecherche
+            // 
+            this.txtRecherche.Location = new System.Drawing.Point(92, 47);
+            this.txtRecherche.Name = "txtRecherche";
+            this.txtRecherche.Size = new System.Drawing.Size(200, 20);
+            this.txtRecherche.TabIndex = 2;
+            this.txtRecherche.TextChanged += new System.EventHandler(this.txtRecherche_TextChanged);
+            // 
+            // flpUtilisateurs
+            // 
+            this.flpUtilisateurs.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.flpUtilisateurs.AutoScroll = true;
+            this.flpUtilisateurs.BackColor = System.Drawing.Color.White;
+            this.flpUtilisateurs.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.flpUtilisateurs.Location = new System.Drawing.Point(15, 75);
+            this.flpUtilisateurs.Name = "flpUtilisateurs";
+            this.flpUtilisateurs.Size = new System.Drawing.Size(450, 360);
+            this.flpUtilisateurs.TabIndex = 3;
             // 
             // grpDetails
             // 
@@ -103,7 +118,7 @@ namespace Fumoblilite.Interface.UserControls
             this.grpDetails.Location = new System.Drawing.Point(480, 50);
             this.grpDetails.Name = "grpDetails";
             this.grpDetails.Size = new System.Drawing.Size(305, 300);
-            this.grpDetails.TabIndex = 2;
+            this.grpDetails.TabIndex = 4;
             this.grpDetails.TabStop = false;
             this.grpDetails.Text = "Détails de l\'utilisateur";
             // 
@@ -242,7 +257,7 @@ namespace Fumoblilite.Interface.UserControls
             this.btnNouveau.Location = new System.Drawing.Point(480, 360);
             this.btnNouveau.Name = "btnNouveau";
             this.btnNouveau.Size = new System.Drawing.Size(90, 30);
-            this.btnNouveau.TabIndex = 3;
+            this.btnNouveau.TabIndex = 5;
             this.btnNouveau.Text = "Nouveau";
             this.btnNouveau.UseVisualStyleBackColor = true;
             this.btnNouveau.Click += new System.EventHandler(this.btnNouveau_Click);
@@ -253,7 +268,7 @@ namespace Fumoblilite.Interface.UserControls
             this.btnEnregistrer.Location = new System.Drawing.Point(580, 360);
             this.btnEnregistrer.Name = "btnEnregistrer";
             this.btnEnregistrer.Size = new System.Drawing.Size(90, 30);
-            this.btnEnregistrer.TabIndex = 4;
+            this.btnEnregistrer.TabIndex = 6;
             this.btnEnregistrer.Text = "Enregistrer";
             this.btnEnregistrer.UseVisualStyleBackColor = true;
             this.btnEnregistrer.Click += new System.EventHandler(this.btnEnregistrer_Click);
@@ -264,7 +279,7 @@ namespace Fumoblilite.Interface.UserControls
             this.btnSupprimer.Location = new System.Drawing.Point(680, 360);
             this.btnSupprimer.Name = "btnSupprimer";
             this.btnSupprimer.Size = new System.Drawing.Size(90, 30);
-            this.btnSupprimer.TabIndex = 5;
+            this.btnSupprimer.TabIndex = 7;
             this.btnSupprimer.Text = "Supprimer";
             this.btnSupprimer.UseVisualStyleBackColor = true;
             this.btnSupprimer.Click += new System.EventHandler(this.btnSupprimer_Click);
@@ -277,12 +292,13 @@ namespace Fumoblilite.Interface.UserControls
             this.Controls.Add(this.btnEnregistrer);
             this.Controls.Add(this.btnNouveau);
             this.Controls.Add(this.grpDetails);
-            this.Controls.Add(this.dgvUtilisateurs);
+            this.Controls.Add(this.flpUtilisateurs);
+            this.Controls.Add(this.txtRecherche);
+            this.Controls.Add(this.lblRecherche);
             this.Controls.Add(this.lblTitre);
             this.Name = "UCGestionUtilisateurs";
             this.Size = new System.Drawing.Size(800, 450);
             this.Load += new System.EventHandler(this.UCGestionUtilisateurs_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvUtilisateurs)).EndInit();
             this.grpDetails.ResumeLayout(false);
             this.grpDetails.PerformLayout();
             this.ResumeLayout(false);
