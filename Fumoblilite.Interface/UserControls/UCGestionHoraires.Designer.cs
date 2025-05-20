@@ -1,5 +1,3 @@
-using System.Windows.Forms;
-
 namespace Fumoblilite.Interface.UserControls
 {
     partial class UCGestionHoraires
@@ -11,7 +9,7 @@ namespace Fumoblilite.Interface.UserControls
         private System.Windows.Forms.Label lblJour;
         private System.Windows.Forms.ComboBox cboJour;
         private System.Windows.Forms.Button btnAfficher;
-        private System.Windows.Forms.DataGridView dgvHoraires;
+        private System.Windows.Forms.FlowLayoutPanel flpHoraires;
         private System.Windows.Forms.GroupBox grpDetails;
         private System.Windows.Forms.Label lblId;
         private System.Windows.Forms.TextBox txtId;
@@ -37,7 +35,7 @@ namespace Fumoblilite.Interface.UserControls
             this.lblJour = new System.Windows.Forms.Label();
             this.cboLigne = new System.Windows.Forms.ComboBox();
             this.lblLigne = new System.Windows.Forms.Label();
-            this.dgvHoraires = new System.Windows.Forms.DataGridView();
+            this.flpHoraires = new System.Windows.Forms.FlowLayoutPanel();
             this.grpDetails = new System.Windows.Forms.GroupBox();
             this.chkEstActif = new System.Windows.Forms.CheckBox();
             this.dtpHeure = new System.Windows.Forms.DateTimePicker();
@@ -54,7 +52,6 @@ namespace Fumoblilite.Interface.UserControls
             this.btnEnregistrer = new System.Windows.Forms.Button();
             this.btnSupprimer = new System.Windows.Forms.Button();
             this.grpFiltres.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvHoraires)).BeginInit();
             this.grpDetails.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -112,42 +109,36 @@ namespace Fumoblilite.Interface.UserControls
             this.lblJour.TabIndex = 2;
             this.lblJour.Text = "Jour :";
             // 
-            // cboJour
+            // cboLigne
             // 
-            this.cboJour.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboJour.FormattingEnabled = true;
-            this.cboJour.Location = new System.Drawing.Point(350, 27);
-            this.cboJour.Name = "cboJour";
-            this.cboJour.Size = new System.Drawing.Size(200, 21);
-            this.cboJour.TabIndex = 3;
+            this.cboLigne.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboLigne.FormattingEnabled = true;
+            this.cboLigne.Location = new System.Drawing.Point(70, 27);
+            this.cboLigne.Name = "cboLigne";
+            this.cboLigne.Size = new System.Drawing.Size(200, 21);
+            this.cboLigne.TabIndex = 1;
             // 
-            // btnAfficher
+            // lblLigne
             // 
-            this.btnAfficher.Location = new System.Drawing.Point(600, 25);
-            this.btnAfficher.Name = "btnAfficher";
-            this.btnAfficher.Size = new System.Drawing.Size(120, 25);
-            this.btnAfficher.TabIndex = 4;
-            this.btnAfficher.Text = "Afficher";
-            this.btnAfficher.UseVisualStyleBackColor = true;
-            this.btnAfficher.Click += new System.EventHandler(this.btnAfficher_Click);
+            this.lblLigne.AutoSize = true;
+            this.lblLigne.Location = new System.Drawing.Point(20, 30);
+            this.lblLigne.Name = "lblLigne";
+            this.lblLigne.Size = new System.Drawing.Size(39, 13);
+            this.lblLigne.TabIndex = 0;
+            this.lblLigne.Text = "Ligne :";
             // 
-            // dgvHoraires
+            // flpHoraires
             // 
-            this.dgvHoraires.AllowUserToAddRows = false;
-            this.dgvHoraires.AllowUserToDeleteRows = false;
-            this.dgvHoraires.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.flpHoraires.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvHoraires.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvHoraires.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvHoraires.Location = new System.Drawing.Point(15, 130);
-            this.dgvHoraires.MultiSelect = false;
-            this.dgvHoraires.Name = "dgvHoraires";
-            this.dgvHoraires.ReadOnly = true;
-            this.dgvHoraires.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvHoraires.Size = new System.Drawing.Size(450, 305);
-            this.dgvHoraires.TabIndex = 2;
-            this.dgvHoraires.SelectionChanged += new System.EventHandler(this.dgvHoraires_SelectionChanged);
+            this.flpHoraires.AutoScroll = true;
+            this.flpHoraires.BackColor = System.Drawing.Color.White;
+            this.flpHoraires.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.flpHoraires.Location = new System.Drawing.Point(15, 130);
+            this.flpHoraires.Name = "flpHoraires";
+            this.flpHoraires.Size = new System.Drawing.Size(450, 305);
+            this.flpHoraires.TabIndex = 2;
             // 
             // grpDetails
             // 
@@ -313,7 +304,7 @@ namespace Fumoblilite.Interface.UserControls
             this.Controls.Add(this.btnEnregistrer);
             this.Controls.Add(this.btnNouveau);
             this.Controls.Add(this.grpDetails);
-            this.Controls.Add(this.dgvHoraires);
+            this.Controls.Add(this.flpHoraires);
             this.Controls.Add(this.grpFiltres);
             this.Controls.Add(this.lblTitre);
             this.Name = "UCGestionHoraires";
@@ -321,7 +312,6 @@ namespace Fumoblilite.Interface.UserControls
             this.Load += new System.EventHandler(this.UCGestionHoraires_Load);
             this.grpFiltres.ResumeLayout(false);
             this.grpFiltres.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvHoraires)).EndInit();
             this.grpDetails.ResumeLayout(false);
             this.grpDetails.PerformLayout();
             this.ResumeLayout(false);
