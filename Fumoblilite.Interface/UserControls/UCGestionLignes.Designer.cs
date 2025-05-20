@@ -91,6 +91,7 @@ namespace Fumoblilite.Interface.UserControls
             this.lblTitre.Size = new System.Drawing.Size(183, 24);
             this.lblTitre.TabIndex = 0;
             this.lblTitre.Text = "Gestion des lignes";
+            this.lblTitre.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
             // 
             // flpLignes
             // 
@@ -219,6 +220,10 @@ namespace Fumoblilite.Interface.UserControls
             this.btnNouveau.Text = "Nouveau";
             this.btnNouveau.UseVisualStyleBackColor = true;
             this.btnNouveau.Click += new System.EventHandler(this.btnNouveau_Click);
+            this.btnNouveau.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.btnNouveau.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
+            this.btnNouveau.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnNouveau.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
             // 
             // btnEnregistrer
             // 
@@ -230,6 +235,10 @@ namespace Fumoblilite.Interface.UserControls
             this.btnEnregistrer.Text = "Enregistrer";
             this.btnEnregistrer.UseVisualStyleBackColor = true;
             this.btnEnregistrer.Click += new System.EventHandler(this.btnEnregistrer_Click);
+            this.btnEnregistrer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
+            this.btnEnregistrer.FlatAppearance.BorderSize = 0;
+            this.btnEnregistrer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnEnregistrer.ForeColor = System.Drawing.Color.White;
             // 
             // btnSupprimer
             // 
@@ -241,6 +250,10 @@ namespace Fumoblilite.Interface.UserControls
             this.btnSupprimer.Text = "Supprimer";
             this.btnSupprimer.UseVisualStyleBackColor = true;
             this.btnSupprimer.Click += new System.EventHandler(this.btnSupprimer_Click);
+            this.btnSupprimer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(17)))), ((int)(((byte)(35)))));
+            this.btnSupprimer.FlatAppearance.BorderSize = 0;
+            this.btnSupprimer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSupprimer.ForeColor = System.Drawing.Color.White;
             // 
             // tabDetails
             // 
@@ -290,6 +303,10 @@ namespace Fumoblilite.Interface.UserControls
             this.btnSupprimerArret.Text = "Supprimer l\'arrêt";
             this.btnSupprimerArret.UseVisualStyleBackColor = true;
             this.btnSupprimerArret.Click += new System.EventHandler(this.btnSupprimerArret_Click);
+            this.btnSupprimerArret.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(17)))), ((int)(((byte)(35)))));
+            this.btnSupprimerArret.FlatAppearance.BorderSize = 0;
+            this.btnSupprimerArret.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSupprimerArret.ForeColor = System.Drawing.Color.White;
             // 
             // btnAjouterArret
             // 
@@ -301,6 +318,10 @@ namespace Fumoblilite.Interface.UserControls
             this.btnAjouterArret.Text = "Ajouter l\'arrêt";
             this.btnAjouterArret.UseVisualStyleBackColor = true;
             this.btnAjouterArret.Click += new System.EventHandler(this.btnAjouterArret_Click);
+            this.btnAjouterArret.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
+            this.btnAjouterArret.FlatAppearance.BorderSize = 0;
+            this.btnAjouterArret.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnAjouterArret.ForeColor = System.Drawing.Color.White;
             // 
             // grpArret
             // 
