@@ -30,6 +30,7 @@
             this.lblTitre.Size = new System.Drawing.Size(156, 24);
             this.lblTitre.TabIndex = 0;
             this.lblTitre.Text = "Réseau complet";
+            this.lblTitre.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
             // 
             // pnlReseau
             // 
@@ -77,6 +78,10 @@
             this.btnZoomIn.TabIndex = 4;
             this.btnZoomIn.Text = "+";
             this.btnZoomIn.UseVisualStyleBackColor = true;
+            this.btnZoomIn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
+            this.btnZoomIn.FlatAppearance.BorderSize = 0;
+            this.btnZoomIn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnZoomIn.ForeColor = System.Drawing.Color.White;
             // 
             // btnZoomOut
             // 
@@ -88,6 +93,10 @@
             this.btnZoomOut.TabIndex = 5;
             this.btnZoomOut.Text = "-";
             this.btnZoomOut.UseVisualStyleBackColor = true;
+            this.btnZoomOut.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
+            this.btnZoomOut.FlatAppearance.BorderSize = 0;
+            this.btnZoomOut.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnZoomOut.ForeColor = System.Drawing.Color.White;
             // 
             // btnResetZoom
             // 
@@ -99,6 +108,10 @@
             this.btnResetZoom.TabIndex = 6;
             this.btnResetZoom.Text = "Reset";
             this.btnResetZoom.UseVisualStyleBackColor = true;
+            this.btnResetZoom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.btnResetZoom.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
+            this.btnResetZoom.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnResetZoom.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
             // 
             // UCConsultationReseau
             // 
