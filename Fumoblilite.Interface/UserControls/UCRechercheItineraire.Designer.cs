@@ -1,3 +1,6 @@
+using System.Windows.Forms;
+using System.Drawing;
+
 namespace Fumoblilite.Interface.UserControls
 {
     partial class UCRechercheItineraire
@@ -15,9 +18,8 @@ namespace Fumoblilite.Interface.UserControls
         private System.Windows.Forms.RadioButton rbDepart;
         private System.Windows.Forms.RadioButton rbArrivee;
         private System.Windows.Forms.Button btnRechercher;
-        private System.Windows.Forms.DataGridView dgvItineraires;
+        private System.Windows.Forms.FlowLayoutPanel flpItineraires;
         private System.Windows.Forms.Panel pnlDetailsItineraire;
-        private System.Windows.Forms.Label lblDetailsItineraire;
 
         private void InitializeComponent()
         {
@@ -34,12 +36,9 @@ namespace Fumoblilite.Interface.UserControls
             this.rbDepart = new System.Windows.Forms.RadioButton();
             this.rbArrivee = new System.Windows.Forms.RadioButton();
             this.btnRechercher = new System.Windows.Forms.Button();
-            this.dgvItineraires = new System.Windows.Forms.DataGridView();
+            this.flpItineraires = new System.Windows.Forms.FlowLayoutPanel();
             this.pnlDetailsItineraire = new System.Windows.Forms.Panel();
-            this.lblDetailsItineraire = new System.Windows.Forms.Label();
             this.grpRecherche.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvItineraires)).BeginInit();
-            this.pnlDetailsItineraire.SuspendLayout();
             this.SuspendLayout();
             // 
             // lblTitre
@@ -170,58 +169,50 @@ namespace Fumoblilite.Interface.UserControls
             // 
             // btnRechercher
             // 
+            this.btnRechercher.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(122)))), ((int)(((byte)(204)))));
+            this.btnRechercher.FlatAppearance.BorderSize = 0;
+            this.btnRechercher.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnRechercher.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnRechercher.ForeColor = System.Drawing.Color.White;
             this.btnRechercher.Location = new System.Drawing.Point(450, 90);
             this.btnRechercher.Name = "btnRechercher";
             this.btnRechercher.Size = new System.Drawing.Size(120, 30);
             this.btnRechercher.TabIndex = 10;
             this.btnRechercher.Text = "Rechercher";
-            this.btnRechercher.UseVisualStyleBackColor = true;
+            this.btnRechercher.UseVisualStyleBackColor = false;
             this.btnRechercher.Click += new System.EventHandler(this.btnRechercher_Click);
             // 
-            // dgvItineraires
+            // flpItineraires
             // 
-            this.dgvItineraires.AllowUserToAddRows = false;
-            this.dgvItineraires.AllowUserToDeleteRows = false;
-            this.dgvItineraires.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.flpItineraires.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvItineraires.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvItineraires.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvItineraires.Location = new System.Drawing.Point(15, 210);
-            this.dgvItineraires.MultiSelect = false;
-            this.dgvItineraires.Name = "dgvItineraires";
-            this.dgvItineraires.ReadOnly = true;
-            this.dgvItineraires.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvItineraires.Size = new System.Drawing.Size(400, 225);
-            this.dgvItineraires.TabIndex = 2;
-            this.dgvItineraires.SelectionChanged += new System.EventHandler(this.dgvItineraires_SelectionChanged);
+            this.flpItineraires.AutoScroll = true;
+            this.flpItineraires.BackColor = System.Drawing.Color.White;
+            this.flpItineraires.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.flpItineraires.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flpItineraires.Location = new System.Drawing.Point(15, 210);
+            this.flpItineraires.Name = "flpItineraires";
+            this.flpItineraires.Size = new System.Drawing.Size(400, 225);
+            this.flpItineraires.TabIndex = 2;
+            this.flpItineraires.WrapContents = false;
             // 
             // pnlDetailsItineraire
             // 
             this.pnlDetailsItineraire.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlDetailsItineraire.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pnlDetailsItineraire.Controls.Add(this.lblDetailsItineraire);
             this.pnlDetailsItineraire.Location = new System.Drawing.Point(430, 210);
             this.pnlDetailsItineraire.Name = "pnlDetailsItineraire";
             this.pnlDetailsItineraire.Size = new System.Drawing.Size(355, 225);
             this.pnlDetailsItineraire.TabIndex = 3;
-            // 
-            // lblDetailsItineraire
-            // 
-            this.lblDetailsItineraire.AutoSize = true;
-            this.lblDetailsItineraire.Location = new System.Drawing.Point(10, 10);
-            this.lblDetailsItineraire.Name = "lblDetailsItineraire";
-            this.lblDetailsItineraire.Size = new System.Drawing.Size(174, 13);
-            this.lblDetailsItineraire.TabIndex = 0;
-            this.lblDetailsItineraire.Text = "Sélectionnez un itinéraire à gauche";
             // 
             // UCRechercheItineraire
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.pnlDetailsItineraire);
-            this.Controls.Add(this.dgvItineraires);
+            this.Controls.Add(this.flpItineraires);
             this.Controls.Add(this.grpRecherche);
             this.Controls.Add(this.lblTitre);
             this.Name = "UCRechercheItineraire";
@@ -229,9 +220,6 @@ namespace Fumoblilite.Interface.UserControls
             this.Load += new System.EventHandler(this.UCRechercheItineraire_Load);
             this.grpRecherche.ResumeLayout(false);
             this.grpRecherche.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvItineraires)).EndInit();
-            this.pnlDetailsItineraire.ResumeLayout(false);
-            this.pnlDetailsItineraire.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
         }
