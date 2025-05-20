@@ -102,7 +102,7 @@ namespace Fumoblilite.Interface.Forms
             // 
             this.menuItemArrets.Name = "menuItemArrets";
             this.menuItemArrets.Size = new System.Drawing.Size(132, 22);
-            this.menuItemArrets.Text = "Arrts";
+            this.menuItemArrets.Text = "Arrêt";
             this.menuItemArrets.Click += new System.EventHandler(this.menuItemArrets_Click);
             // 
             // menuItemLignes
@@ -141,14 +141,14 @@ namespace Fumoblilite.Interface.Forms
             // 
             this.menuItemReseau.Name = "menuItemReseau";
             this.menuItemReseau.Size = new System.Drawing.Size(171, 22);
-            this.menuItemReseau.Text = "Rseau complet";
+            this.menuItemReseau.Text = "Réseau complet";
             this.menuItemReseau.Click += new System.EventHandler(this.menuItemReseau_Click);
             // 
             // menuItemLigneDetails
             // 
             this.menuItemLigneDetails.Name = "menuItemLigneDetails";
             this.menuItemLigneDetails.Size = new System.Drawing.Size(171, 22);
-            this.menuItemLigneDetails.Text = "Dtails d\'une ligne";
+            this.menuItemLigneDetails.Text = "Détails d\'une ligne";
             this.menuItemLigneDetails.Click += new System.EventHandler(this.menuItemLigneDetails_Click);
             // 
             // menuItemHorairesJournee
