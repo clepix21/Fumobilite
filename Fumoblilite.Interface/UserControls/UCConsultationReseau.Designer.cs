@@ -4,15 +4,21 @@
     {
         private System.Windows.Forms.Label lblTitre;
         private System.Windows.Forms.Panel pnlReseau;
-        private System.Windows.Forms.CheckedListBox lstLignes;
+        private System.Windows.Forms.FlowLayoutPanel flpLignes;
         private System.Windows.Forms.Label lblLignes;
+        private System.Windows.Forms.Button btnZoomIn;
+        private System.Windows.Forms.Button btnZoomOut;
+        private System.Windows.Forms.Button btnResetZoom;
 
         private void InitializeComponent()
         {
             this.lblTitre = new System.Windows.Forms.Label();
             this.pnlReseau = new System.Windows.Forms.Panel();
-            this.lstLignes = new System.Windows.Forms.CheckedListBox();
+            this.flpLignes = new System.Windows.Forms.FlowLayoutPanel();
             this.lblLignes = new System.Windows.Forms.Label();
+            this.btnZoomIn = new System.Windows.Forms.Button();
+            this.btnZoomOut = new System.Windows.Forms.Button();
+            this.btnResetZoom = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblTitre
@@ -30,6 +36,7 @@
             this.pnlReseau.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlReseau.BackColor = System.Drawing.Color.White;
             this.pnlReseau.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pnlReseau.Location = new System.Drawing.Point(180, 50);
             this.pnlReseau.Name = "pnlReseau";
@@ -37,16 +44,19 @@
             this.pnlReseau.TabIndex = 1;
             this.pnlReseau.Paint += new System.Windows.Forms.PaintEventHandler(this.pnlReseau_Paint);
             // 
-            // lstLignes
+            // flpLignes
             // 
-            this.lstLignes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.flpLignes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.lstLignes.FormattingEnabled = true;
-            this.lstLignes.Location = new System.Drawing.Point(15, 70);
-            this.lstLignes.Name = "lstLignes";
-            this.lstLignes.Size = new System.Drawing.Size(150, 364);
-            this.lstLignes.TabIndex = 2;
-            this.lstLignes.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.lstLignes_ItemCheck);
+            this.flpLignes.AutoScroll = true;
+            this.flpLignes.BackColor = System.Drawing.Color.White;
+            this.flpLignes.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.flpLignes.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flpLignes.Location = new System.Drawing.Point(15, 70);
+            this.flpLignes.Name = "flpLignes";
+            this.flpLignes.Size = new System.Drawing.Size(150, 330);
+            this.flpLignes.TabIndex = 2;
+            this.flpLignes.WrapContents = false;
             // 
             // lblLignes
             // 
@@ -57,12 +67,48 @@
             this.lblLignes.TabIndex = 3;
             this.lblLignes.Text = "Lignes :";
             // 
+            // btnZoomIn
+            // 
+            this.btnZoomIn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnZoomIn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnZoomIn.Location = new System.Drawing.Point(15, 410);
+            this.btnZoomIn.Name = "btnZoomIn";
+            this.btnZoomIn.Size = new System.Drawing.Size(40, 25);
+            this.btnZoomIn.TabIndex = 4;
+            this.btnZoomIn.Text = "+";
+            this.btnZoomIn.UseVisualStyleBackColor = true;
+            // 
+            // btnZoomOut
+            // 
+            this.btnZoomOut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnZoomOut.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnZoomOut.Location = new System.Drawing.Point(65, 410);
+            this.btnZoomOut.Name = "btnZoomOut";
+            this.btnZoomOut.Size = new System.Drawing.Size(40, 25);
+            this.btnZoomOut.TabIndex = 5;
+            this.btnZoomOut.Text = "-";
+            this.btnZoomOut.UseVisualStyleBackColor = true;
+            // 
+            // btnResetZoom
+            // 
+            this.btnResetZoom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnResetZoom.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnResetZoom.Location = new System.Drawing.Point(115, 410);
+            this.btnResetZoom.Name = "btnResetZoom";
+            this.btnResetZoom.Size = new System.Drawing.Size(50, 25);
+            this.btnResetZoom.TabIndex = 6;
+            this.btnResetZoom.Text = "Reset";
+            this.btnResetZoom.UseVisualStyleBackColor = true;
+            // 
             // UCConsultationReseau
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnResetZoom);
+            this.Controls.Add(this.btnZoomOut);
+            this.Controls.Add(this.btnZoomIn);
             this.Controls.Add(this.lblLignes);
-            this.Controls.Add(this.lstLignes);
+            this.Controls.Add(this.flpLignes);
             this.Controls.Add(this.pnlReseau);
             this.Controls.Add(this.lblTitre);
             this.Name = "UCConsultationReseau";
