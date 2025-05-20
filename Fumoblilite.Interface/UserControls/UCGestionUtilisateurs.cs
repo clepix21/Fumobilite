@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.Drawing;
 using Fumoblilite.Systeme.Modeles;
 using Fumoblilite.Systeme.Services;
 using Fumoblilite.SQL.Repositories;
 using Fumoblilite.Systeme.Interfaces;
+using System.Linq;
 
 namespace Fumoblilite.Interface.UserControls
 {
@@ -14,6 +16,7 @@ namespace Fumoblilite.Interface.UserControls
         private readonly ServiceAuthentification _serviceAuthentification;
         private readonly IRepositoryUtilisateur _repositoryUtilisateur;
         private Utilisateur _utilisateurSelectionne;
+        private Panel _selectedUserPanel;
 
         public UCGestionUtilisateurs(string connectionString)
         {
@@ -35,27 +38,142 @@ namespace Fumoblilite.Interface.UserControls
             try
             {
                 List<Utilisateur> utilisateurs = _repositoryUtilisateur.ObtenirTous();
-                dgvUtilisateurs.DataSource = utilisateurs;
 
-                // Configurer l'affichage des colonnes
-                dgvUtilisateurs.Columns["Id"].Width = 50;
-                dgvUtilisateurs.Columns["Nom"].Width = 100;
-                dgvUtilisateurs.Columns["Prenom"].HeaderText = "Prénom";
-                dgvUtilisateurs.Columns["Prenom"].Width = 100;
-                dgvUtilisateurs.Columns["NomUtilisateur"].HeaderText = "Nom d'utilisateur";
-                dgvUtilisateurs.Columns["NomUtilisateur"].Width = 120;
-                dgvUtilisateurs.Columns["MotDePasse"].Visible = false;
-                dgvUtilisateurs.Columns["Email"].Width = 150;
-                dgvUtilisateurs.Columns["Role"].HeaderText = "Rôle";
-                dgvUtilisateurs.Columns["EstActif"].HeaderText = "Actif";
-                dgvUtilisateurs.Columns["DateCreation"].Visible = false;
-                dgvUtilisateurs.Columns["DateModification"].Visible = false;
+                flpUtilisateurs.SuspendLayout();
+                flpUtilisateurs.Controls.Clear();
+                _selectedUserPanel = null;
 
+                foreach (var utilisateur in utilisateurs)
+                {
+                    Panel panel = CreerCarteUtilisateur(utilisateur);
+                    flpUtilisateurs.Controls.Add(panel);
+                }
+
+                flpUtilisateurs.ResumeLayout();
                 ViderChamps();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Erreur lors du chargement des utilisateurs : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private Panel CreerCarteUtilisateur(Utilisateur utilisateur)
+        {
+            // Créer un panel pour la carte
+            Panel panel = new Panel
+            {
+                Width = 430,
+                Height = 80,
+                Margin = new Padding(5),
+                BorderStyle = BorderStyle.FixedSingle,
+                Tag = utilisateur
+            };
+
+            // Ajouter une bordure colorée à gauche selon le rôle
+            Panel bordureGauche = new Panel
+            {
+                Width = 10,
+                Height = panel.Height,
+                Dock = DockStyle.Left,
+                BackColor = utilisateur.Role == "Admin" ? Color.DarkRed : Color.DarkBlue
+            };
+            panel.Controls.Add(bordureGauche);
+
+            // Ajouter les informations de l'utilisateur
+            Label lblNomComplet = new Label
+            {
+                Text = $"{utilisateur.Prenom} {utilisateur.Nom}",
+                Font = new Font("Segoe UI", 12, FontStyle.Bold),
+                AutoSize = true,
+                Location = new Point(20, 10)
+            };
+            panel.Controls.Add(lblNomComplet);
+
+            Label lblNomUtilisateur = new Label
+            {
+                Text = $"Nom d'utilisateur: {utilisateur.NomUtilisateur}",
+                Font = new Font("Segoe UI", 9),
+                AutoSize = true,
+                Location = new Point(20, 35)
+            };
+            panel.Controls.Add(lblNomUtilisateur);
+
+            Label lblEmail = new Label
+            {
+                Text = $"Email: {utilisateur.Email}",
+                Font = new Font("Segoe UI", 9),
+                AutoSize = true,
+                Location = new Point(20, 55)
+            };
+            panel.Controls.Add(lblEmail);
+
+            // Indicateur de rôle
+            Label lblRole = new Label
+            {
+                Text = utilisateur.Role,
+                Font = new Font("Segoe UI", 8, FontStyle.Bold),
+                AutoSize = true,
+                ForeColor = utilisateur.Role == "Admin" ? Color.DarkRed : Color.DarkBlue,
+                Location = new Point(panel.Width - 100, 10)
+            };
+            panel.Controls.Add(lblRole);
+
+            // Indicateur d'état actif/inactif
+            Panel indicateurActif = new Panel
+            {
+                Width = 15,
+                Height = 15,
+                BackColor = utilisateur.EstActif ? Color.Green : Color.Red,
+                Location = new Point(panel.Width - 25, 10)
+            };
+            panel.Controls.Add(indicateurActif);
+
+            Label lblActif = new Label
+            {
+                Text = utilisateur.EstActif ? "Actif" : "Inactif",
+                Font = new Font("Segoe UI", 8),
+                AutoSize = true,
+                Location = new Point(panel.Width - 70, 35)
+            };
+            panel.Controls.Add(lblActif);
+
+            // Ajouter un gestionnaire d'événements pour la sélection
+            panel.Click += (sender, e) => SelectionnerUtilisateur(panel);
+            foreach (Control control in panel.Controls)
+            {
+                control.Click += (sender, e) => SelectionnerUtilisateur(panel);
+            }
+
+            return panel;
+        }
+
+        private void SelectionnerUtilisateur(Panel panel)
+        {
+            // Désélectionner le panel précédemment sélectionné
+            if (_selectedUserPanel != null)
+            {
+                _selectedUserPanel.BackColor = SystemColors.Control;
+            }
+
+            // Sélectionner le nouveau panel
+            _selectedUserPanel = panel;
+            _selectedUserPanel.BackColor = Color.FromArgb(230, 240, 250);
+
+            // Récupérer l'utilisateur associé au panel
+            _utilisateurSelectionne = (Utilisateur)panel.Tag;
+
+            if (_utilisateurSelectionne != null)
+            {
+                txtId.Text = _utilisateurSelectionne.Id.ToString();
+                txtNom.Text = _utilisateurSelectionne.Nom;
+                txtPrenom.Text = _utilisateurSelectionne.Prenom;
+                txtNomUtilisateur.Text = _utilisateurSelectionne.NomUtilisateur;
+                txtMotDePasse.Text = string.Empty; // Ne pas afficher le mot de passe
+                txtEmail.Text = _utilisateurSelectionne.Email;
+                cboRole.SelectedItem = _utilisateurSelectionne.Role;
+                chkEstActif.Checked = _utilisateurSelectionne.EstActif;
+                btnSupprimer.Enabled = true;
             }
         }
 
@@ -71,26 +189,12 @@ namespace Fumoblilite.Interface.UserControls
             chkEstActif.Checked = true;
             _utilisateurSelectionne = null;
             btnSupprimer.Enabled = false;
-        }
 
-        private void dgvUtilisateurs_SelectionChanged(object sender, EventArgs e)
-        {
-            if (dgvUtilisateurs.SelectedRows.Count > 0)
+            // Désélectionner le panel
+            if (_selectedUserPanel != null)
             {
-                int id = Convert.ToInt32(dgvUtilisateurs.SelectedRows[0].Cells["Id"].Value);
-                _utilisateurSelectionne = _repositoryUtilisateur.ObtenirParId(id);
-                if (_utilisateurSelectionne != null)
-                {
-                    txtId.Text = _utilisateurSelectionne.Id.ToString();
-                    txtNom.Text = _utilisateurSelectionne.Nom;
-                    txtPrenom.Text = _utilisateurSelectionne.Prenom;
-                    txtNomUtilisateur.Text = _utilisateurSelectionne.NomUtilisateur;
-                    txtMotDePasse.Text = string.Empty; // Ne pas afficher le mot de passe
-                    txtEmail.Text = _utilisateurSelectionne.Email;
-                    cboRole.SelectedItem = _utilisateurSelectionne.Role;
-                    chkEstActif.Checked = _utilisateurSelectionne.EstActif;
-                    btnSupprimer.Enabled = true;
-                }
+                _selectedUserPanel.BackColor = SystemColors.Control;
+                _selectedUserPanel = null;
             }
         }
 
@@ -194,6 +298,30 @@ namespace Fumoblilite.Interface.UserControls
                     {
                         MessageBox.Show($"Erreur : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+                }
+            }
+        }
+
+        private void txtRecherche_TextChanged(object sender, EventArgs e)
+        {
+            FiltrerUtilisateurs();
+        }
+
+        private void FiltrerUtilisateurs()
+        {
+            string recherche = txtRecherche.Text.ToLower();
+
+            foreach (Control control in flpUtilisateurs.Controls)
+            {
+                if (control is Panel panel && panel.Tag is Utilisateur utilisateur)
+                {
+                    bool visible = string.IsNullOrEmpty(recherche) ||
+                                  utilisateur.Nom.ToLower().Contains(recherche) ||
+                                  utilisateur.Prenom.ToLower().Contains(recherche) ||
+                                  utilisateur.NomUtilisateur.ToLower().Contains(recherche) ||
+                                  utilisateur.Email.ToLower().Contains(recherche);
+
+                    panel.Visible = visible;
                 }
             }
         }
