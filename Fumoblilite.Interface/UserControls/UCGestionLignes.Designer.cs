@@ -6,7 +6,7 @@ namespace Fumoblilite.Interface.UserControls
     partial class UCGestionLignes
     {
         private System.Windows.Forms.Label lblTitre;
-        private System.Windows.Forms.DataGridView dgvLignes;
+        private System.Windows.Forms.FlowLayoutPanel flpLignes;
         private System.Windows.Forms.GroupBox grpDetails;
         private System.Windows.Forms.Label lblId;
         private System.Windows.Forms.TextBox txtId;
@@ -24,7 +24,7 @@ namespace Fumoblilite.Interface.UserControls
         private System.Windows.Forms.TabControl tabDetails;
         private System.Windows.Forms.TabPage tabInfos;
         private System.Windows.Forms.TabPage tabArrets;
-        private System.Windows.Forms.DataGridView dgvArrets;
+        private System.Windows.Forms.FlowLayoutPanel flpArrets;
         private System.Windows.Forms.GroupBox grpArret;
         private System.Windows.Forms.Label lblArret;
         private System.Windows.Forms.ComboBox cboArret;
@@ -41,7 +41,7 @@ namespace Fumoblilite.Interface.UserControls
         private void InitializeComponent()
         {
             this.lblTitre = new System.Windows.Forms.Label();
-            this.dgvLignes = new System.Windows.Forms.DataGridView();
+            this.flpLignes = new System.Windows.Forms.FlowLayoutPanel();
             this.grpDetails = new System.Windows.Forms.GroupBox();
             this.chkEstActif = new System.Windows.Forms.CheckBox();
             this.btnCouleur = new System.Windows.Forms.Button();
@@ -70,9 +70,8 @@ namespace Fumoblilite.Interface.UserControls
             this.lblOrdre = new System.Windows.Forms.Label();
             this.cboArret = new System.Windows.Forms.ComboBox();
             this.lblArret = new System.Windows.Forms.Label();
-            this.dgvArrets = new System.Windows.Forms.DataGridView();
+            this.flpArrets = new System.Windows.Forms.FlowLayoutPanel();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvLignes)).BeginInit();
             this.grpDetails.SuspendLayout();
             this.tabDetails.SuspendLayout();
             this.tabInfos.SuspendLayout();
@@ -81,7 +80,6 @@ namespace Fumoblilite.Interface.UserControls
             ((System.ComponentModel.ISupportInitialize)(this.nudTempsTrajet)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTempsArret)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudOrdre)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvArrets)).BeginInit();
             this.SuspendLayout();
             // 
             // lblTitre
@@ -94,31 +92,17 @@ namespace Fumoblilite.Interface.UserControls
             this.lblTitre.TabIndex = 0;
             this.lblTitre.Text = "Gestion des lignes";
             // 
-            // dgvLignes
+            // flpLignes
             // 
-            this.dgvLignes.AllowUserToAddRows = false;
-            this.dgvLignes.AllowUserToDeleteRows = false;
-            this.dgvLignes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.flpLignes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.dgvLignes.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvLignes.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            // 
-            // dgvLignes
-            // 
-            this.dgvLignes.AllowUserToAddRows = false;
-            this.dgvLignes.AllowUserToDeleteRows = false;
-            this.dgvLignes.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.dgvLignes.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvLignes.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvLignes.Location = new System.Drawing.Point(15, 50);
-            this.dgvLignes.MultiSelect = false;
-            this.dgvLignes.Name = "dgvLignes";
-            this.dgvLignes.ReadOnly = true;
-            this.dgvLignes.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvLignes.Size = new System.Drawing.Size(300, 385);
-            this.dgvLignes.TabIndex = 1;
-            this.dgvLignes.SelectionChanged += new System.EventHandler(this.dgvLignes_SelectionChanged);
+            this.flpLignes.AutoScroll = true;
+            this.flpLignes.BackColor = System.Drawing.Color.White;
+            this.flpLignes.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.flpLignes.Location = new System.Drawing.Point(15, 50);
+            this.flpLignes.Name = "flpLignes";
+            this.flpLignes.Size = new System.Drawing.Size(300, 385);
+            this.flpLignes.TabIndex = 1;
             // 
             // grpDetails
             // 
@@ -287,7 +271,7 @@ namespace Fumoblilite.Interface.UserControls
             this.tabArrets.Controls.Add(this.btnSupprimerArret);
             this.tabArrets.Controls.Add(this.btnAjouterArret);
             this.tabArrets.Controls.Add(this.grpArret);
-            this.tabArrets.Controls.Add(this.dgvArrets);
+            this.tabArrets.Controls.Add(this.flpArrets);
             this.tabArrets.Location = new System.Drawing.Point(4, 22);
             this.tabArrets.Name = "tabArrets";
             this.tabArrets.Padding = new System.Windows.Forms.Padding(3);
@@ -438,22 +422,18 @@ namespace Fumoblilite.Interface.UserControls
             this.lblArret.TabIndex = 0;
             this.lblArret.Text = "Arrêt :";
             // 
-            // dgvArrets
+            // flpArrets
             // 
-            this.dgvArrets.AllowUserToAddRows = false;
-            this.dgvArrets.AllowUserToDeleteRows = false;
-            this.dgvArrets.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            this.flpArrets.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgvArrets.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvArrets.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvArrets.Location = new System.Drawing.Point(6, 6);
-            this.dgvArrets.MultiSelect = false;
-            this.dgvArrets.Name = "dgvArrets";
-            this.dgvArrets.ReadOnly = true;
-            this.dgvArrets.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvArrets.Size = new System.Drawing.Size(453, 150);
-            this.dgvArrets.TabIndex = 0;
+            this.flpArrets.AutoScroll = true;
+            this.flpArrets.BackColor = System.Drawing.Color.White;
+            this.flpArrets.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.flpArrets.Location = new System.Drawing.Point(6, 6);
+            this.flpArrets.Name = "flpArrets";
+            this.flpArrets.Size = new System.Drawing.Size(453, 150);
+            this.flpArrets.TabIndex = 0;
             // 
             // UCGestionLignes
             // 
@@ -463,12 +443,11 @@ namespace Fumoblilite.Interface.UserControls
             this.Controls.Add(this.btnSupprimer);
             this.Controls.Add(this.btnEnregistrer);
             this.Controls.Add(this.btnNouveau);
-            this.Controls.Add(this.dgvLignes);
+            this.Controls.Add(this.flpLignes);
             this.Controls.Add(this.lblTitre);
             this.Name = "UCGestionLignes";
             this.Size = new System.Drawing.Size(800, 450);
             this.Load += new System.EventHandler(this.UCGestionLignes_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvLignes)).EndInit();
             this.grpDetails.ResumeLayout(false);
             this.grpDetails.PerformLayout();
             this.tabDetails.ResumeLayout(false);
@@ -479,10 +458,8 @@ namespace Fumoblilite.Interface.UserControls
             ((System.ComponentModel.ISupportInitialize)(this.nudTempsTrajet)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudTempsArret)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudOrdre)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvArrets)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
     }
 }
