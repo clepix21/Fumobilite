@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Linq;
+using System.Drawing;
 using Fumoblilite.Systeme.Modeles;
 using Fumoblilite.Systeme.Services;
 using Fumoblilite.SQL.Repositories;
@@ -16,6 +17,8 @@ namespace Fumoblilite.Interface.UserControls
         private readonly ServiceLigne _serviceLigne;
         private readonly ServiceArret _serviceArret;
         private Horaire _horaireSelectionne;
+        private List<dynamic> _horairesAffichage;
+        private Panel _selectedPanel;
 
         public UCGestionHoraires(string connectionString)
         {
@@ -165,7 +168,8 @@ namespace Fumoblilite.Interface.UserControls
                 if (horaires.Count == 0)
                 {
                     MessageBox.Show("Aucun horaire trouvé pour les critères spécifiés.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    dgvHoraires.DataSource = null;
+                    flpHoraires.Controls.Clear();
+                    _horairesAffichage = null;
                     return;
                 }
 
@@ -174,21 +178,21 @@ namespace Fumoblilite.Interface.UserControls
                 var arrets = _serviceArret.ObtenirTous().ToDictionary(a => a.Id);
 
                 // Préparer les données pour l'affichage
-                var horairesAffichage = horaires.Select(h => new
+                // Replace this line:
+                // With this line:
+                _horairesAffichage = horaires.Select(h => (dynamic)new
                 {
                     Id = h.Id,
                     Ligne = lignes.ContainsKey(h.LigneId) ? $"{lignes[h.LigneId].Numero} - {lignes[h.LigneId].Nom}" : $"Ligne {h.LigneId}",
-                    Arrêt = arrets.ContainsKey(h.ArretId) ? arrets[h.ArretId].Nom : $"Arrêt {h.ArretId}",
-                    Jour = ((DayOfWeek)h.JourSemaine).ToString(),
+                    LigneCouleur = lignes.ContainsKey(h.LigneId) ? lignes[h.LigneId].Couleur : "#808080",
+                    Arret = arrets.ContainsKey(h.ArretId) ? arrets[h.ArretId].Nom : $"Arrêt {h.ArretId}",
+                    Jour = GetJourSemaine((DayOfWeek)h.JourSemaine),
                     Heure = h.HeureDepart.ToString(@"hh\:mm"),
-                    Actif = h.EstActif ? "Oui" : "Non",
+                    Actif = h.EstActif,
                     HoraireComplet = h // Pour pouvoir accéder à l'objet complet
-                }).OrderBy(h => h.Ligne).ThenBy(h => h.Arrêt).ThenBy(h => h.Heure).ToList();
+                }).OrderBy(h => h.Ligne).ThenBy(h => h.Arret).ThenBy(h => h.Heure).ToList();
 
-                dgvHoraires.DataSource = horairesAffichage;
-
-                // Masquer la colonne de l'objet complet
-                dgvHoraires.Columns["HoraireComplet"].Visible = false;
+                AfficherHoraires();
             }
             catch (Exception ex)
             {
@@ -196,32 +200,183 @@ namespace Fumoblilite.Interface.UserControls
             }
         }
 
-        private void dgvHoraires_SelectionChanged(object sender, EventArgs e)
+        private void AfficherHoraires()
         {
-            if (dgvHoraires.SelectedRows.Count > 0 && dgvHoraires.DataSource != null)
-            {
-                try
-                {
-                    // Récupérer l'horaire sélectionné
-                    dynamic row = dgvHoraires.SelectedRows[0].DataBoundItem;
-                    _horaireSelectionne = row.HoraireComplet;
+            flpHoraires.SuspendLayout();
+            flpHoraires.Controls.Clear();
+            _selectedPanel = null;
 
-                    if (_horaireSelectionne != null)
+            if (_horairesAffichage == null || _horairesAffichage.Count == 0)
+            {
+                flpHoraires.ResumeLayout();
+                return;
+            }
+
+            foreach (var horaire in _horairesAffichage)
+            {
+                Panel panel = CreerCarteHoraire(horaire);
+                flpHoraires.Controls.Add(panel);
+            }
+
+            flpHoraires.ResumeLayout();
+        }
+
+        private Panel CreerCarteHoraire(dynamic horaire)
+        {
+            // Créer un panel pour la carte
+            Panel panel = new Panel
+            {
+                Width = 420,
+                Height = 100,
+                Margin = new Padding(5),
+                BorderStyle = BorderStyle.FixedSingle,
+                Tag = horaire
+            };
+
+            // Ajouter une bordure colorée à gauche selon la couleur de la ligne
+            Panel bordureGauche = new Panel
+            {
+                Width = 10,
+                Height = panel.Height,
+                Dock = DockStyle.Left
+            };
+
+            try
+            {
+                if (!string.IsNullOrEmpty(horaire.LigneCouleur))
+                {
+                    string hexColor = horaire.LigneCouleur.TrimStart('#');
+                    if (hexColor.Length == 6)
                     {
-                        txtId.Text = _horaireSelectionne.Id.ToString();
-                        cboLigneDetail.SelectedValue = _horaireSelectionne.LigneId;
-                        ChargerArrets(_horaireSelectionne.LigneId);
-                        cboArret.SelectedValue = _horaireSelectionne.ArretId;
-                        cboJourDetail.SelectedValue = _horaireSelectionne.JourSemaine;
-                        dtpHeure.Value = DateTime.Today.Add(_horaireSelectionne.HeureDepart);
-                        chkEstActif.Checked = _horaireSelectionne.EstActif;
-                        btnSupprimer.Enabled = true;
+                        int r = Convert.ToInt32(hexColor.Substring(0, 2), 16);
+                        int g = Convert.ToInt32(hexColor.Substring(2, 2), 16);
+                        int b = Convert.ToInt32(hexColor.Substring(4, 2), 16);
+                        bordureGauche.BackColor = Color.FromArgb(r, g, b);
+                    }
+                    else
+                    {
+                        bordureGauche.BackColor = Color.Gray;
                     }
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show($"Erreur lors de la sélection de l'horaire : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    bordureGauche.BackColor = Color.Gray;
                 }
+            }
+            catch
+            {
+                bordureGauche.BackColor = Color.Gray;
+            }
+
+            panel.Controls.Add(bordureGauche);
+
+            // Ajouter les informations de l'horaire
+            Label lblLigne = new Label
+            {
+                Text = horaire.Ligne,
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                AutoSize = true,
+                Location = new Point(20, 10)
+            };
+            panel.Controls.Add(lblLigne);
+
+            Label lblArret = new Label
+            {
+                Text = $"Arrêt: {horaire.Arret}",
+                Font = new Font("Segoe UI", 9),
+                AutoSize = true,
+                Location = new Point(20, 35)
+            };
+            panel.Controls.Add(lblArret);
+
+            Label lblJour = new Label
+            {
+                Text = $"Jour: {horaire.Jour}",
+                Font = new Font("Segoe UI", 9),
+                AutoSize = true,
+                Location = new Point(20, 55)
+            };
+            panel.Controls.Add(lblJour);
+
+            Label lblHeure = new Label
+            {
+                Text = $"Heure: {horaire.Heure}",
+                Font = new Font("Segoe UI", 9),
+                AutoSize = true,
+                Location = new Point(20, 75)
+            };
+            panel.Controls.Add(lblHeure);
+
+            // Indicateur d'état actif/inactif
+            Panel indicateurActif = new Panel
+            {
+                Width = 15,
+                Height = 15,
+                BackColor = horaire.Actif ? Color.Green : Color.Red,
+                Location = new Point(panel.Width - 25, 10)
+            };
+            panel.Controls.Add(indicateurActif);
+
+            Label lblActif = new Label
+            {
+                Text = horaire.Actif ? "Actif" : "Inactif",
+                Font = new Font("Segoe UI", 8),
+                AutoSize = true,
+                Location = new Point(panel.Width - 70, 10)
+            };
+            panel.Controls.Add(lblActif);
+
+            // Ajouter un gestionnaire d'événements pour la sélection
+            panel.Click += (sender, e) => SelectionnerHoraire(panel);
+            foreach (Control control in panel.Controls)
+            {
+                control.Click += (sender, e) => SelectionnerHoraire(panel);
+            }
+
+            return panel;
+        }
+
+        private void SelectionnerHoraire(Panel panel)
+        {
+            // Désélectionner le panel précédemment sélectionné
+            if (_selectedPanel != null)
+            {
+                _selectedPanel.BackColor = SystemColors.Control;
+            }
+
+            // Sélectionner le nouveau panel
+            _selectedPanel = panel;
+            _selectedPanel.BackColor = Color.FromArgb(230, 240, 250);
+
+            // Récupérer l'horaire associé au panel
+            dynamic item = panel.Tag;
+            _horaireSelectionne = item.HoraireComplet;
+
+            if (_horaireSelectionne != null)
+            {
+                txtId.Text = _horaireSelectionne.Id.ToString();
+                cboLigneDetail.SelectedValue = _horaireSelectionne.LigneId;
+                ChargerArrets(_horaireSelectionne.LigneId);
+                cboArret.SelectedValue = _horaireSelectionne.ArretId;
+                cboJourDetail.SelectedValue = _horaireSelectionne.JourSemaine;
+                dtpHeure.Value = DateTime.Today.Add(_horaireSelectionne.HeureDepart);
+                chkEstActif.Checked = _horaireSelectionne.EstActif;
+                btnSupprimer.Enabled = true;
+            }
+        }
+
+        private string GetJourSemaine(DayOfWeek jour)
+        {
+            switch (jour)
+            {
+                case DayOfWeek.Monday: return "Lundi";
+                case DayOfWeek.Tuesday: return "Mardi";
+                case DayOfWeek.Wednesday: return "Mercredi";
+                case DayOfWeek.Thursday: return "Jeudi";
+                case DayOfWeek.Friday: return "Vendredi";
+                case DayOfWeek.Saturday: return "Samedi";
+                case DayOfWeek.Sunday: return "Dimanche";
+                default: return jour.ToString();
             }
         }
 
@@ -250,6 +405,13 @@ namespace Fumoblilite.Interface.UserControls
             chkEstActif.Checked = true;
             _horaireSelectionne = null;
             btnSupprimer.Enabled = false;
+
+            // Désélectionner le panel précédemment sélectionné
+            if (_selectedPanel != null)
+            {
+                _selectedPanel.BackColor = SystemColors.Control;
+                _selectedPanel = null;
+            }
         }
 
         private void btnEnregistrer_Click(object sender, EventArgs e)
