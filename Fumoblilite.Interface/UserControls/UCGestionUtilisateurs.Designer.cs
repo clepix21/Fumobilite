@@ -66,6 +66,7 @@ namespace Fumoblilite.Interface.UserControls
             this.lblTitre.Size = new System.Drawing.Size(211, 24);
             this.lblTitre.TabIndex = 0;
             this.lblTitre.Text = "Gestion des utilisateurs";
+            this.lblTitre.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
             // 
             // lblRecherche
             // 
@@ -261,6 +262,10 @@ namespace Fumoblilite.Interface.UserControls
             this.btnNouveau.Text = "Nouveau";
             this.btnNouveau.UseVisualStyleBackColor = true;
             this.btnNouveau.Click += new System.EventHandler(this.btnNouveau_Click);
+            this.btnNouveau.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.btnNouveau.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
+            this.btnNouveau.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnNouveau.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
             // 
             // btnEnregistrer
             // 
@@ -272,6 +277,10 @@ namespace Fumoblilite.Interface.UserControls
             this.btnEnregistrer.Text = "Enregistrer";
             this.btnEnregistrer.UseVisualStyleBackColor = true;
             this.btnEnregistrer.Click += new System.EventHandler(this.btnEnregistrer_Click);
+            this.btnEnregistrer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
+            this.btnEnregistrer.FlatAppearance.BorderSize = 0;
+            this.btnEnregistrer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnEnregistrer.ForeColor = System.Drawing.Color.White;
             // 
             // btnSupprimer
             // 
@@ -283,6 +292,10 @@ namespace Fumoblilite.Interface.UserControls
             this.btnSupprimer.Text = "Supprimer";
             this.btnSupprimer.UseVisualStyleBackColor = true;
             this.btnSupprimer.Click += new System.EventHandler(this.btnSupprimer_Click);
+            this.btnSupprimer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(17)))), ((int)(((byte)(35)))));
+            this.btnSupprimer.FlatAppearance.BorderSize = 0;
+            this.btnSupprimer.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSupprimer.ForeColor = System.Drawing.Color.White;
             // 
             // UCGestionUtilisateurs
             // 

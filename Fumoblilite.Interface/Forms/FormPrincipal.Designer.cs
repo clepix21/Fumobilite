@@ -76,7 +76,7 @@ namespace Fumoblilite.Interface.Forms
             // 
             this.menuItemDeconnexion.Name = "menuItemDeconnexion";
             this.menuItemDeconnexion.Size = new System.Drawing.Size(144, 22);
-            this.menuItemDeconnexion.Text = "Dconnexion";
+            this.menuItemDeconnexion.Text = "Déconnexion";
             this.menuItemDeconnexion.Click += new System.EventHandler(this.menuItemDeconnexion_Click);
             // 
             // menuItemQuitter
