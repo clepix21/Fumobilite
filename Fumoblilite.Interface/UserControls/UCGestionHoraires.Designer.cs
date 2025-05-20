@@ -1,5 +1,3 @@
-using Fumoblilite.Interface.Controls;
-
 namespace Fumoblilite.Interface.UserControls
 {
     partial class UCGestionHoraires
