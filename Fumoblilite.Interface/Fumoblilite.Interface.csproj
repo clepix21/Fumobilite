@@ -92,7 +92,9 @@
     <Compile Include="UserControls\UCConsultationReseau.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\UCCredits.cs" />
+    <Compile Include="UserControls\UCCredits.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UserControls\UCCredits.Designer.cs">
       <DependentUpon>UCCredits.cs</DependentUpon>
     </Compile>
@@ -147,6 +149,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="UserControls\UCCredits.resx">
+      <DependentUpon>UCCredits.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UCGestionLignes.resx">
       <DependentUpon>UCGestionLignes.cs</DependentUpon>
     </EmbeddedResource>
