@@ -41,6 +41,8 @@ namespace Fumoblilite.Interface.Forms
             // 
             // menuStrip
             // 
+            this.menuStrip.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
+            this.menuStrip.ForeColor = System.Drawing.Color.White;
             this.menuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuFichier,
@@ -49,10 +51,8 @@ namespace Fumoblilite.Interface.Forms
             this.menuRecherche});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(284, 24);
+            this.menuStrip.Size = new System.Drawing.Size(567, 28);
             this.menuStrip.TabIndex = 2;
-            this.menuStrip.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
-            this.menuStrip.ForeColor = System.Drawing.Color.White;
             // 
             // menuFichier
             // 
@@ -60,29 +60,29 @@ namespace Fumoblilite.Interface.Forms
             this.menuItemConnexion,
             this.menuItemDeconnexion,
             this.menuItemQuitter});
-            this.menuFichier.Name = "menuFichier";
-            this.menuFichier.Size = new System.Drawing.Size(54, 20);
-            this.menuFichier.Text = "Fichier";
             this.menuFichier.ForeColor = System.Drawing.Color.White;
+            this.menuFichier.Name = "menuFichier";
+            this.menuFichier.Size = new System.Drawing.Size(66, 24);
+            this.menuFichier.Text = "Fichier";
             // 
             // menuItemConnexion
             // 
             this.menuItemConnexion.Name = "menuItemConnexion";
-            this.menuItemConnexion.Size = new System.Drawing.Size(144, 22);
+            this.menuItemConnexion.Size = new System.Drawing.Size(179, 26);
             this.menuItemConnexion.Text = "Connexion";
             this.menuItemConnexion.Click += new System.EventHandler(this.menuItemConnexion_Click);
             // 
             // menuItemDeconnexion
             // 
             this.menuItemDeconnexion.Name = "menuItemDeconnexion";
-            this.menuItemDeconnexion.Size = new System.Drawing.Size(144, 22);
+            this.menuItemDeconnexion.Size = new System.Drawing.Size(179, 26);
             this.menuItemDeconnexion.Text = "Déconnexion";
             this.menuItemDeconnexion.Click += new System.EventHandler(this.menuItemDeconnexion_Click);
             // 
             // menuItemQuitter
             // 
             this.menuItemQuitter.Name = "menuItemQuitter";
-            this.menuItemQuitter.Size = new System.Drawing.Size(144, 22);
+            this.menuItemQuitter.Size = new System.Drawing.Size(179, 26);
             this.menuItemQuitter.Text = "Quitter";
             this.menuItemQuitter.Click += new System.EventHandler(this.menuItemQuitter_Click);
             // 
@@ -93,36 +93,36 @@ namespace Fumoblilite.Interface.Forms
             this.menuItemLignes,
             this.menuItemHoraires,
             this.menuItemUtilisateurs});
-            this.menuGestion.Name = "menuGestion";
-            this.menuGestion.Size = new System.Drawing.Size(59, 20);
-            this.menuGestion.Text = "Gestion";
             this.menuGestion.ForeColor = System.Drawing.Color.White;
+            this.menuGestion.Name = "menuGestion";
+            this.menuGestion.Size = new System.Drawing.Size(73, 24);
+            this.menuGestion.Text = "Gestion";
             // 
             // menuItemArrets
             // 
             this.menuItemArrets.Name = "menuItemArrets";
-            this.menuItemArrets.Size = new System.Drawing.Size(132, 22);
+            this.menuItemArrets.Size = new System.Drawing.Size(165, 26);
             this.menuItemArrets.Text = "Arrêt";
             this.menuItemArrets.Click += new System.EventHandler(this.menuItemArrets_Click);
             // 
             // menuItemLignes
             // 
             this.menuItemLignes.Name = "menuItemLignes";
-            this.menuItemLignes.Size = new System.Drawing.Size(132, 22);
+            this.menuItemLignes.Size = new System.Drawing.Size(165, 26);
             this.menuItemLignes.Text = "Lignes";
             this.menuItemLignes.Click += new System.EventHandler(this.menuItemLignes_Click);
             // 
             // menuItemHoraires
             // 
             this.menuItemHoraires.Name = "menuItemHoraires";
-            this.menuItemHoraires.Size = new System.Drawing.Size(132, 22);
+            this.menuItemHoraires.Size = new System.Drawing.Size(165, 26);
             this.menuItemHoraires.Text = "Horaires";
             this.menuItemHoraires.Click += new System.EventHandler(this.menuItemHoraires_Click);
             // 
             // menuItemUtilisateurs
             // 
             this.menuItemUtilisateurs.Name = "menuItemUtilisateurs";
-            this.menuItemUtilisateurs.Size = new System.Drawing.Size(132, 22);
+            this.menuItemUtilisateurs.Size = new System.Drawing.Size(165, 26);
             this.menuItemUtilisateurs.Text = "Utilisateurs";
             this.menuItemUtilisateurs.Click += new System.EventHandler(this.menuItemUtilisateurs_Click);
             // 
@@ -132,29 +132,29 @@ namespace Fumoblilite.Interface.Forms
             this.menuItemReseau,
             this.menuItemLigneDetails,
             this.menuItemHorairesJournee});
-            this.menuConsultation.Name = "menuConsultation";
-            this.menuConsultation.Size = new System.Drawing.Size(87, 20);
-            this.menuConsultation.Text = "Consultation";
             this.menuConsultation.ForeColor = System.Drawing.Color.White;
+            this.menuConsultation.Name = "menuConsultation";
+            this.menuConsultation.Size = new System.Drawing.Size(106, 24);
+            this.menuConsultation.Text = "Consultation";
             // 
             // menuItemReseau
             // 
             this.menuItemReseau.Name = "menuItemReseau";
-            this.menuItemReseau.Size = new System.Drawing.Size(171, 22);
+            this.menuItemReseau.Size = new System.Drawing.Size(215, 26);
             this.menuItemReseau.Text = "Réseau complet";
             this.menuItemReseau.Click += new System.EventHandler(this.menuItemReseau_Click);
             // 
             // menuItemLigneDetails
             // 
             this.menuItemLigneDetails.Name = "menuItemLigneDetails";
-            this.menuItemLigneDetails.Size = new System.Drawing.Size(171, 22);
+            this.menuItemLigneDetails.Size = new System.Drawing.Size(215, 26);
             this.menuItemLigneDetails.Text = "Détails d\'une ligne";
             this.menuItemLigneDetails.Click += new System.EventHandler(this.menuItemLigneDetails_Click);
             // 
             // menuItemHorairesJournee
             // 
             this.menuItemHorairesJournee.Name = "menuItemHorairesJournee";
-            this.menuItemHorairesJournee.Size = new System.Drawing.Size(171, 22);
+            this.menuItemHorairesJournee.Size = new System.Drawing.Size(215, 26);
             this.menuItemHorairesJournee.Text = "Horaires du jour";
             this.menuItemHorairesJournee.Click += new System.EventHandler(this.menuItemHorairesJournee_Click);
             // 
@@ -162,47 +162,47 @@ namespace Fumoblilite.Interface.Forms
             // 
             this.menuRecherche.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuItemItineraire});
-            this.menuRecherche.Name = "menuRecherche";
-            this.menuRecherche.Size = new System.Drawing.Size(74, 20);
-            this.menuRecherche.Text = "Recherche";
             this.menuRecherche.ForeColor = System.Drawing.Color.White;
+            this.menuRecherche.Name = "menuRecherche";
+            this.menuRecherche.Size = new System.Drawing.Size(91, 24);
+            this.menuRecherche.Text = "Recherche";
             // 
             // menuItemItineraire
             // 
             this.menuItemItineraire.Name = "menuItemItineraire";
-            this.menuItemItineraire.Size = new System.Drawing.Size(120, 22);
+            this.menuItemItineraire.Size = new System.Drawing.Size(143, 26);
             this.menuItemItineraire.Text = "Itinraire";
             this.menuItemItineraire.Click += new System.EventHandler(this.menuItemItineraire_Click);
             // 
             // statusStrip
             // 
+            this.statusStrip.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
             this.statusStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.lblStatusUtilisateur});
-            this.statusStrip.Location = new System.Drawing.Point(0, 239);
+            this.statusStrip.Location = new System.Drawing.Point(0, 384);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(284, 22);
+            this.statusStrip.Size = new System.Drawing.Size(567, 26);
             this.statusStrip.TabIndex = 1;
-            this.statusStrip.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
             // 
             // lblStatusUtilisateur
             // 
-            this.lblStatusUtilisateur.Name = "lblStatusUtilisateur";
-            this.lblStatusUtilisateur.Size = new System.Drawing.Size(118, 17);
-            this.lblStatusUtilisateur.Text = "Utilisateur connect: ";
             this.lblStatusUtilisateur.ForeColor = System.Drawing.Color.White;
+            this.lblStatusUtilisateur.Name = "lblStatusUtilisateur";
+            this.lblStatusUtilisateur.Size = new System.Drawing.Size(139, 20);
+            this.lblStatusUtilisateur.Text = "Utilisateur connect: ";
             // 
             // panelContenu
             // 
             this.panelContenu.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelContenu.Location = new System.Drawing.Point(0, 24);
+            this.panelContenu.Location = new System.Drawing.Point(0, 28);
             this.panelContenu.Name = "panelContenu";
-            this.panelContenu.Size = new System.Drawing.Size(284, 215);
+            this.panelContenu.Size = new System.Drawing.Size(567, 356);
             this.panelContenu.TabIndex = 0;
             // 
             // FormPrincipal
             // 
-            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.ClientSize = new System.Drawing.Size(567, 410);
             this.Controls.Add(this.panelContenu);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.menuStrip);
