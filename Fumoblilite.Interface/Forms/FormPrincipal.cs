@@ -162,5 +162,11 @@ namespace Fumoblilite.Interface.Forms
             uc.Dock = DockStyle.Fill;
             panelContenu.Controls.Add(uc);
         }
+
+        private void lblGroupe_Click(object sender, EventArgs e)
+        {
+            ChargerUserControl(new UCCredits());
+
+        }
     }
 }

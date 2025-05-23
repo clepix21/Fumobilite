@@ -206,11 +206,13 @@ namespace Fumoblilite.Interface.Forms
             this.lblGroupe.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.lblGroupe.AutoSize = true;
             this.lblGroupe.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
+            this.lblGroupe.ForeColor = System.Drawing.Color.White;
             this.lblGroupe.Location = new System.Drawing.Point(505, 392);
             this.lblGroupe.Name = "lblGroupe";
             this.lblGroupe.Size = new System.Drawing.Size(75, 16);
             this.lblGroupe.TabIndex = 3;
             this.lblGroupe.Text = "Groupe A-6";
+            this.lblGroupe.Click += new System.EventHandler(this.lblGroupe_Click);
             // 
             // FormPrincipal
             // 
