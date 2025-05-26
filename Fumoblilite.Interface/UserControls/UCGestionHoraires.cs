@@ -41,7 +41,27 @@ namespace Fumoblilite.Interface.UserControls
         {
             ChargerLignes();
             ChargerJours();
+            InitialiserInterface();
             dtpHeure.Value = DateTime.Now;
+        }
+
+        private void InitialiserInterface()
+        {
+            // Initialiser les contrôles de génération récurrente
+            nudIntervalle.Value = 30; // 30 minutes par défaut
+            nudNombreHoraires.Value = 10; // 10 horaires par défaut
+            dtpHeureDebut.Value = DateTime.Today.AddHours(6); // 6h00
+            dtpHeureFin.Value = DateTime.Today.AddHours(22); // 22h00
+
+            // Initialiser les jours de la semaine pour la génération
+            clbJours.Items.Clear();
+            clbJours.Items.Add("Lundi", true);
+            clbJours.Items.Add("Mardi", true);
+            clbJours.Items.Add("Mercredi", true);
+            clbJours.Items.Add("Jeudi", true);
+            clbJours.Items.Add("Vendredi", true);
+            clbJours.Items.Add("Samedi", false);
+            clbJours.Items.Add("Dimanche", false);
         }
 
         private void ChargerLignes()
@@ -58,10 +78,18 @@ namespace Fumoblilite.Interface.UserControls
                 cboLigne.ValueMember = "Id";
                 cboLigne.DataSource = lignesFiltres;
 
-                // Configuration du ComboBox de détail
+                // Configuration des ComboBox de détail et duplication
                 cboLigneDetail.DisplayMember = "Nom";
                 cboLigneDetail.ValueMember = "Id";
                 cboLigneDetail.DataSource = new List<Ligne>(lignes);
+
+                cboLigneSource.DisplayMember = "Nom";
+                cboLigneSource.ValueMember = "Id";
+                cboLigneSource.DataSource = new List<Ligne>(lignes);
+
+                cboLigneDestination.DisplayMember = "Nom";
+                cboLigneDestination.ValueMember = "Id";
+                cboLigneDestination.DataSource = new List<Ligne>(lignes);
             }
             catch (Exception ex)
             {
@@ -73,7 +101,6 @@ namespace Fumoblilite.Interface.UserControls
         {
             try
             {
-                // Créer une liste des jours de la semaine
                 var jours = new List<KeyValuePair<DayOfWeek, string>>
                 {
                     new KeyValuePair<DayOfWeek, string>(DayOfWeek.Monday, "Lundi"),
@@ -85,12 +112,11 @@ namespace Fumoblilite.Interface.UserControls
                     new KeyValuePair<DayOfWeek, string>(DayOfWeek.Sunday, "Dimanche")
                 };
 
-                // Configuration du ComboBox de filtre
+                // Configuration des ComboBox
                 cboJour.DisplayMember = "Value";
                 cboJour.ValueMember = "Key";
                 cboJour.DataSource = new List<KeyValuePair<DayOfWeek, string>>(jours);
 
-                // Configuration du ComboBox de détail
                 cboJourDetail.DisplayMember = "Value";
                 cboJourDetail.ValueMember = "Key";
                 cboJourDetail.DataSource = new List<KeyValuePair<DayOfWeek, string>>(jours);
@@ -115,25 +141,17 @@ namespace Fumoblilite.Interface.UserControls
                     return;
                 }
 
-                // Récupérer les arrêts de la ligne
                 var ligne = _serviceLigne.ObtenirParId(ligneId, true);
-                if (ligne == null || ligne.Arrets == null || ligne.Arrets.Count == 0)
+                if (ligne?.Arrets == null || ligne.Arrets.Count == 0)
                 {
                     cboArret.DataSource = null;
                     return;
                 }
 
-                // Récupérer les informations des arrêts
                 var arrets = _serviceArret.ObtenirTous().ToDictionary(a => a.Id);
-
-                // Préparer les données pour l'affichage
                 var arretsAffichage = ligne.Arrets
                     .Where(al => arrets.ContainsKey(al.ArretId))
-                    .Select(al => new
-                    {
-                        Id = al.ArretId,
-                        Nom = arrets[al.ArretId].Nom
-                    })
+                    .Select(al => new { Id = al.ArretId, Nom = arrets[al.ArretId].Nom })
                     .OrderBy(a => a.Nom)
                     .ToList();
 
@@ -173,26 +191,7 @@ namespace Fumoblilite.Interface.UserControls
                     return;
                 }
 
-                // Récupérer les informations des lignes et des arrêts pour l'affichage
-                var lignes = _serviceLigne.ObtenirToutes().ToDictionary(l => l.Id);
-                var arrets = _serviceArret.ObtenirTous().ToDictionary(a => a.Id);
-
-                // Préparer les données pour l'affichage
-                // Replace this line:
-                // With this line:
-                _horairesAffichage = horaires.Select(h => (dynamic)new
-                {
-                    Id = h.Id,
-                    Ligne = lignes.ContainsKey(h.LigneId) ? $"{lignes[h.LigneId].Numero} - {lignes[h.LigneId].Nom}" : $"Ligne {h.LigneId}",
-                    LigneCouleur = lignes.ContainsKey(h.LigneId) ? lignes[h.LigneId].Couleur : "#808080",
-                    Arret = arrets.ContainsKey(h.ArretId) ? arrets[h.ArretId].Nom : $"Arrêt {h.ArretId}",
-                    Jour = GetJourSemaine((DayOfWeek)h.JourSemaine),
-                    Heure = h.HeureDepart.ToString(@"hh\:mm"),
-                    Actif = h.EstActif,
-                    HoraireComplet = h // Pour pouvoir accéder à l'objet complet
-                }).OrderBy(h => h.Ligne).ThenBy(h => h.Arret).ThenBy(h => h.Heure).ToList();
-
-                AfficherHoraires();
+                AfficherHoraires(horaires);
             }
             catch (Exception ex)
             {
@@ -200,17 +199,41 @@ namespace Fumoblilite.Interface.UserControls
             }
         }
 
-        private void AfficherHoraires()
+        private void AfficherHoraires(List<Horaire> horaires)
         {
             flpHoraires.SuspendLayout();
             flpHoraires.Controls.Clear();
             _selectedPanel = null;
 
-            if (_horairesAffichage == null || _horairesAffichage.Count == 0)
+            if (!horaires.Any())
             {
+                var lblAucun = new Label
+                {
+                    Text = "Aucun horaire trouvé",
+                    Font = new Font(Font.FontFamily, 10),
+                    ForeColor = Color.Gray,
+                    AutoSize = true,
+                    Margin = new Padding(20)
+                };
+                flpHoraires.Controls.Add(lblAucun);
                 flpHoraires.ResumeLayout();
                 return;
             }
+
+            var lignes = _serviceLigne.ObtenirToutes().ToDictionary(l => l.Id);
+            var arrets = _serviceArret.ObtenirTous().ToDictionary(a => a.Id);
+
+            _horairesAffichage = horaires.Select(h => (dynamic)new
+            {
+                Id = h.Id,
+                Ligne = lignes.ContainsKey(h.LigneId) ? $"{lignes[h.LigneId].Numero} - {lignes[h.LigneId].Nom}" : $"Ligne {h.LigneId}",
+                LigneCouleur = lignes.ContainsKey(h.LigneId) ? lignes[h.LigneId].Couleur : "#808080",
+                Arret = arrets.ContainsKey(h.ArretId) ? arrets[h.ArretId].Nom : $"Arrêt {h.ArretId}",
+                Jour = GetJourSemaine(h.JourSemaine),
+                Heure = h.HeureDepart.ToString(@"hh\:mm"),
+                Actif = h.EstActif,
+                HoraireComplet = h
+            }).ToList();
 
             foreach (var horaire in _horairesAffichage)
             {
@@ -223,114 +246,80 @@ namespace Fumoblilite.Interface.UserControls
 
         private Panel CreerCarteHoraire(dynamic horaire)
         {
-            // Créer un panel pour la carte
-            Panel panel = new Panel
+            bool estActif = horaire.Actif;
+            var panel = new Panel
             {
-                Width = 420,
-                Height = 100,
+                Width = 400,
+                Height = 90,
                 Margin = new Padding(5),
                 BorderStyle = BorderStyle.FixedSingle,
-                Tag = horaire
+                Tag = horaire,
+                BackColor = estActif ? Color.White : Color.FromArgb(245, 245, 245)
             };
 
-            // Ajouter une bordure colorée à gauche selon la couleur de la ligne
-            Panel bordureGauche = new Panel
+            // Bordure colorée
+            var bordure = new Panel
             {
-                Width = 10,
+                Width = 8,
                 Height = panel.Height,
-                Dock = DockStyle.Left
+                Dock = DockStyle.Left,
+                BackColor = !string.IsNullOrEmpty(horaire.LigneCouleur)
+                    ? ColorTranslator.FromHtml(horaire.LigneCouleur)
+                    : Color.Gray
             };
+            panel.Controls.Add(bordure);
 
-            try
-            {
-                if (!string.IsNullOrEmpty(horaire.LigneCouleur))
-                {
-                    string hexColor = horaire.LigneCouleur.TrimStart('#');
-                    if (hexColor.Length == 6)
-                    {
-                        int r = Convert.ToInt32(hexColor.Substring(0, 2), 16);
-                        int g = Convert.ToInt32(hexColor.Substring(2, 2), 16);
-                        int b = Convert.ToInt32(hexColor.Substring(4, 2), 16);
-                        bordureGauche.BackColor = Color.FromArgb(r, g, b);
-                    }
-                    else
-                    {
-                        bordureGauche.BackColor = Color.Gray;
-                    }
-                }
-                else
-                {
-                    bordureGauche.BackColor = Color.Gray;
-                }
-            }
-            catch
-            {
-                bordureGauche.BackColor = Color.Gray;
-            }
-
-            panel.Controls.Add(bordureGauche);
-
-            // Ajouter les informations de l'horaire
-            Label lblLigne = new Label
+            // Informations
+            var lblLigne = new Label
             {
                 Text = horaire.Ligne,
-                Font = new Font("Segoe UI", 10, FontStyle.Bold),
-                AutoSize = true,
-                Location = new Point(20, 10)
+                Font = new Font("Segoe UI", 9, FontStyle.Bold),
+                Location = new Point(15, 8),
+                AutoSize = true
             };
             panel.Controls.Add(lblLigne);
 
-            Label lblArret = new Label
+            var lblArret = new Label
             {
                 Text = $"Arrêt: {horaire.Arret}",
-                Font = new Font("Segoe UI", 9),
-                AutoSize = true,
-                Location = new Point(20, 35)
+                Location = new Point(15, 28),
+                AutoSize = true
             };
             panel.Controls.Add(lblArret);
 
-            Label lblJour = new Label
+            var lblJour = new Label
             {
                 Text = $"Jour: {horaire.Jour}",
-                Font = new Font("Segoe UI", 9),
-                AutoSize = true,
-                Location = new Point(20, 55)
+                Location = new Point(15, 48),
+                AutoSize = true
             };
             panel.Controls.Add(lblJour);
 
-            Label lblHeure = new Label
+            var lblHeure = new Label
             {
-                Text = $"Heure: {horaire.Heure}",
-                Font = new Font("Segoe UI", 9),
+                Text = horaire.Heure,
+                Font = new Font("Segoe UI", 12, FontStyle.Bold),
+                Location = new Point(panel.Width - 80, 25),
                 AutoSize = true,
-                Location = new Point(20, 75)
+                ForeColor = estActif ? Color.Green : Color.Gray
             };
             panel.Controls.Add(lblHeure);
 
-            // Indicateur d'état actif/inactif
-            Panel indicateurActif = new Panel
+            var lblStatut = new Label
             {
-                Width = 15,
-                Height = 15,
-                BackColor = horaire.Actif ? Color.Green : Color.Red,
-                Location = new Point(panel.Width - 25, 10)
-            };
-            panel.Controls.Add(indicateurActif);
-
-            Label lblActif = new Label
-            {
-                Text = horaire.Actif ? "Actif" : "Inactif",
-                Font = new Font("Segoe UI", 8),
+                Text = estActif ? "●" : "○",
+                Font = new Font("Segoe UI", 16),
+                Location = new Point(panel.Width - 25, 20),
                 AutoSize = true,
-                Location = new Point(panel.Width - 70, 10)
+                ForeColor = estActif ? Color.Green : Color.Red
             };
-            panel.Controls.Add(lblActif);
+            panel.Controls.Add(lblStatut);
 
-            // Ajouter un gestionnaire d'événements pour la sélection
-            panel.Click += (sender, e) => SelectionnerHoraire(panel);
+            // Gestionnaires d'événements
+            panel.Click += (s, e) => SelectionnerHoraire(panel);
             foreach (Control control in panel.Controls)
             {
-                control.Click += (sender, e) => SelectionnerHoraire(panel);
+                control.Click += (s, e) => SelectionnerHoraire(panel);
             }
 
             return panel;
@@ -338,17 +327,15 @@ namespace Fumoblilite.Interface.UserControls
 
         private void SelectionnerHoraire(Panel panel)
         {
-            // Désélectionner le panel précédemment sélectionné
             if (_selectedPanel != null)
             {
-                _selectedPanel.BackColor = SystemColors.Control;
+                dynamic selectedItem = _selectedPanel.Tag;
+                _selectedPanel.BackColor = selectedItem.Actif ? Color.White : Color.FromArgb(245, 245, 245);
             }
 
-            // Sélectionner le nouveau panel
             _selectedPanel = panel;
             _selectedPanel.BackColor = Color.FromArgb(230, 240, 250);
 
-            // Récupérer l'horaire associé au panel
             dynamic item = panel.Tag;
             _horaireSelectionne = item.HoraireComplet;
 
@@ -362,6 +349,7 @@ namespace Fumoblilite.Interface.UserControls
                 dtpHeure.Value = DateTime.Today.Add(_horaireSelectionne.HeureDepart);
                 chkEstActif.Checked = _horaireSelectionne.EstActif;
                 btnSupprimer.Enabled = true;
+                btnDupliquer.Enabled = true;
             }
         }
 
@@ -369,17 +357,163 @@ namespace Fumoblilite.Interface.UserControls
         {
             switch (jour)
             {
-                case DayOfWeek.Monday: return "Lundi";
-                case DayOfWeek.Tuesday: return "Mardi";
-                case DayOfWeek.Wednesday: return "Mercredi";
-                case DayOfWeek.Thursday: return "Jeudi";
-                case DayOfWeek.Friday: return "Vendredi";
-                case DayOfWeek.Saturday: return "Samedi";
-                case DayOfWeek.Sunday: return "Dimanche";
-                default: return jour.ToString();
+                case DayOfWeek.Monday:
+                    return "Lundi";
+                case DayOfWeek.Tuesday:
+                    return "Mardi";
+                case DayOfWeek.Wednesday:
+                    return "Mercredi";
+                case DayOfWeek.Thursday:
+                    return "Jeudi";
+                case DayOfWeek.Friday:
+                    return "Vendredi";
+                case DayOfWeek.Saturday:
+                    return "Samedi";
+                case DayOfWeek.Sunday:
+                    return "Dimanche";
+                default:
+                    return jour.ToString();
             }
         }
 
+
+        // Gestionnaires d'événements pour les nouvelles fonctionnalités
+        private void btnGenererRecurrent_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (cboLigneDetail.SelectedItem == null || cboArret.SelectedItem == null)
+                {
+                    MessageBox.Show("Veuillez sélectionner une ligne et un arrêt.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                var joursSelectionnes = new List<DayOfWeek>();
+                for (int i = 0; i < clbJours.Items.Count; i++)
+                {
+                    if (clbJours.GetItemChecked(i))
+                    {
+                        joursSelectionnes.Add((DayOfWeek)(i + 1)); // +1 car DayOfWeek commence à 0 = Dimanche
+                    }
+                }
+
+                if (!joursSelectionnes.Any())
+                {
+                    MessageBox.Show("Veuillez sélectionner au moins un jour.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                int ligneId = (int)cboLigneDetail.SelectedValue;
+                int arretId = (int)cboArret.SelectedValue;
+                TimeSpan heureDebut = dtpHeureDebut.Value.TimeOfDay;
+                TimeSpan heureFin = dtpHeureFin.Value.TimeOfDay;
+                int intervalleMinutes = (int)nudIntervalle.Value;
+                int nombreMax = (int)nudNombreHoraires.Value;
+
+                int nombreCrees = 0;
+                foreach (var jour in joursSelectionnes)
+                {
+                    TimeSpan heureCourante = heureDebut;
+                    int compteur = 0;
+
+                    while (heureCourante <= heureFin && compteur < nombreMax)
+                    {
+                        var nouvelHoraire = new Horaire
+                        {
+                            LigneId = ligneId,
+                            ArretId = arretId,
+                            JourSemaine = jour,
+                            HeureDepart = heureCourante,
+                            EstActif = true
+                        };
+
+                        try
+                        {
+                            _serviceHoraire.Ajouter(nouvelHoraire);
+                            nombreCrees++;
+                        }
+                        catch
+                        {
+                            // Ignorer les doublons
+                        }
+
+                        heureCourante = heureCourante.Add(TimeSpan.FromMinutes(intervalleMinutes));
+                        compteur++;
+                    }
+                }
+
+                MessageBox.Show($"{nombreCrees} horaires créés avec succès.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                btnAfficher_Click(sender, e);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de la génération : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnDupliquerLigne_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (cboLigneSource.SelectedItem == null || cboLigneDestination.SelectedItem == null)
+                {
+                    MessageBox.Show("Veuillez sélectionner les lignes source et destination.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                int ligneSourceId = (int)cboLigneSource.SelectedValue;
+                int ligneDestinationId = (int)cboLigneDestination.SelectedValue;
+
+                if (ligneSourceId == ligneDestinationId)
+                {
+                    MessageBox.Show("Les lignes source et destination doivent être différentes.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                var horairesSource = _serviceHoraire.ObtenirParLigne(ligneSourceId);
+                var ligneDestination = _serviceLigne.ObtenirParId(ligneDestinationId, true);
+
+                if (ligneDestination?.Arrets == null || !ligneDestination.Arrets.Any())
+                {
+                    MessageBox.Show("La ligne de destination n'a pas d'arrêts configurés.", "Validation", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                int nombreDupliques = 0;
+                var premierArretDestination = ligneDestination.Arrets.First().ArretId;
+
+                foreach (var horaire in horairesSource)
+                {
+                    var nouvelHoraire = new Horaire
+                    {
+                        LigneId = ligneDestinationId,
+                        ArretId = premierArretDestination,
+                        JourSemaine = horaire.JourSemaine,
+                        HeureDepart = horaire.HeureDepart,
+                        EstActif = horaire.EstActif
+                    };
+
+                    try
+                    {
+                        _serviceHoraire.Ajouter(nouvelHoraire);
+                        nombreDupliques++;
+                    }
+                    catch
+                    {
+                        // Ignorer les doublons
+                    }
+                }
+
+                MessageBox.Show($"{nombreDupliques} horaires dupliqués avec succès.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                btnAfficher_Click(sender, e);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de la duplication : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        // Gestionnaires d'événements existants
         private void cboLigneDetail_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (cboLigneDetail.SelectedItem != null)
@@ -405,8 +539,8 @@ namespace Fumoblilite.Interface.UserControls
             chkEstActif.Checked = true;
             _horaireSelectionne = null;
             btnSupprimer.Enabled = false;
+            btnDupliquer.Enabled = false;
 
-            // Désélectionner le panel précédemment sélectionné
             if (_selectedPanel != null)
             {
                 _selectedPanel.BackColor = SystemColors.Control;
@@ -432,8 +566,7 @@ namespace Fumoblilite.Interface.UserControls
 
                 if (_horaireSelectionne == null)
                 {
-                    // Nouvel horaire
-                    Horaire nouvelHoraire = new Horaire
+                    var nouvelHoraire = new Horaire
                     {
                         LigneId = ligneId,
                         ArretId = arretId,
@@ -447,7 +580,6 @@ namespace Fumoblilite.Interface.UserControls
                 }
                 else
                 {
-                    // Modification d'un horaire existant
                     _horaireSelectionne.LigneId = ligneId;
                     _horaireSelectionne.ArretId = arretId;
                     _horaireSelectionne.JourSemaine = jour;
@@ -465,7 +597,6 @@ namespace Fumoblilite.Interface.UserControls
                     }
                 }
 
-                // Rafraîchir l'affichage
                 btnAfficher_Click(sender, e);
                 ViderChamps();
             }
@@ -488,8 +619,6 @@ namespace Fumoblilite.Interface.UserControls
                         if (resultat)
                         {
                             MessageBox.Show("Horaire supprimé avec succès.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                            // Rafraîchir l'affichage
                             btnAfficher_Click(sender, e);
                             ViderChamps();
                         }
@@ -502,6 +631,32 @@ namespace Fumoblilite.Interface.UserControls
                     {
                         MessageBox.Show($"Erreur : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
+                }
+            }
+        }
+
+        private void btnDupliquer_Click(object sender, EventArgs e)
+        {
+            if (_horaireSelectionne != null)
+            {
+                try
+                {
+                    var nouvelHoraire = new Horaire
+                    {
+                        LigneId = _horaireSelectionne.LigneId,
+                        ArretId = _horaireSelectionne.ArretId,
+                        JourSemaine = _horaireSelectionne.JourSemaine,
+                        HeureDepart = _horaireSelectionne.HeureDepart.Add(TimeSpan.FromMinutes(30)), // +30 minutes
+                        EstActif = _horaireSelectionne.EstActif
+                    };
+
+                    int id = _serviceHoraire.Ajouter(nouvelHoraire);
+                    MessageBox.Show("Horaire dupliqué avec succès.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    btnAfficher_Click(sender, e);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Erreur lors de la duplication : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
         }
