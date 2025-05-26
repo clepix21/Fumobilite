@@ -16,6 +16,8 @@ namespace Fumoblilite.Interface.UserControls
         private readonly ServiceLigne _serviceLigne;
         private readonly ServiceArret _serviceArret;
         private readonly ServiceHoraire _serviceHoraire;
+        private Timer _searchTimer;
+        private Timer _refreshTimer;
 
         public UCConsultationHoraires(string connectionString)
         {
@@ -32,34 +34,66 @@ namespace Fumoblilite.Interface.UserControls
             _serviceLigne = new ServiceLigne(repositoryLigne, repositoryArretLigne);
             _serviceArret = new ServiceArret(repositoryArret);
             _serviceHoraire = new ServiceHoraire(repositoryHoraire);
+
+            // Timer pour la recherche en temps réel
+            _searchTimer = new Timer { Interval = 500 };
+            _searchTimer.Tick += (s, e) => { _searchTimer.Stop(); btnAfficher_Click(s, e); };
+
+            // Timer pour rafraîchir les prochains départs
+            _refreshTimer = new Timer { Interval = 60000 }; // 1 minute
+            _refreshTimer.Tick += (s, e) => AfficherProchainsDeparts();
         }
 
         private void UCConsultationHoraires_Load(object sender, EventArgs e)
         {
-            // Charger les lignes et les jours lors du chargement du contrôle
             ChargerLignes();
+            ChargerArrets();
             ChargerJours();
+            InitialiserFiltres();
+            _refreshTimer.Start();
+        }
+
+        private void InitialiserFiltres()
+        {
+            // Initialiser les heures
+            dtpHeureDebut.Value = DateTime.Today.AddHours(6); // 6h00
+            dtpHeureFin.Value = DateTime.Today.AddHours(22);  // 22h00
+
+            chkSeulementActifs.Checked = true;
+            chkProchainsDeparts.Checked = false;
         }
 
         private void ChargerLignes()
         {
             try
             {
-                // Obtenir toutes les lignes
                 List<Ligne> lignes = _serviceLigne.ObtenirToutes();
-
-                // Ajouter une option "Toutes les lignes"
                 lignes.Insert(0, new Ligne { Id = 0, Numero = "Toutes", Nom = "Toutes les lignes" });
 
-                // Configurer la source de données du comboBox des lignes
                 cboLigne.DisplayMember = "Nom";
                 cboLigne.ValueMember = "Id";
                 cboLigne.DataSource = lignes;
             }
             catch (Exception ex)
             {
-                // Afficher un message d'erreur en cas d'exception
                 MessageBox.Show($"Erreur lors du chargement des lignes : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ChargerArrets()
+        {
+            try
+            {
+                List<Arret> arrets = _serviceArret.ObtenirTous();
+                arrets.Insert(0, new Arret { Id = 0, Nom = "Tous les arrêts" });
+
+                cboArret.DisplayMember = "Nom";
+                cboArret.ValueMember = "Id";
+                cboArret.DataSource = arrets;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors du chargement des arrêts : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -67,30 +101,57 @@ namespace Fumoblilite.Interface.UserControls
         {
             try
             {
-                // Créer une liste des jours de la semaine
-                var jours = new List<KeyValuePair<DayOfWeek, string>>
-                    {
-                        new KeyValuePair<DayOfWeek, string>(DayOfWeek.Monday, "Lundi"),
-                        new KeyValuePair<DayOfWeek, string>(DayOfWeek.Tuesday, "Mardi"),
-                        new KeyValuePair<DayOfWeek, string>(DayOfWeek.Wednesday, "Mercredi"),
-                        new KeyValuePair<DayOfWeek, string>(DayOfWeek.Thursday, "Jeudi"),
-                        new KeyValuePair<DayOfWeek, string>(DayOfWeek.Friday, "Vendredi"),
-                        new KeyValuePair<DayOfWeek, string>(DayOfWeek.Saturday, "Samedi"),
-                        new KeyValuePair<DayOfWeek, string>(DayOfWeek.Sunday, "Dimanche")
-                    };
+                var jours = new List<KeyValuePair<int, string>>
+                {
+                    new KeyValuePair<int, string>(-1, "Tous les jours"),
+                    new KeyValuePair<int, string>((int)DayOfWeek.Monday, "Lundi"),
+                    new KeyValuePair<int, string>((int)DayOfWeek.Tuesday, "Mardi"),
+                    new KeyValuePair<int, string>((int)DayOfWeek.Wednesday, "Mercredi"),
+                    new KeyValuePair<int, string>((int)DayOfWeek.Thursday, "Jeudi"),
+                    new KeyValuePair<int, string>((int)DayOfWeek.Friday, "Vendredi"),
+                    new KeyValuePair<int, string>((int)DayOfWeek.Saturday, "Samedi"),
+                    new KeyValuePair<int, string>((int)DayOfWeek.Sunday, "Dimanche")
+                };
 
-                // Configurer la source de données du comboBox des jours
                 cboJour.DisplayMember = "Value";
                 cboJour.ValueMember = "Key";
                 cboJour.DataSource = jours;
-
-                // Sélectionner le jour actuel
-                cboJour.SelectedValue = DateTime.Today.DayOfWeek;
+                cboJour.SelectedValue = (int)DateTime.Today.DayOfWeek;
             }
             catch (Exception ex)
             {
-                // Afficher un message d'erreur en cas d'exception
                 MessageBox.Show($"Erreur lors du chargement des jours : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void AfficherProchainsDeparts()
+        {
+            try
+            {
+                if (!chkProchainsDeparts.Checked) return;
+
+                var maintenant = DateTime.Now;
+                var horairesAujourdhui = _serviceHoraire.ObtenirParJour(maintenant.DayOfWeek)
+                    .Where(h => h.EstActif && h.HeureDepart > maintenant.TimeOfDay)
+                    .OrderBy(h => h.HeureDepart)
+                    .Take(3)
+                    .ToList();
+
+                if (horairesAujourdhui.Any())
+                {
+                    lblProchainsDeparts.Text = $"Prochains départs : {string.Join(", ", horairesAujourdhui.Select(h => h.HeureDepart.ToString(@"hh\:mm")))}";
+                    lblProchainsDeparts.ForeColor = Color.Green;
+                }
+                else
+                {
+                    lblProchainsDeparts.Text = "Aucun départ prévu aujourd'hui";
+                    lblProchainsDeparts.ForeColor = Color.Gray;
+                }
+            }
+            catch (Exception ex)
+            {
+                lblProchainsDeparts.Text = "Erreur lors du chargement";
+                lblProchainsDeparts.ForeColor = Color.Red;
             }
         }
 
@@ -98,218 +159,269 @@ namespace Fumoblilite.Interface.UserControls
         {
             try
             {
-                // Récupérer les valeurs sélectionnées
                 int ligneId = (int)cboLigne.SelectedValue;
-                DayOfWeek jour = (DayOfWeek)cboJour.SelectedValue;
+                int arretId = (int)cboArret.SelectedValue;
+                int jourValue = (int)cboJour.SelectedValue;
 
                 List<Horaire> horaires;
 
-                // Obtenir les horaires en fonction des critères sélectionnés
-                if (ligneId == 0) // Toutes les lignes
+                if (jourValue == -1) // Tous les jours
                 {
-                    horaires = _serviceHoraire.ObtenirParJour(jour);
+                    horaires = _serviceHoraire.ObtenirParCriteres(new HoraireCriteres());
                 }
                 else
                 {
-                    horaires = _serviceHoraire.ObtenirParLigneEtJour(ligneId, jour);
+                    DayOfWeek jour = (DayOfWeek)jourValue;
+                    if (ligneId == 0) // Toutes les lignes
+                    {
+                        horaires = _serviceHoraire.ObtenirParJour(jour);
+                    }
+                    else
+                    {
+                        horaires = _serviceHoraire.ObtenirParLigneEtJour(ligneId, jour);
+                    }
                 }
 
-                // Vérifier si des horaires ont été trouvés
+                // Filtrer par arrêt si spécifié
+                if (arretId != 0)
+                {
+                    horaires = horaires.Where(h => h.ArretId == arretId).ToList();
+                }
+
+                // Filtrer par plage horaire
+                var heureDebut = dtpHeureDebut.Value.TimeOfDay;
+                var heureFin = dtpHeureFin.Value.TimeOfDay;
+                horaires = horaires.Where(h => h.HeureDepart >= heureDebut && h.HeureDepart <= heureFin).ToList();
+
+                // Filtrer par statut actif si demandé
+                if (chkSeulementActifs.Checked)
+                {
+                    horaires = horaires.Where(h => h.EstActif).ToList();
+                }
+
+                // Filtrer par recherche textuelle si spécifiée
+                if (!string.IsNullOrWhiteSpace(txtRecherche.Text))
+                {
+                    var recherche = txtRecherche.Text.ToLower();
+                    var lignes = _serviceLigne.ObtenirToutes().ToDictionary(l => l.Id);
+                    var arrets = _serviceArret.ObtenirTous().ToDictionary(a => a.Id);
+
+                    horaires = horaires.Where(h =>
+                        (lignes.ContainsKey(h.LigneId) && lignes[h.LigneId].Nom.ToLower().Contains(recherche)) ||
+                        (arrets.ContainsKey(h.ArretId) && arrets[h.ArretId].Nom.ToLower().Contains(recherche)) ||
+                        h.HeureDepart.ToString(@"hh\:mm").Contains(recherche)
+                    ).ToList();
+                }
+
                 if (horaires.Count == 0)
                 {
                     MessageBox.Show("Aucun horaire trouvé pour les critères spécifiés.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     flpHoraires.Controls.Clear();
+                    lblStatistiques.Text = "Aucun résultat";
                     return;
                 }
 
-                // Récupérer les informations des lignes et des arrêts pour l'affichage
-                var lignes = _serviceLigne.ObtenirToutes().ToDictionary(l => l.Id);
-                var arrets = _serviceArret.ObtenirTous().ToDictionary(a => a.Id);
-
-                // Préparer les données pour l'affichage
-                var horairesAffichage = horaires.Select(h => new
-                {
-                    Horaire = h,
-                    Ligne = lignes.ContainsKey(h.LigneId) ? $"{lignes[h.LigneId].Numero} - {lignes[h.LigneId].Nom}" : $"Ligne {h.LigneId}",
-                    Arret = arrets.ContainsKey(h.ArretId) ? arrets[h.ArretId].Nom : $"Arrêt {h.ArretId}",
-                    Heure = h.HeureDepart.ToString(@"hh\:mm"),
-                    Actif = h.EstActif
-                }).OrderBy(h => h.Ligne).ThenBy(h => h.Arret).ThenBy(h => h.Heure).ToList();
-
-                // Afficher les horaires dans le FlowLayoutPanel
-                AfficherHoraires(horairesAffichage);
+                AfficherHoraires(horaires);
+                AfficherStatistiques(horaires.Count);
             }
             catch (Exception ex)
             {
-                // Afficher un message d'erreur en cas d'exception
                 MessageBox.Show($"Erreur lors de l'affichage des horaires : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void AfficherHoraires<T>(List<T> horairesAffichage)
+
+        private void AfficherHoraires(List<Horaire> horaires)
         {
-            // Vider le FlowLayoutPanel
-            flpHoraires.Controls.Clear();
             flpHoraires.SuspendLayout();
+            flpHoraires.Controls.Clear();
 
-            // Créer un panel d'en-tête
-            Panel headerPanel = new Panel
+            // Récupérer les informations des lignes et des arrêts pour l'affichage
+            var lignes = _serviceLigne.ObtenirToutes().ToDictionary(l => l.Id);
+            var arrets = _serviceArret.ObtenirTous().ToDictionary(a => a.Id);
+
+            // Préparer les données pour l'affichage
+            var horairesAffichage = horaires.Select(h => new
             {
-                Width = flpHoraires.Width - 25,
-                Height = 40,
-                BackColor = Color.FromArgb(50, 50, 80),
-                Margin = new Padding(0, 0, 0, 10)
-            };
+                Horaire = h,
+                Ligne = lignes.ContainsKey(h.LigneId) ? $"{lignes[h.LigneId].Numero} - {lignes[h.LigneId].Nom}" : $"Ligne {h.LigneId}",
+                LigneCouleur = lignes.ContainsKey(h.LigneId) ? lignes[h.LigneId].Couleur : "#808080",
+                Arret = arrets.ContainsKey(h.ArretId) ? arrets[h.ArretId].Nom : $"Arrêt {h.ArretId}",
+                Heure = h.HeureDepart.ToString(@"hh\:mm"),
+                Jour = GetNomJour(h.JourSemaine),
+                Actif = h.EstActif
+            }).OrderBy(h => h.Ligne).ThenBy(h => h.Arret).ThenBy(h => h.Heure).ToList();
 
-            // Ajouter les labels d'en-tête
-            Label lblHeaderLigne = new Label
+            foreach (var horaire in horairesAffichage)
             {
-                Text = "Ligne",
-                ForeColor = Color.White,
-                Font = new Font(Font.FontFamily, 10, FontStyle.Bold),
-                Location = new Point(20, 10),
-                AutoSize = true
-            };
-
-            Label lblHeaderArret = new Label
-            {
-                Text = "Arrêt",
-                ForeColor = Color.White,
-                Font = new Font(Font.FontFamily, 10, FontStyle.Bold),
-                Location = new Point(220, 10),
-                AutoSize = true
-            };
-
-            Label lblHeaderHeure = new Label
-            {
-                Text = "Heure",
-                ForeColor = Color.White,
-                Font = new Font(Font.FontFamily, 10, FontStyle.Bold),
-                Location = new Point(420, 10),
-                AutoSize = true
-            };
-
-            Label lblHeaderActif = new Label
-            {
-                Text = "Actif",
-                ForeColor = Color.White,
-                Font = new Font(Font.FontFamily, 10, FontStyle.Bold),
-                Location = new Point(520, 10),
-                AutoSize = true
-            };
-
-            headerPanel.Controls.Add(lblHeaderLigne);
-            headerPanel.Controls.Add(lblHeaderArret);
-            headerPanel.Controls.Add(lblHeaderHeure);
-            headerPanel.Controls.Add(lblHeaderActif);
-
-            flpHoraires.Controls.Add(headerPanel);
-
-            // Ajouter une carte pour chaque horaire
-            foreach (dynamic horaire in horairesAffichage)
-            {
-                // Créer un panel pour la carte
-                Panel cardPanel = new Panel
-                {
-                    Width = flpHoraires.Width - 25,
-                    Height = 60,
-                    BackColor = horaire.Actif ? Color.White : Color.FromArgb(240, 240, 240),
-                    Margin = new Padding(0, 0, 0, 5),
-                    BorderStyle = BorderStyle.None
-                };
-
-                // Ajouter un effet de survol
-                cardPanel.MouseEnter += (s, e) =>
-                {
-                    cardPanel.BackColor = Color.FromArgb(230, 240, 250);
-                };
-                cardPanel.MouseLeave += (s, e) =>
-                {
-                    cardPanel.BackColor = horaire.Actif ? Color.White : Color.FromArgb(240, 240, 240);
-                };
-
-                // Ajouter une bordure gauche colorée
-                Panel borderPanel = new Panel
-                {
-                    Width = 5,
-                    Height = cardPanel.Height,
-                    BackColor = horaire.Actif ? Color.FromArgb(50, 120, 200) : Color.Gray,
-                    Dock = DockStyle.Left
-                };
-                cardPanel.Controls.Add(borderPanel);
-
-                // Ajouter les labels pour les informations
-                Label lblLigne = new Label
-                {
-                    Text = horaire.Ligne,
-                    Font = new Font(Font.FontFamily, 9, FontStyle.Bold),
-                    Location = new Point(20, 10),
-                    Width = 180,
-                    AutoEllipsis = true
-                };
-
-                Label lblArret = new Label
-                {
-                    Text = horaire.Arret,
-                    Location = new Point(220, 10),
-                    Width = 180,
-                    AutoEllipsis = true
-                };
-
-                Label lblHeure = new Label
-                {
-                    Text = horaire.Heure,
-                    Font = new Font(Font.FontFamily, 10, FontStyle.Bold),
-                    Location = new Point(420, 10),
-                    AutoSize = true
-                };
-
-                // Ajouter un indicateur visuel pour l'état actif
-                Panel indicateurActif = new Panel
-                {
-                    Width = 16,
-                    Height = 16,
-                    BackColor = horaire.Actif ? Color.FromArgb(50, 180, 50) : Color.FromArgb(180, 50, 50),
-                    Location = new Point(520, 10),
-                    BorderStyle = BorderStyle.None
-                };
-                indicateurActif.Paint += (s, e) =>
-                {
-                    e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-                    e.Graphics.FillEllipse(new SolidBrush(indicateurActif.BackColor), 0, 0, 15, 15);
-                };
-
-                Label lblActif = new Label
-                {
-                    Text = horaire.Actif ? "Actif" : "Inactif",
-                    Location = new Point(545, 10),
-                    AutoSize = true,
-                    ForeColor = horaire.Actif ? Color.FromArgb(50, 180, 50) : Color.FromArgb(180, 50, 50)
-                };
-
-                // Ajouter des informations supplémentaires
-                Label lblInfos = new Label
-                {
-                    Text = $"ID: {horaire.Horaire.Id}",
-                    ForeColor = Color.Gray,
-                    Font = new Font(Font.FontFamily, 8),
-                    Location = new Point(20, 35),
-                    AutoSize = true
-                };
-
-                // Ajouter les contrôles au panel
-                cardPanel.Controls.Add(lblLigne);
-                cardPanel.Controls.Add(lblArret);
-                cardPanel.Controls.Add(lblHeure);
-                cardPanel.Controls.Add(indicateurActif);
-                cardPanel.Controls.Add(lblActif);
-                cardPanel.Controls.Add(lblInfos);
-
-                // Ajouter la carte au FlowLayoutPanel
-                flpHoraires.Controls.Add(cardPanel);
+                Panel panel = CreerCarteHoraire(horaire);
+                flpHoraires.Controls.Add(panel);
             }
 
             flpHoraires.ResumeLayout();
+        }
+
+        private Panel CreerCarteHoraire(dynamic horaire)
+        {
+            var panel = new Panel
+            {
+                Width = flpHoraires.Width - 30,
+                Height = 80,
+                BackColor = horaire.Actif ? Color.White : Color.FromArgb(245, 245, 245),
+                Margin = new Padding(5),
+                BorderStyle = BorderStyle.FixedSingle
+            };
+
+            // Bordure colorée selon la ligne
+            var bordure = new Panel
+            {
+                Width = 5,
+                Height = panel.Height,
+                Dock = DockStyle.Left,
+                BackColor = !string.IsNullOrEmpty(horaire.LigneCouleur)
+                    ? ColorTranslator.FromHtml(horaire.LigneCouleur)
+                    : Color.Gray
+            };
+            panel.Controls.Add(bordure);
+
+            // Informations principales
+            var lblLigne = new Label
+            {
+                Text = horaire.Ligne,
+                Font = new Font(Font.FontFamily, 10, FontStyle.Bold),
+                Location = new Point(15, 10),
+                AutoSize = true
+            };
+            panel.Controls.Add(lblLigne);
+
+            var lblArret = new Label
+            {
+                Text = horaire.Arret,
+                Location = new Point(15, 30),
+                AutoSize = true
+            };
+            panel.Controls.Add(lblArret);
+
+            var lblJour = new Label
+            {
+                Text = horaire.Jour,
+                Location = new Point(15, 50),
+                AutoSize = true,
+                ForeColor = Color.Gray,
+                Font = new Font(Font.FontFamily, 8)
+            };
+            panel.Controls.Add(lblJour);
+
+            var lblHeure = new Label
+            {
+                Text = horaire.Heure,
+                Font = new Font(Font.FontFamily, 12, FontStyle.Bold),
+                Location = new Point(panel.Width - 80, 20),
+                AutoSize = true,
+                ForeColor = horaire.Actif ? Color.Green : Color.Gray
+            };
+            panel.Controls.Add(lblHeure);
+
+            // Indicateur temps réel
+            if (horaire.Horaire.JourSemaine == DateTime.Now.DayOfWeek && horaire.Horaire.HeureDepart > DateTime.Now.TimeOfDay)
+            {
+                var tempsRestant = horaire.Horaire.HeureDepart - DateTime.Now.TimeOfDay;
+                var lblTemps = new Label
+                {
+                    Text = $"Dans {tempsRestant.Hours}h{tempsRestant.Minutes:00}",
+                    Location = new Point(panel.Width - 100, 50),
+                    AutoSize = true,
+                    ForeColor = Color.Blue,
+                    Font = new Font(Font.FontFamily, 8, FontStyle.Italic)
+                };
+                panel.Controls.Add(lblTemps);
+            }
+
+            return panel;
+        }
+
+        private void AfficherStatistiques(int total)
+        {
+            lblStatistiques.Text = $"Total: {total} horaires trouvés";
+        }
+
+        private string GetNomJour(DayOfWeek jour)
+        {
+            switch (jour)
+            {
+                case DayOfWeek.Monday:
+                    return "Lundi";
+                case DayOfWeek.Tuesday:
+                    return "Mardi";
+                case DayOfWeek.Wednesday:
+                    return "Mercredi";
+                case DayOfWeek.Thursday:
+                    return "Jeudi";
+                case DayOfWeek.Friday:
+                    return "Vendredi";
+                case DayOfWeek.Saturday:
+                    return "Samedi";
+                case DayOfWeek.Sunday:
+                    return "Dimanche";
+                default:
+                    return jour.ToString();
+            }
+        }
+
+
+        // Gestionnaires d'événements
+        private void txtRecherche_TextChanged(object sender, EventArgs e)
+        {
+            _searchTimer.Stop();
+            _searchTimer.Start();
+        }
+
+        private void chkProchainsDeparts_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkProchainsDeparts.Checked)
+            {
+                AfficherProchainsDeparts();
+                _refreshTimer.Start();
+            }
+            else
+            {
+                _refreshTimer.Stop();
+                lblProchainsDeparts.Text = "";
+            }
+        }
+
+        private void btnExporter_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var saveDialog = new SaveFileDialog
+                {
+                    Filter = "Fichiers CSV (*.csv)|*.csv",
+                    DefaultExt = "csv",
+                    FileName = $"horaires_{DateTime.Now:yyyyMMdd}.csv"
+                };
+
+                if (saveDialog.ShowDialog() == DialogResult.OK)
+                {
+                    // Récupérer les horaires actuellement affichés
+                    btnAfficher_Click(null, null);
+                    MessageBox.Show("Export réalisé avec succès !", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de l'export : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _searchTimer?.Dispose();
+                _refreshTimer?.Dispose();
+            }
+            base.Dispose(disposing);
         }
     }
 }
