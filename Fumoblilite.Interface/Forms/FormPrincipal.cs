@@ -16,6 +16,10 @@ namespace Fumoblilite.Interface.Forms
             _connectionString = connectionString;
             _utilisateurConnecte = utilisateur;
             this.FormClosing += FormPrincipal_FormClosing;
+
+            // Activer la capture des touches pour l'invite de commande
+            this.KeyPreview = true;
+            this.KeyDown += FormPrincipal_KeyDown;
         }
 
         private void FormPrincipal_Load(object sender, EventArgs e)
@@ -64,6 +68,84 @@ namespace Fumoblilite.Interface.Forms
                 {
                     Application.Exit(); // Fermer l'application
                 }
+            }
+        }
+
+        private void FormPrincipal_KeyDown(object sender, KeyEventArgs e)
+        {
+            // Vérifier si la combinaison Ctrl+O est pressée
+            if (e.Control && e.KeyCode == Keys.C)
+            {
+                OuvrirInviteCommande();
+                e.Handled = true;
+            }
+        }
+
+        private void OuvrirInviteCommande()
+        {
+            // Charger le contrôle utilisateur d'invite de commande
+            ChargerUserControl(new UCInviteCommande(_connectionString, _utilisateurConnecte, this));
+        }
+
+        public void ExecuterCommande(string commande)
+        {
+            // Méthode publique pour exécuter des commandes depuis l'invite
+            string[] parties = commande.ToLower().Split(' ');
+            string commandePrincipale = parties[0];
+
+            switch (commandePrincipale)
+            {
+                case "reseau":
+                    ChargerUserControl(new UCConsultationReseau(_connectionString));
+                    break;
+                case "lignes":
+                    if (_utilisateurConnecte?.Role == "Admin")
+                        ChargerUserControl(new UCGestionLignes(_connectionString));
+                    else
+                        ChargerUserControl(new UCConsultationLigne(_connectionString));
+                    break;
+                case "arrets":
+                    if (_utilisateurConnecte?.Role == "Admin")
+                        ChargerUserControl(new UCGestionArrets(_connectionString));
+                    else
+                        MessageBox.Show("Accès refusé. Droits administrateur requis.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    break;
+                case "horaires":
+                    if (_utilisateurConnecte?.Role == "Admin")
+                        ChargerUserControl(new UCGestionHoraires(_connectionString));
+                    else
+                        ChargerUserControl(new UCConsultationHoraires(_connectionString));
+                    break;
+                case "utilisateurs":
+                    if (_utilisateurConnecte?.Role == "Admin")
+                        ChargerUserControl(new UCGestionUtilisateurs(_connectionString));
+                    else
+                        MessageBox.Show("Accès refusé. Droits administrateur requis.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    break;
+                case "itineraire":
+                    ChargerUserControl(new UCRechercheItineraire(_connectionString));
+                    break;
+                case "credits":
+                    ChargerUserControl(new UCCredits());
+                    break;
+                case "connexion":
+                    if (_utilisateurConnecte == null)
+                        menuItemConnexion_Click(null, null);
+                    else
+                        MessageBox.Show("Vous êtes déjà connecté.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    break;
+                case "deconnexion":
+                    if (_utilisateurConnecte != null)
+                        menuItemDeconnexion_Click(null, null);
+                    else
+                        MessageBox.Show("Vous n'êtes pas connecté.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    break;
+                case "quitter":
+                    menuItemQuitter_Click(null, null);
+                    break;
+                default:
+                    MessageBox.Show($"Commande '{commandePrincipale}' non reconnue.\n\nCommandes disponibles:\n- reseau\n- lignes\n- arrets (Admin)\n- horaires\n- utilisateurs (Admin)\n- itineraire\n- credits\n- connexion\n- deconnexion\n- quitter", "Aide", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    break;
             }
         }
 
@@ -166,7 +248,6 @@ namespace Fumoblilite.Interface.Forms
         private void lblGroupe_Click(object sender, EventArgs e)
         {
             ChargerUserControl(new UCCredits());
-
         }
     }
 }

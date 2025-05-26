@@ -126,6 +126,12 @@
     <Compile Include="UserControls\UCGestionUtilisateurs.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="UserControls\UCInviteCommande.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\UCInviteCommande.Designer.cs">
+      <DependentUpon>UCInviteCommande.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\UCRechercheItineraire.Designer.cs">
       <SubType>UserControl</SubType>
       <DependentUpon>UCRechercheItineraire.cs</DependentUpon>
