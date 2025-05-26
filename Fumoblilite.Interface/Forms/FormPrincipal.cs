@@ -9,6 +9,7 @@ namespace Fumoblilite.Interface.Forms
     {
         private readonly string _connectionString;
         private readonly Utilisateur _utilisateurConnecte;
+        private bool _modeConsole = false;
 
         public FormPrincipal(string connectionString, Utilisateur utilisateur)
         {
@@ -73,7 +74,7 @@ namespace Fumoblilite.Interface.Forms
 
         private void FormPrincipal_KeyDown(object sender, KeyEventArgs e)
         {
-            // Vérifier si la combinaison Ctrl+O est pressée
+            // Vérifier si la combinaison Ctrl + C est pressée
             if (e.Control && e.KeyCode == Keys.C)
             {
                 OuvrirInviteCommande();
@@ -84,12 +85,19 @@ namespace Fumoblilite.Interface.Forms
         private void OuvrirInviteCommande()
         {
             // Charger le contrôle utilisateur d'invite de commande
+            _modeConsole = true;
             ChargerUserControl(new UCInviteCommande(_connectionString, _utilisateurConnecte, this));
         }
 
         public void ExecuterCommande(string commande)
         {
-            // Méthode publique pour exécuter des commandes depuis l'invite
+            // En mode console, ne pas charger les UserControls, laisser la console gérer
+            if (_modeConsole)
+            {
+                return; // La console gère tout
+            }
+
+            // Mode normal - charger les UserControls
             string[] parties = commande.ToLower().Split(' ');
             string commandePrincipale = parties[0];
 
@@ -143,10 +151,13 @@ namespace Fumoblilite.Interface.Forms
                 case "quitter":
                     menuItemQuitter_Click(null, null);
                     break;
-                default:
-                    MessageBox.Show($"Commande '{commandePrincipale}' non reconnue.\n\nCommandes disponibles:\n- reseau\n- lignes\n- arrets (Admin)\n- horaires\n- utilisateurs (Admin)\n- itineraire\n- credits\n- connexion\n- deconnexion\n- quitter", "Aide", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    break;
             }
+        }
+
+        public void FermerModeConsole()
+        {
+            _modeConsole = false;
+            AfficherReseau();
         }
 
         private void AfficherReseau()
