@@ -155,6 +155,12 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="UserControls\UCConsultationHoraires.resx">
+      <DependentUpon>UCConsultationHoraires.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UCConsultationLigne.resx">
+      <DependentUpon>UCConsultationLigne.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UCCredits.resx">
       <DependentUpon>UCCredits.cs</DependentUpon>
     </EmbeddedResource>
