@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SQLite;
+using MySql.Data.MySqlClient;
 using Fumoblilite.Systeme.Modeles;
 using Fumoblilite.Systeme.Interfaces;
 
@@ -20,14 +19,14 @@ namespace Fumoblilite.SQL.Repositories
         {
             List<Ligne> lignes = new List<Ligne>();
 
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
-                string query = "SELECT * FROM Lignes WHERE EstSupprime = 0 ORDER BY Numero";
+                string query = "SELECT * FROM Lignes WHERE EstSupprime = FALSE ORDER BY Numero";
 
-                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
-                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -42,16 +41,16 @@ namespace Fumoblilite.SQL.Repositories
 
         public Ligne ObtenirParId(int id)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
-                string query = "SELECT * FROM Lignes WHERE Id = @Id AND EstSupprime = 0";
+                string query = "SELECT * FROM Lignes WHERE Id = @Id AND EstSupprime = FALSE";
 
-                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
 
-                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         if (reader.Read())
                         {
@@ -66,19 +65,19 @@ namespace Fumoblilite.SQL.Repositories
 
         public int Ajouter(Ligne ligne)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
                 string query = @"
-                    INSERT INTO Lignes (Numero, Nom, Couleur,EstActif, DateCreation, EstSupprime)
-                    VALUES (@Numero, @Nom, @Couleur, @EstActif, @DateCreation, 0);
-                    SELECT last_insert_rowid();";
+                    INSERT INTO Lignes (Numero, Nom, Couleur, EstActif, DateCreation, EstSupprime)
+                    VALUES (@Numero, @Nom, @Couleur, @EstActif, @DateCreation, FALSE);
+                    SELECT LAST_INSERT_ID();";
 
-                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Numero", ligne.Numero);
                     command.Parameters.AddWithValue("@Nom", ligne.Nom);
-                    command.Parameters.AddWithValue("@Couleur", ligne.Couleur ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@Couleur", ligne.Couleur);
                     command.Parameters.AddWithValue("@EstActif", ligne.EstActif);
                     command.Parameters.AddWithValue("@DateCreation", ligne.DateCreation);
 
@@ -89,7 +88,7 @@ namespace Fumoblilite.SQL.Repositories
 
         public bool Modifier(Ligne ligne)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
                 string query = @"
@@ -101,12 +100,12 @@ namespace Fumoblilite.SQL.Repositories
                         DateModification = @DateModification
                     WHERE Id = @Id";
 
-                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", ligne.Id);
                     command.Parameters.AddWithValue("@Numero", ligne.Numero);
                     command.Parameters.AddWithValue("@Nom", ligne.Nom);
-                    command.Parameters.AddWithValue("@Couleur", ligne.Couleur ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@Couleur", ligne.Couleur);
                     command.Parameters.AddWithValue("@EstActif", ligne.EstActif);
                     command.Parameters.AddWithValue("@DateModification", ligne.DateModification ?? DateTime.Now);
 
@@ -117,12 +116,12 @@ namespace Fumoblilite.SQL.Repositories
 
         public bool Supprimer(int id)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
-                string query = "UPDATE Lignes SET EstSupprime = 1 WHERE Id = @Id";
+                string query = "UPDATE Lignes SET EstSupprime = TRUE, DateModification = NOW() WHERE Id = @Id";
 
-                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
                     return command.ExecuteNonQuery() > 0;
@@ -130,7 +129,7 @@ namespace Fumoblilite.SQL.Repositories
             }
         }
 
-        private Ligne MapFromReader(SQLiteDataReader reader)
+        private Ligne MapFromReader(MySqlDataReader reader)
         {
             return new Ligne
             {
@@ -146,4 +145,3 @@ namespace Fumoblilite.SQL.Repositories
         }
     }
 }
-

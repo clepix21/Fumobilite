@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SQLite;
+using MySql.Data.MySqlClient;
 using Fumoblilite.Systeme.Modeles;
 using Fumoblilite.Systeme.Interfaces;
 
@@ -22,16 +21,16 @@ namespace Fumoblilite.SQL.Repositories
         {
             List<ArretLigne> arretsLigne = new List<ArretLigne>();
 
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
-                string query = "SELECT * FROM ArretsLignes WHERE LigneId = @LigneId AND EstSupprime = 0 ORDER BY Ordre";
+                string query = "SELECT * FROM ArretsLignes WHERE LigneId = @LigneId AND EstSupprime = FALSE ORDER BY Ordre";
 
-                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@LigneId", ligneId);
 
-                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -48,16 +47,16 @@ namespace Fumoblilite.SQL.Repositories
 
         public ArretLigne ObtenirParId(int id)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
-                string query = "SELECT * FROM ArretsLignes WHERE Id = @Id AND EstSupprime = 0";
+                string query = "SELECT * FROM ArretsLignes WHERE Id = @Id AND EstSupprime = FALSE";
 
-                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
 
-                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         if (reader.Read())
                         {
@@ -74,15 +73,15 @@ namespace Fumoblilite.SQL.Repositories
 
         public int Ajouter(ArretLigne arretLigne)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
                 string query = @"
                     INSERT INTO ArretsLignes (LigneId, ArretId, Ordre, TempsArretMinutes, TempsTrajetSuivantMinutes, DateCreation, EstSupprime)
-                    VALUES (@LigneId, @ArretId, @Ordre, @TempsArretMinutes, @TempsTrajetSuivantMinutes, @DateCreation, 0);
-                    SELECT last_insert_rowid();";
+                    VALUES (@LigneId, @ArretId, @Ordre, @TempsArretMinutes, @TempsTrajetSuivantMinutes, @DateCreation, FALSE);
+                    SELECT LAST_INSERT_ID();";
 
-                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@LigneId", arretLigne.LigneId);
                     command.Parameters.AddWithValue("@ArretId", arretLigne.ArretId);
@@ -98,7 +97,7 @@ namespace Fumoblilite.SQL.Repositories
 
         public bool Modifier(ArretLigne arretLigne)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
                 string query = @"
@@ -111,7 +110,7 @@ namespace Fumoblilite.SQL.Repositories
                         DateModification = @DateModification
                     WHERE Id = @Id";
 
-                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", arretLigne.Id);
                     command.Parameters.AddWithValue("@LigneId", arretLigne.LigneId);
@@ -128,12 +127,12 @@ namespace Fumoblilite.SQL.Repositories
 
         public bool Supprimer(int id)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
-                string query = "UPDATE ArretsLignes SET EstSupprime = 1 WHERE Id = @Id";
+                string query = "UPDATE ArretsLignes SET EstSupprime = TRUE, DateModification = NOW() WHERE Id = @Id";
 
-                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
                     return command.ExecuteNonQuery() > 0;
@@ -141,7 +140,7 @@ namespace Fumoblilite.SQL.Repositories
             }
         }
 
-        private ArretLigne MapFromReader(SQLiteDataReader reader)
+        private ArretLigne MapFromReader(MySqlDataReader reader)
         {
             return new ArretLigne
             {
@@ -157,4 +156,3 @@ namespace Fumoblilite.SQL.Repositories
         }
     }
 }
-

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SQLite;
+using MySql.Data.MySqlClient;
 using Fumoblilite.Systeme.Modeles;
 using Fumoblilite.Systeme.Interfaces;
 
@@ -20,14 +19,14 @@ namespace Fumoblilite.SQL.Repositories
         {
             List<Utilisateur> utilisateurs = new List<Utilisateur>();
 
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
-                string query = "SELECT * FROM Utilisateurs WHERE EstSupprime = 0 ORDER BY Nom, Prenom";
+                string query = "SELECT * FROM Utilisateurs WHERE EstSupprime = FALSE ORDER BY Nom, Prenom";
 
-                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
-                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -42,16 +41,16 @@ namespace Fumoblilite.SQL.Repositories
 
         public Utilisateur ObtenirParId(int id)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
-                string query = "SELECT * FROM Utilisateurs WHERE Id = @Id AND EstSupprime = 0";
+                string query = "SELECT * FROM Utilisateurs WHERE Id = @Id AND EstSupprime = FALSE";
 
-                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
 
-                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         if (reader.Read())
                         {
@@ -66,16 +65,16 @@ namespace Fumoblilite.SQL.Repositories
 
         public Utilisateur ObtenirParNomUtilisateur(string nomUtilisateur)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
-                string query = "SELECT * FROM Utilisateurs WHERE NomUtilisateur = @NomUtilisateur AND EstSupprime = 0";
+                string query = "SELECT * FROM Utilisateurs WHERE NomUtilisateur = @NomUtilisateur AND EstSupprime = FALSE";
 
-                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@NomUtilisateur", nomUtilisateur);
 
-                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         if (reader.Read())
                         {
@@ -90,21 +89,21 @@ namespace Fumoblilite.SQL.Repositories
 
         public int Ajouter(Utilisateur utilisateur)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
                 string query = @"
                     INSERT INTO Utilisateurs (Nom, Prenom, NomUtilisateur, MotDePasse, Email, Role, EstActif, DateCreation, EstSupprime)
-                    VALUES (@Nom, @Prenom, @NomUtilisateur, @MotDePasse, @Email, @Role, @EstActif, @DateCreation, 0);
-                    SELECT last_insert_rowid();";
+                    VALUES (@Nom, @Prenom, @NomUtilisateur, @MotDePasse, @Email, @Role, @EstActif, @DateCreation, FALSE);
+                    SELECT LAST_INSERT_ID();";
 
-                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Nom", utilisateur.Nom);
                     command.Parameters.AddWithValue("@Prenom", utilisateur.Prenom);
                     command.Parameters.AddWithValue("@NomUtilisateur", utilisateur.NomUtilisateur);
                     command.Parameters.AddWithValue("@MotDePasse", utilisateur.MotDePasse);
-                    command.Parameters.AddWithValue("@Email", utilisateur.Email ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@Email", utilisateur.Email);
                     command.Parameters.AddWithValue("@Role", utilisateur.Role);
                     command.Parameters.AddWithValue("@EstActif", utilisateur.EstActif);
                     command.Parameters.AddWithValue("@DateCreation", utilisateur.DateCreation);
@@ -116,7 +115,7 @@ namespace Fumoblilite.SQL.Repositories
 
         public bool Modifier(Utilisateur utilisateur)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
                 string query = @"
@@ -130,13 +129,13 @@ namespace Fumoblilite.SQL.Repositories
                         DateModification = @DateModification
                     WHERE Id = @Id";
 
-                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", utilisateur.Id);
                     command.Parameters.AddWithValue("@Nom", utilisateur.Nom);
                     command.Parameters.AddWithValue("@Prenom", utilisateur.Prenom);
                     command.Parameters.AddWithValue("@NomUtilisateur", utilisateur.NomUtilisateur);
-                    command.Parameters.AddWithValue("@Email", utilisateur.Email ?? (object)DBNull.Value);
+                    command.Parameters.AddWithValue("@Email", utilisateur.Email);
                     command.Parameters.AddWithValue("@Role", utilisateur.Role);
                     command.Parameters.AddWithValue("@EstActif", utilisateur.EstActif);
                     command.Parameters.AddWithValue("@DateModification", utilisateur.DateModification ?? DateTime.Now);
@@ -148,16 +147,15 @@ namespace Fumoblilite.SQL.Repositories
 
         public bool ModifierMotDePasse(int id, string motDePasse)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
-                string query = "UPDATE Utilisateurs SET MotDePasse = @MotDePasse, DateModification = @DateModification WHERE Id = @Id";
+                string query = "UPDATE Utilisateurs SET MotDePasse = @MotDePasse, DateModification = NOW() WHERE Id = @Id";
 
-                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
                     command.Parameters.AddWithValue("@MotDePasse", motDePasse);
-                    command.Parameters.AddWithValue("@DateModification", DateTime.Now);
 
                     return command.ExecuteNonQuery() > 0;
                 }
@@ -166,12 +164,12 @@ namespace Fumoblilite.SQL.Repositories
 
         public bool Supprimer(int id)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
-                string query = "UPDATE Utilisateurs SET EstSupprime = 1 WHERE Id = @Id";
+                string query = "UPDATE Utilisateurs SET EstSupprime = TRUE, DateModification = NOW() WHERE Id = @Id";
 
-                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
                     return command.ExecuteNonQuery() > 0;
@@ -179,7 +177,7 @@ namespace Fumoblilite.SQL.Repositories
             }
         }
 
-        private Utilisateur MapFromReader(SQLiteDataReader reader)
+        private Utilisateur MapFromReader(MySqlDataReader reader)
         {
             return new Utilisateur
             {
@@ -197,4 +195,3 @@ namespace Fumoblilite.SQL.Repositories
         }
     }
 }
-

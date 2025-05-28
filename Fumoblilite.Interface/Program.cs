@@ -1,13 +1,7 @@
 using System;
 using System.Windows.Forms;
-using System.IO;
-using Fumoblilite.SQL;
 using Fumoblilite.Interface.Forms;
-
-/*
- * Temps passé sur le projet : 
- * LEMAIRE Clément : 59 heures de développement, tests et documentation.
- */
+using Fumoblilite.SQL;
 
 namespace Fumoblilite.Interface
 {
@@ -22,26 +16,41 @@ namespace Fumoblilite.Interface
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            // Chemin de la base de données
-            string dossierApplication = AppDomain.CurrentDomain.BaseDirectory;
-            string cheminBaseDonnees = Path.Combine(dossierApplication, "Fumoblilite.db");
+            // Configuration de la base de données MySQL
+            string serveur = "10.1.139.236";
+            string login = "a6";
+            string mdp = "fumo";
+            string bd = "basea6";
 
-            // Initialisation de la base de données
-            GestionBaseDonnees gestionBD = new GestionBaseDonnees(cheminBaseDonnees);
-            bool nouvelleBaseDonnees = gestionBD.CreerBaseDonneesSiNonExistante();
-            //gestionBD.InsererDonneesInitiales();
+            // Initialiser la base de données
+            GestionBaseDonnees gestionBD = new GestionBaseDonnees(serveur, login, mdp, bd);
 
-
-            if (nouvelleBaseDonnees)
+            // Tester la connexion
+            if (!gestionBD.TesterConnexion())
             {
-                MessageBox.Show("Une nouvelle base de données a été créée avec des données de démonstration.\n\nIdentifiants par défaut :\nUtilisateur : admin\nMot de passe : admin",
-                    "Base de données initialisée",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
+                MessageBox.Show("Impossible de se connecter à la base de données. Vérifiez les paramètres de connexion.",
+                               "Erreur de connexion", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Créer les tables si nécessaire
+            try
+            {
+                bool nouvelleBase = gestionBD.CreerBaseDonneesSiNonExistante();
+                if (nouvelleBase)
+                {
+                    MessageBox.Show("Base de données initialisée avec succès!",
+                                   "Initialisation", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de l'initialisation de la base de données : {ex.Message}",
+                               "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
 
             Application.Run(new FormPrincipal(gestionBD.ConnectionString, null));
         }
     }
 }
-

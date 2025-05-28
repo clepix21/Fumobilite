@@ -15,40 +15,62 @@ namespace Fumoblilite.Interface.Forms
         // Constructeur de la classe FormConnexion
         public FormConnexion(string connectionString)
         {
-            InitializeComponent();
             _connectionString = connectionString;
+            InitializeComponent();
 
             // Initialisation du service d'authentification avec le repository utilisateur
-            var repositoryUtilisateur = new RepositoryUtilisateur(_connectionString);
-            _serviceAuthentification = new ServiceAuthentification(repositoryUtilisateur);
+            try
+            {
+                var repositoryUtilisateur = new RepositoryUtilisateur(_connectionString);
+                _serviceAuthentification = new ServiceAuthentification(repositoryUtilisateur);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de l'initialisation : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         // Gestionnaire d'événements pour le clic sur le bouton de connexion
         private void btnConnexion_Click(object sender, EventArgs e)
         {
-            string nomUtilisateur = txtNomUtilisateur.Text.Trim();
-            string motDePasse = txtMotDePasse.Text;
+            try
+            {
+                string nomUtilisateur = txtNomUtilisateur.Text.Trim();
+                string motDePasse = txtMotDePasse.Text;
 
-            // Vérification si les champs nom d'utilisateur et mot de passe sont remplis
-            if (string.IsNullOrEmpty(nomUtilisateur) || string.IsNullOrEmpty(motDePasse))
-            {
-                MessageBox.Show("Veuillez saisir un nom d'utilisateur et un mot de passe.", "Erreur de connexion", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
+                // Vérification si les champs nom d'utilisateur et mot de passe sont remplis
+                if (string.IsNullOrEmpty(nomUtilisateur) || string.IsNullOrEmpty(motDePasse))
+                {
+                    MessageBox.Show("Veuillez saisir un nom d'utilisateur et un mot de passe.", "Erreur de connexion", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
 
-            // Authentification de l'utilisateur
-            Utilisateur utilisateur = _serviceAuthentification.Authentifier(nomUtilisateur, motDePasse);
-            if (utilisateur != null)
-            {
-                UtilisateurConnecte = utilisateur;
-                this.Close(); // Fermer le formulaire de connexion si l'authentification réussit
+                // Vérification que le service d'authentification est initialisé
+                if (_serviceAuthentification == null)
+                {
+                    MessageBox.Show("Erreur de connexion à la base de données.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Authentification de l'utilisateur
+                Utilisateur utilisateur = _serviceAuthentification.Authentifier(nomUtilisateur, motDePasse);
+                if (utilisateur != null)
+                {
+                    UtilisateurConnecte = utilisateur;
+                    this.DialogResult = DialogResult.OK;
+                    this.Close(); // Fermer le formulaire de connexion si l'authentification réussit
+                }
+                else
+                {
+                    // Afficher un message d'erreur si l'authentification échoue
+                    MessageBox.Show("Nom d'utilisateur ou mot de passe incorrect.", "Erreur de connexion", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    txtMotDePasse.Clear();
+                    txtMotDePasse.Focus();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                // Afficher un message d'erreur si l'authentification échoue
-                MessageBox.Show("Nom d'utilisateur ou mot de passe incorrect.", "Erreur de connexion", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txtMotDePasse.Clear();
-                txtMotDePasse.Focus();
+                MessageBox.Show($"Erreur lors de la connexion : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -57,6 +79,15 @@ namespace Fumoblilite.Interface.Forms
         {
             this.DialogResult = DialogResult.Cancel;
             this.Close();
+        }
+
+        // Gestionnaire pour la touche Entrée dans le champ mot de passe
+        private void txtMotDePasse_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                btnConnexion_Click(sender, e);
+            }
         }
     }
 }

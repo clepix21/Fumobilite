@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SQLite;
+using MySql.Data.MySqlClient;
 using System.Linq;
 using System.Text;
 using Fumoblilite.Systeme.Modeles;
@@ -21,33 +20,6 @@ namespace Fumoblilite.SQL.Repositories
         {
             _connectionString = connectionString;
             _cache = new Dictionary<string, List<Horaire>>();
-            CreerIndex();
-        }
-
-        private void CreerIndex()
-        {
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
-            {
-                connection.Open();
-
-                // Créer des index pour optimiser les performances
-                var indexes = new[]
-                {
-                    "CREATE INDEX IF NOT EXISTS idx_horaires_ligne_jour ON Horaires(LigneId, JourSemaine, HeureDepart)",
-                    "CREATE INDEX IF NOT EXISTS idx_horaires_arret_jour ON Horaires(ArretId, JourSemaine, HeureDepart)",
-                    "CREATE INDEX IF NOT EXISTS idx_horaires_actif ON Horaires(EstActif, EstSupprime)",
-                    "CREATE INDEX IF NOT EXISTS idx_horaires_heure ON Horaires(HeureDepart)",
-                    "CREATE INDEX IF NOT EXISTS idx_horaires_date_creation ON Horaires(DateCreation)"
-                };
-
-                foreach (var indexQuery in indexes)
-                {
-                    using (var command = new SQLiteCommand(indexQuery, connection))
-                    {
-                        command.ExecuteNonQuery();
-                    }
-                }
-            }
         }
 
         private void InvaliderCache()
@@ -82,19 +54,19 @@ namespace Fumoblilite.SQL.Repositories
             {
                 List<Horaire> horaires = new List<Horaire>();
 
-                using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+                using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
                     string query = @"
                         SELECT * FROM Horaires 
-                        WHERE LigneId = @LigneId AND EstSupprime = 0 
+                        WHERE LigneId = @LigneId AND EstSupprime = FALSE 
                         ORDER BY JourSemaine, HeureDepart";
 
-                    using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@LigneId", ligneId);
 
-                        using (SQLiteDataReader reader = command.ExecuteReader())
+                        using (MySqlDataReader reader = command.ExecuteReader())
                         {
                             while (reader.Read())
                             {
@@ -115,21 +87,21 @@ namespace Fumoblilite.SQL.Repositories
             {
                 List<Horaire> horaires = new List<Horaire>();
 
-                using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+                using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
                     string query = @"
                         SELECT h.*, l.Numero as LigneNumero, l.Nom as LigneNom
                         FROM Horaires h
                         INNER JOIN Lignes l ON h.LigneId = l.Id
-                        WHERE h.ArretId = @ArretId AND h.EstSupprime = 0 AND l.EstSupprime = 0
+                        WHERE h.ArretId = @ArretId AND h.EstSupprime = FALSE AND l.EstSupprime = FALSE
                         ORDER BY h.JourSemaine, h.HeureDepart";
 
-                    using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@ArretId", arretId);
 
-                        using (SQLiteDataReader reader = command.ExecuteReader())
+                        using (MySqlDataReader reader = command.ExecuteReader())
                         {
                             while (reader.Read())
                             {
@@ -150,20 +122,20 @@ namespace Fumoblilite.SQL.Repositories
             {
                 List<Horaire> horaires = new List<Horaire>();
 
-                using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+                using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
                     string query = @"
                         SELECT * FROM Horaires 
-                        WHERE LigneId = @LigneId AND JourSemaine = @JourSemaine AND EstSupprime = 0 
+                        WHERE LigneId = @LigneId AND JourSemaine = @JourSemaine AND EstSupprime = FALSE 
                         ORDER BY HeureDepart";
 
-                    using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@LigneId", ligneId);
                         command.Parameters.AddWithValue("@JourSemaine", (int)jour);
 
-                        using (SQLiteDataReader reader = command.ExecuteReader())
+                        using (MySqlDataReader reader = command.ExecuteReader())
                         {
                             while (reader.Read())
                             {
@@ -181,7 +153,7 @@ namespace Fumoblilite.SQL.Repositories
         {
             List<Horaire> horaires = new List<Horaire>();
 
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
                 string query = @"
@@ -189,15 +161,15 @@ namespace Fumoblilite.SQL.Repositories
                     FROM Horaires h
                     INNER JOIN Lignes l ON h.LigneId = l.Id
                     WHERE h.ArretId = @ArretId AND h.JourSemaine = @JourSemaine 
-                          AND h.EstSupprime = 0 AND l.EstSupprime = 0
+                          AND h.EstSupprime = FALSE AND l.EstSupprime = FALSE
                     ORDER BY h.HeureDepart";
 
-                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@ArretId", arretId);
                     command.Parameters.AddWithValue("@JourSemaine", (int)jour);
 
-                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -217,7 +189,7 @@ namespace Fumoblilite.SQL.Repositories
             {
                 List<Horaire> horaires = new List<Horaire>();
 
-                using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+                using (MySqlConnection connection = new MySqlConnection(_connectionString))
                 {
                     connection.Open();
                     string query = @"
@@ -225,15 +197,15 @@ namespace Fumoblilite.SQL.Repositories
                         FROM Horaires h
                         INNER JOIN Lignes l ON h.LigneId = l.Id
                         INNER JOIN Arrets a ON h.ArretId = a.Id
-                        WHERE h.JourSemaine = @JourSemaine AND h.EstSupprime = 0 
-                              AND l.EstSupprime = 0 AND a.EstSupprime = 0
+                        WHERE h.JourSemaine = @JourSemaine AND h.EstSupprime = FALSE 
+                              AND l.EstSupprime = FALSE AND a.EstSupprime = FALSE
                         ORDER BY l.Numero, a.Nom, h.HeureDepart";
 
-                    using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                    using (MySqlCommand command = new MySqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@JourSemaine", (int)jour);
 
-                        using (SQLiteDataReader reader = command.ExecuteReader())
+                        using (MySqlDataReader reader = command.ExecuteReader())
                         {
                             while (reader.Read())
                             {
@@ -251,7 +223,7 @@ namespace Fumoblilite.SQL.Repositories
         {
             List<Horaire> horaires = new List<Horaire>();
 
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
 
@@ -260,56 +232,56 @@ namespace Fumoblilite.SQL.Repositories
                     FROM Horaires h
                     INNER JOIN Lignes l ON h.LigneId = l.Id
                     INNER JOIN Arrets a ON h.ArretId = a.Id
-                    WHERE h.EstSupprime = 0 AND l.EstSupprime = 0 AND a.EstSupprime = 0");
+                    WHERE h.EstSupprime = FALSE AND l.EstSupprime = FALSE AND a.EstSupprime = FALSE");
 
-                var parameters = new List<SQLiteParameter>();
+                var parameters = new List<MySqlParameter>();
 
                 if (criteres.LigneId.HasValue)
                 {
                     queryBuilder.Append(" AND h.LigneId = @LigneId");
-                    parameters.Add(new SQLiteParameter("@LigneId", criteres.LigneId.Value));
+                    parameters.Add(new MySqlParameter("@LigneId", criteres.LigneId.Value));
                 }
 
                 if (criteres.ArretId.HasValue)
                 {
                     queryBuilder.Append(" AND h.ArretId = @ArretId");
-                    parameters.Add(new SQLiteParameter("@ArretId", criteres.ArretId.Value));
+                    parameters.Add(new MySqlParameter("@ArretId", criteres.ArretId.Value));
                 }
 
                 if (criteres.JourSemaine.HasValue)
                 {
                     queryBuilder.Append(" AND h.JourSemaine = @JourSemaine");
-                    parameters.Add(new SQLiteParameter("@JourSemaine", (int)criteres.JourSemaine.Value));
+                    parameters.Add(new MySqlParameter("@JourSemaine", (int)criteres.JourSemaine.Value));
                 }
 
                 if (criteres.HeureDebut.HasValue)
                 {
                     queryBuilder.Append(" AND h.HeureDepart >= @HeureDebut");
-                    parameters.Add(new SQLiteParameter("@HeureDebut", criteres.HeureDebut.Value.ToString()));
+                    parameters.Add(new MySqlParameter("@HeureDebut", criteres.HeureDebut.Value));
                 }
 
                 if (criteres.HeureFin.HasValue)
                 {
                     queryBuilder.Append(" AND h.HeureDepart <= @HeureFin");
-                    parameters.Add(new SQLiteParameter("@HeureFin", criteres.HeureFin.Value.ToString()));
+                    parameters.Add(new MySqlParameter("@HeureFin", criteres.HeureFin.Value));
                 }
 
                 if (criteres.EstActif.HasValue)
                 {
                     queryBuilder.Append(" AND h.EstActif = @EstActif");
-                    parameters.Add(new SQLiteParameter("@EstActif", criteres.EstActif.Value));
+                    parameters.Add(new MySqlParameter("@EstActif", criteres.EstActif.Value));
                 }
 
                 if (criteres.DateCreationDebut.HasValue)
                 {
                     queryBuilder.Append(" AND h.DateCreation >= @DateCreationDebut");
-                    parameters.Add(new SQLiteParameter("@DateCreationDebut", criteres.DateCreationDebut.Value));
+                    parameters.Add(new MySqlParameter("@DateCreationDebut", criteres.DateCreationDebut.Value));
                 }
 
                 if (criteres.DateCreationFin.HasValue)
                 {
                     queryBuilder.Append(" AND h.DateCreation <= @DateCreationFin");
-                    parameters.Add(new SQLiteParameter("@DateCreationFin", criteres.DateCreationFin.Value));
+                    parameters.Add(new MySqlParameter("@DateCreationFin", criteres.DateCreationFin.Value));
                 }
 
                 // Tri
@@ -321,20 +293,20 @@ namespace Fumoblilite.SQL.Repositories
                 if (criteres.Limite.HasValue)
                 {
                     queryBuilder.Append(" LIMIT @Limite");
-                    parameters.Add(new SQLiteParameter("@Limite", criteres.Limite.Value));
+                    parameters.Add(new MySqlParameter("@Limite", criteres.Limite.Value));
 
                     if (criteres.Offset.HasValue)
                     {
                         queryBuilder.Append(" OFFSET @Offset");
-                        parameters.Add(new SQLiteParameter("@Offset", criteres.Offset.Value));
+                        parameters.Add(new MySqlParameter("@Offset", criteres.Offset.Value));
                     }
                 }
 
-                using (SQLiteCommand command = new SQLiteCommand(queryBuilder.ToString(), connection))
+                using (MySqlCommand command = new MySqlCommand(queryBuilder.ToString(), connection))
                 {
                     command.Parameters.AddRange(parameters.ToArray());
 
-                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -353,7 +325,7 @@ namespace Fumoblilite.SQL.Repositories
             DayOfWeek jour = dateHeure.DayOfWeek;
             TimeSpan heureActuelle = dateHeure.TimeOfDay;
 
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
                 string query = @"
@@ -361,19 +333,19 @@ namespace Fumoblilite.SQL.Repositories
                     FROM Horaires h
                     INNER JOIN Lignes l ON h.LigneId = l.Id
                     WHERE h.ArretId = @ArretId AND h.JourSemaine = @JourSemaine 
-                          AND h.HeureDepart >= @HeureActuelle AND h.EstActif = 1
-                          AND h.EstSupprime = 0 AND l.EstSupprime = 0
+                          AND h.HeureDepart >= @HeureActuelle AND h.EstActif = TRUE
+                          AND h.EstSupprime = FALSE AND l.EstSupprime = FALSE
                     ORDER BY h.HeureDepart
                     LIMIT @Limite";
 
-                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@ArretId", arretId);
                     command.Parameters.AddWithValue("@JourSemaine", (int)jour);
-                    command.Parameters.AddWithValue("@HeureActuelle", heureActuelle.ToString());
+                    command.Parameters.AddWithValue("@HeureActuelle", heureActuelle);
                     command.Parameters.AddWithValue("@Limite", limite);
 
-                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -390,24 +362,24 @@ namespace Fumoblilite.SQL.Repositories
         {
             List<Horaire> horaires = new List<Horaire>();
 
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
                 string query = @"
                     SELECT * FROM Horaires 
                     WHERE LigneId = @LigneId AND JourSemaine = @JourSemaine 
                           AND HeureDepart >= @HeureDebut AND HeureDepart <= @HeureFin
-                          AND EstSupprime = 0 
+                          AND EstSupprime = FALSE 
                     ORDER BY HeureDepart";
 
-                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@LigneId", ligneId);
                     command.Parameters.AddWithValue("@JourSemaine", (int)jour);
-                    command.Parameters.AddWithValue("@HeureDebut", heureDebut.ToString());
-                    command.Parameters.AddWithValue("@HeureFin", heureFin.ToString());
+                    command.Parameters.AddWithValue("@HeureDebut", heureDebut);
+                    command.Parameters.AddWithValue("@HeureFin", heureFin);
 
-                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -422,21 +394,21 @@ namespace Fumoblilite.SQL.Repositories
 
         public bool ExisteHoraire(int ligneId, int arretId, DayOfWeek jour, TimeSpan heure)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
                 string query = @"
                     SELECT COUNT(*) FROM Horaires 
                     WHERE LigneId = @LigneId AND ArretId = @ArretId 
                           AND JourSemaine = @JourSemaine AND HeureDepart = @HeureDepart
-                          AND EstSupprime = 0";
+                          AND EstSupprime = FALSE";
 
-                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@LigneId", ligneId);
                     command.Parameters.AddWithValue("@ArretId", arretId);
                     command.Parameters.AddWithValue("@JourSemaine", (int)jour);
-                    command.Parameters.AddWithValue("@HeureDepart", heure.ToString());
+                    command.Parameters.AddWithValue("@HeureDepart", heure);
 
                     return Convert.ToInt32(command.ExecuteScalar()) > 0;
                 }
@@ -451,20 +423,20 @@ namespace Fumoblilite.SQL.Repositories
                 throw new InvalidOperationException("Un horaire identique existe déjà pour cette ligne, cet arrêt, ce jour et cette heure.");
             }
 
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
                 string query = @"
                     INSERT INTO Horaires (LigneId, ArretId, JourSemaine, HeureDepart, EstActif, DateCreation, EstSupprime)
-                    VALUES (@LigneId, @ArretId, @JourSemaine, @HeureDepart, @EstActif, @DateCreation, 0);
-                    SELECT last_insert_rowid();";
+                    VALUES (@LigneId, @ArretId, @JourSemaine, @HeureDepart, @EstActif, @DateCreation, FALSE);
+                    SELECT LAST_INSERT_ID();";
 
-                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@LigneId", horaire.LigneId);
                     command.Parameters.AddWithValue("@ArretId", horaire.ArretId);
                     command.Parameters.AddWithValue("@JourSemaine", (int)horaire.JourSemaine);
-                    command.Parameters.AddWithValue("@HeureDepart", horaire.HeureDepart.ToString());
+                    command.Parameters.AddWithValue("@HeureDepart", horaire.HeureDepart);
                     command.Parameters.AddWithValue("@EstActif", horaire.EstActif);
                     command.Parameters.AddWithValue("@DateCreation", horaire.DateCreation);
 
@@ -479,18 +451,18 @@ namespace Fumoblilite.SQL.Repositories
         {
             int nombreAjoutes = 0;
 
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
-                using (SQLiteTransaction transaction = connection.BeginTransaction())
+                using (MySqlTransaction transaction = connection.BeginTransaction())
                 {
                     try
                     {
                         string query = @"
                             INSERT INTO Horaires (LigneId, ArretId, JourSemaine, HeureDepart, EstActif, DateCreation, EstSupprime)
-                            VALUES (@LigneId, @ArretId, @JourSemaine, @HeureDepart, @EstActif, @DateCreation, 0)";
+                            VALUES (@LigneId, @ArretId, @JourSemaine, @HeureDepart, @EstActif, @DateCreation, FALSE)";
 
-                        using (SQLiteCommand command = new SQLiteCommand(query, connection, transaction))
+                        using (MySqlCommand command = new MySqlCommand(query, connection, transaction))
                         {
                             foreach (var horaire in horaires)
                             {
@@ -501,7 +473,7 @@ namespace Fumoblilite.SQL.Repositories
                                     command.Parameters.AddWithValue("@LigneId", horaire.LigneId);
                                     command.Parameters.AddWithValue("@ArretId", horaire.ArretId);
                                     command.Parameters.AddWithValue("@JourSemaine", (int)horaire.JourSemaine);
-                                    command.Parameters.AddWithValue("@HeureDepart", horaire.HeureDepart.ToString());
+                                    command.Parameters.AddWithValue("@HeureDepart", horaire.HeureDepart);
                                     command.Parameters.AddWithValue("@EstActif", horaire.EstActif);
                                     command.Parameters.AddWithValue("@DateCreation", horaire.DateCreation);
 
@@ -527,7 +499,7 @@ namespace Fumoblilite.SQL.Repositories
 
         public bool Modifier(Horaire horaire)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
                 string query = @"
@@ -540,13 +512,13 @@ namespace Fumoblilite.SQL.Repositories
                         DateModification = @DateModification
                     WHERE Id = @Id";
 
-                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", horaire.Id);
                     command.Parameters.AddWithValue("@LigneId", horaire.LigneId);
                     command.Parameters.AddWithValue("@ArretId", horaire.ArretId);
                     command.Parameters.AddWithValue("@JourSemaine", (int)horaire.JourSemaine);
-                    command.Parameters.AddWithValue("@HeureDepart", horaire.HeureDepart.ToString());
+                    command.Parameters.AddWithValue("@HeureDepart", horaire.HeureDepart);
                     command.Parameters.AddWithValue("@EstActif", horaire.EstActif);
                     command.Parameters.AddWithValue("@DateModification", horaire.DateModification ?? DateTime.Now);
 
@@ -559,12 +531,12 @@ namespace Fumoblilite.SQL.Repositories
 
         public bool Supprimer(int id)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
-                string query = "UPDATE Horaires SET EstSupprime = 1 WHERE Id = @Id";
+                string query = "UPDATE Horaires SET EstSupprime = TRUE, DateModification = NOW() WHERE Id = @Id";
 
-                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Id", id);
                     bool result = command.ExecuteNonQuery() > 0;
@@ -576,32 +548,32 @@ namespace Fumoblilite.SQL.Repositories
 
         public bool SupprimerParCriteres(HoraireCriteres criteres)
         {
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
 
-                var queryBuilder = new StringBuilder("UPDATE Horaires SET EstSupprime = 1 WHERE EstSupprime = 0");
-                var parameters = new List<SQLiteParameter>();
+                var queryBuilder = new StringBuilder("UPDATE Horaires SET EstSupprime = TRUE, DateModification = NOW() WHERE EstSupprime = FALSE");
+                var parameters = new List<MySqlParameter>();
 
                 if (criteres.LigneId.HasValue)
                 {
                     queryBuilder.Append(" AND LigneId = @LigneId");
-                    parameters.Add(new SQLiteParameter("@LigneId", criteres.LigneId.Value));
+                    parameters.Add(new MySqlParameter("@LigneId", criteres.LigneId.Value));
                 }
 
                 if (criteres.ArretId.HasValue)
                 {
                     queryBuilder.Append(" AND ArretId = @ArretId");
-                    parameters.Add(new SQLiteParameter("@ArretId", criteres.ArretId.Value));
+                    parameters.Add(new MySqlParameter("@ArretId", criteres.ArretId.Value));
                 }
 
                 if (criteres.JourSemaine.HasValue)
                 {
                     queryBuilder.Append(" AND JourSemaine = @JourSemaine");
-                    parameters.Add(new SQLiteParameter("@JourSemaine", (int)criteres.JourSemaine.Value));
+                    parameters.Add(new MySqlParameter("@JourSemaine", (int)criteres.JourSemaine.Value));
                 }
 
-                using (SQLiteCommand command = new SQLiteCommand(queryBuilder.ToString(), connection))
+                using (MySqlCommand command = new MySqlCommand(queryBuilder.ToString(), connection))
                 {
                     command.Parameters.AddRange(parameters.ToArray());
                     bool result = command.ExecuteNonQuery() > 0;
@@ -615,20 +587,20 @@ namespace Fumoblilite.SQL.Repositories
         {
             var statistiques = new Dictionary<DayOfWeek, int>();
 
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
                 string query = @"
                     SELECT JourSemaine, COUNT(*) as Nombre
                     FROM Horaires 
-                    WHERE LigneId = @LigneId AND EstSupprime = 0 AND EstActif = 1
+                    WHERE LigneId = @LigneId AND EstSupprime = FALSE AND EstActif = TRUE
                     GROUP BY JourSemaine";
 
-                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@LigneId", ligneId);
 
-                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -647,7 +619,7 @@ namespace Fumoblilite.SQL.Repositories
         {
             var statistiques = new List<HoraireStatistique>();
 
-            using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+            using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
                 string query = @"
@@ -655,18 +627,18 @@ namespace Fumoblilite.SQL.Repositories
                         l.Id as LigneId,
                         l.Nom as LigneNom,
                         COUNT(h.Id) as NombreHoraires,
-                        SUM(CASE WHEN h.EstActif = 1 THEN 1 ELSE 0 END) as NombreHorairesActifs,
+                        SUM(CASE WHEN h.EstActif = TRUE THEN 1 ELSE 0 END) as NombreHorairesActifs,
                         MIN(h.HeureDepart) as PremierHoraire,
                         MAX(h.HeureDepart) as DernierHoraire
                     FROM Lignes l
-                    LEFT JOIN Horaires h ON l.Id = h.LigneId AND h.EstSupprime = 0
-                    WHERE l.EstSupprime = 0
+                    LEFT JOIN Horaires h ON l.Id = h.LigneId AND h.EstSupprime = FALSE
+                    WHERE l.EstSupprime = FALSE
                     GROUP BY l.Id, l.Nom
                     ORDER BY l.Numero";
 
-                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
-                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    using (MySqlDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
@@ -679,10 +651,10 @@ namespace Fumoblilite.SQL.Repositories
                             };
 
                             if (reader["PremierHoraire"] != DBNull.Value)
-                                stat.PremierHoraire = TimeSpan.Parse(reader["PremierHoraire"].ToString());
+                                stat.PremierHoraire = (TimeSpan)reader["PremierHoraire"];
 
                             if (reader["DernierHoraire"] != DBNull.Value)
-                                stat.DernierHoraire = TimeSpan.Parse(reader["DernierHoraire"].ToString());
+                                stat.DernierHoraire = (TimeSpan)reader["DernierHoraire"];
 
                             // Calculer la fréquence moyenne (en minutes)
                             if (stat.PremierHoraire.HasValue && stat.DernierHoraire.HasValue && stat.NombreHorairesActifs > 1)
@@ -700,7 +672,7 @@ namespace Fumoblilite.SQL.Repositories
             return statistiques;
         }
 
-        private Horaire MapFromReader(SQLiteDataReader reader)
+        private Horaire MapFromReader(MySqlDataReader reader)
         {
             return new Horaire
             {
@@ -708,7 +680,7 @@ namespace Fumoblilite.SQL.Repositories
                 LigneId = Convert.ToInt32(reader["LigneId"]),
                 ArretId = Convert.ToInt32(reader["ArretId"]),
                 JourSemaine = (DayOfWeek)Convert.ToInt32(reader["JourSemaine"]),
-                HeureDepart = TimeSpan.Parse(reader["HeureDepart"].ToString()),
+                HeureDepart = (TimeSpan)reader["HeureDepart"],
                 EstActif = Convert.ToBoolean(reader["EstActif"]),
                 DateCreation = Convert.ToDateTime(reader["DateCreation"]),
                 DateModification = reader["DateModification"] != DBNull.Value ? (DateTime?)Convert.ToDateTime(reader["DateModification"]) : null
