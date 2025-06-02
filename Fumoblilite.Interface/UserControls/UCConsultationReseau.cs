@@ -50,9 +50,11 @@ namespace Fumoblilite.Interface.UserControls
             // Charger les données
             ChargerDonnees();
 
-            // Pour le mettre en (0;0) au centre du panel
-            _panOffset = new Point(pnlReseau.Width / 2, pnlReseau.Height / 2);
+            // Appliquer un zoom initial
+            _zoomFactor = 1.4f;
 
+            // Rafraîchir l'affichage
+            pnlReseau.Invalidate();
         }
 
         private void ConfigurerControles()

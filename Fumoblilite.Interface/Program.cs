@@ -6,7 +6,7 @@ using Fumoblilite.SQL;
 
 /*
 * Temps passé sur le projet : 
-* LEMAIRE Clément: 66 heures de développement, tests et documentation.
+* LEMAIRE Clément: 69 heures de développement, tests et documentation.
 */
 
 namespace Fumoblilite.Interface
