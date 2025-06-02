@@ -187,7 +187,8 @@ namespace Fumoblilite.Interface.UserControls
                 chkEstActif.Checked = _ligneSelectionnee.EstActif;
                 btnSupprimer.Enabled = true;
 
-                // Afficher les arrêts de la ligne
+                // Recharger la ligne avec ses arrêts depuis la base de données
+                _ligneSelectionnee = _serviceLigne.ObtenirParId(_ligneSelectionnee.Id, true);
                 AfficherArrets();
             }
         }
@@ -216,26 +217,48 @@ namespace Fumoblilite.Interface.UserControls
                 flpArrets.Controls.Clear();
                 _selectedArretPanel = null;
 
-                if (_ligneSelectionnee == null || _ligneSelectionnee.Arrets == null)
+                if (_ligneSelectionnee == null)
                 {
                     flpArrets.ResumeLayout();
                     return;
                 }
 
-                // Récupérer les informations des arrêts
-                var arrets = _serviceArret.ObtenirTous().ToDictionary(a => a.Id);
+                // Recharger la ligne avec ses arrêts depuis la base de données
+                _ligneSelectionnee = _serviceLigne.ObtenirParId(_ligneSelectionnee.Id, true);
 
+                if (_ligneSelectionnee.Arrets == null || _ligneSelectionnee.Arrets.Count == 0)
+                {
+                    // Afficher un message si aucun arrêt
+                    Label lblAucunArret = new Label
+                    {
+                        Text = "Aucun arrêt configuré pour cette ligne",
+                        Font = new Font("Segoe UI", 10, FontStyle.Italic),
+                        ForeColor = Color.Gray,
+                        AutoSize = true,
+                        Margin = new Padding(10)
+                    };
+                    flpArrets.Controls.Add(lblAucunArret);
+                    flpArrets.ResumeLayout();
+                    return;
+                }
+
+                // Récupérer tous les arrêts pour avoir les noms
+                var tousLesArrets = _serviceArret.ObtenirTous().ToDictionary(a => a.Id, a => a);
 
                 // Préparer les données pour l'affichage
-                _arretsAffichage = _ligneSelectionnee.Arrets.Select(al => (dynamic)new
-                {
-                    Id = al.Id,
-                    Ordre = al.Ordre,
-                    Nom = arrets.ContainsKey(al.ArretId) ? arrets[al.ArretId].Nom : $"Arrêt {al.ArretId}",
-                    TempsArret = al.TempsArretMinutes,
-                    TempsTrajet = al.TempsTrajetSuivantMinutes,
-                    ArretLigneComplet = al
-                }).OrderBy(a => a.Ordre).ToList();
+                _arretsAffichage = _ligneSelectionnee.Arrets
+                    .Where(al => tousLesArrets.ContainsKey(al.ArretId))
+                    .Select(al => (dynamic)new
+                    {
+                        Id = al.Id,
+                        Ordre = al.Ordre,
+                        Nom = tousLesArrets[al.ArretId].Nom,
+                        TempsArret = al.TempsArretMinutes,
+                        TempsTrajet = al.TempsTrajetSuivantMinutes,
+                        ArretLigneComplet = al
+                    })
+                    .OrderBy(a => a.Ordre)
+                    .ToList();
 
                 foreach (var arret in _arretsAffichage)
                 {
@@ -248,6 +271,7 @@ namespace Fumoblilite.Interface.UserControls
             catch (Exception ex)
             {
                 MessageBox.Show($"Erreur lors de l'affichage des arrêts : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                flpArrets.ResumeLayout();
             }
         }
 
@@ -558,6 +582,29 @@ namespace Fumoblilite.Interface.UserControls
             {
                 MessageBox.Show($"Erreur : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void DebugAffichageArrets()
+        {
+            if (_ligneSelectionnee == null)
+            {
+                MessageBox.Show("Aucune ligne sélectionnée", "Debug");
+                return;
+            }
+
+            string debug = $"Ligne ID: {_ligneSelectionnee.Id}\n";
+            debug += $"Ligne Nom: {_ligneSelectionnee.Nom}\n";
+            debug += $"Nombre d'arrêts: {(_ligneSelectionnee.Arrets?.Count ?? 0)}\n";
+
+            if (_ligneSelectionnee.Arrets != null)
+            {
+                foreach (var arret in _ligneSelectionnee.Arrets)
+                {
+                    debug += $"- Arrêt ID: {arret.ArretId}, Ordre: {arret.Ordre}\n";
+                }
+            }
+
+            MessageBox.Show(debug, "Debug Arrêts");
         }
     }
 }

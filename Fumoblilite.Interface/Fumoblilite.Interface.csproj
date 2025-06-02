@@ -192,6 +192,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="logo.ico" />
+    <None Include="Resources\le_l2.png" />
+    <None Include="Resources\la_l.jpg" />
+    <None Include="Resources\le_m.png" />
     <None Include="Resources\le_n.png" />
     <None Include="Resources\le_l.png" />
     <None Include="Resources\le_c.png" />

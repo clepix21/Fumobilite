@@ -73,6 +73,16 @@ namespace Fumoblilite.Interface.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap la_l {
+            get {
+                object obj = ResourceManager.GetObject("la_l", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap le_c {
             get {
                 object obj = ResourceManager.GetObject("le_c", resourceCulture);
@@ -86,6 +96,26 @@ namespace Fumoblilite.Interface.Properties {
         internal static System.Drawing.Bitmap le_l {
             get {
                 object obj = ResourceManager.GetObject("le_l", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap le_l2 {
+            get {
+                object obj = ResourceManager.GetObject("le_l2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap le_m {
+            get {
+                object obj = ResourceManager.GetObject("le_m", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
