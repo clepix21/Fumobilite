@@ -3,6 +3,12 @@ using System.Windows.Forms;
 using Fumoblilite.Interface.Forms;
 using Fumoblilite.SQL;
 
+
+/*
+* Temps passé sur le projet : 
+* LEMAIRE Clément: 66 heures de développement, tests et documentation.
+*/
+
 namespace Fumoblilite.Interface
 {
     static class Program
