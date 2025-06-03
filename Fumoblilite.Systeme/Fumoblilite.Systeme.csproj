@@ -46,6 +46,7 @@
     <Compile Include="Interfaces\IRepositoryHoraire.cs" />
     <Compile Include="Interfaces\IRepositoryLigne.cs" />
     <Compile Include="Interfaces\IRepositoryUtilisateur.cs" />
+    <Compile Include="Modeles\ActionHistorique.cs" />
     <Compile Include="Modeles\Arret.cs" />
     <Compile Include="Modeles\ArretLigne.cs" />
     <Compile Include="Modeles\Horaire.cs" />
