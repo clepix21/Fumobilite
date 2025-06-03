@@ -6,7 +6,10 @@ using Fumoblilite.Systeme.Modeles;
 using Fumoblilite.Systeme.Services;
 using Fumoblilite.SQL.Repositories;
 using Fumoblilite.Systeme.Interfaces;
-using System.Linq;
+using System.IO;
+using System.Text;
+using System.Text.Json;
+
 
 namespace Fumoblilite.Interface.UserControls
 {
@@ -325,5 +328,30 @@ namespace Fumoblilite.Interface.UserControls
                 }
             }
         }
+
+        private void btnExporterCsv_Click(object sender, EventArgs e)
+        {
+            var utilisateurs = _repositoryUtilisateur.ObtenirTous();
+            var sb = new StringBuilder();
+            sb.AppendLine("Id,Nom,Prenom,NomUtilisateur,Email,Role,EstActif");
+            foreach (var u in utilisateurs)
+                sb.AppendLine($"{u.Id},{u.Nom},{u.Prenom},{u.NomUtilisateur},{u.Email},{u.Role},{u.EstActif}");
+            using (var sfd = new SaveFileDialog { Filter = "CSV (*.csv)|*.csv", FileName = "utilisateurs.csv" })
+            {
+                if (sfd.ShowDialog() == DialogResult.OK)
+                    File.WriteAllText(sfd.FileName, sb.ToString(), Encoding.UTF8);
+            }
+        }
+
+        private void btnExporterJson_Click(object sender, EventArgs e)
+        {
+            var utilisateurs = _repositoryUtilisateur.ObtenirTous();
+            using (var sfd = new SaveFileDialog { Filter = "JSON (*.json)|*.json", FileName = "utilisateurs.json" })
+            {
+                if (sfd.ShowDialog() == DialogResult.OK)
+                    File.WriteAllText(sfd.FileName, JsonSerializer.Serialize(utilisateurs, new JsonSerializerOptions { WriteIndented = true }), Encoding.UTF8);
+            }
+        }
+
     }
 }
