@@ -260,5 +260,65 @@ namespace Fumoblilite.Interface.Forms
         {
             ChargerUserControl(new UCCredits());
         }
+
+        // Ajoutez ce code dans la classe FormPrincipal
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            // Ouvre la console (déjà existant, mais on le garde ici pour centraliser)
+            if (keyData == (Keys.Control | Keys.C))
+            {
+                OuvrirInviteCommande();
+                return true;
+            }
+            // Quitter l'application
+            if (keyData == (Keys.Control | Keys.Q))
+            {
+                Application.Exit();
+                return true;
+            }
+            // Gestion des lignes (admin)
+            if (keyData == (Keys.Control | Keys.L))
+            {
+                if (_utilisateurConnecte?.Role == "Admin")
+                    ChargerUserControl(new UCGestionLignes(_connectionString));
+                return true;
+            }
+            // Gestion des arrêts (admin)
+            if (keyData == (Keys.Control | Keys.A))
+            {
+                if (_utilisateurConnecte?.Role == "Admin")
+                    ChargerUserControl(new UCGestionArrets(_connectionString));
+                return true;
+            }
+            // Gestion des horaires (admin)
+            if (keyData == (Keys.Control | Keys.H))
+            {
+                if (_utilisateurConnecte?.Role == "Admin")
+                    ChargerUserControl(new UCGestionHoraires(_connectionString));
+                return true;
+            }
+            // Gestion des utilisateurs (admin)
+            if (keyData == (Keys.Control | Keys.U))
+            {
+                if (_utilisateurConnecte?.Role == "Admin")
+                    ChargerUserControl(new UCGestionUtilisateurs(_connectionString));
+                return true;
+            }
+            // Afficher le réseau
+            if (keyData == (Keys.Control | Keys.R))
+            {
+                AfficherReseau();
+                return true;
+            }
+            // Aide/crédits
+            if (keyData == Keys.F1)
+            {
+                ChargerUserControl(new UCCredits());
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
     }
 }
