@@ -61,6 +61,16 @@ namespace Fumoblilite.Interface.Properties {
         }
         
         /// <summary>
+        ///   Recherche une ressource localisée de type System.Byte[].
+        /// </summary>
+        internal static byte[] chocobo {
+            get {
+                object obj = ResourceManager.GetObject("chocobo", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap GsJFEo4WoAEBxAW {
@@ -136,6 +146,16 @@ namespace Fumoblilite.Interface.Properties {
         internal static byte[] logo {
             get {
                 object obj = ResourceManager.GetObject("logo", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Byte[].
+        /// </summary>
+        internal static byte[] lvlup {
+            get {
+                object obj = ResourceManager.GetObject("lvlup", resourceCulture);
                 return ((byte[])(obj));
             }
         }

@@ -2,6 +2,9 @@ using System;
 using System.Windows.Forms;
 using Fumoblilite.Systeme.Modeles;
 using Fumoblilite.Interface.UserControls;
+using Fumoblilite.Interface.Properties;
+using System.Media;
+using System.IO;
 
 namespace Fumoblilite.Interface.Forms
 {
@@ -330,6 +333,27 @@ namespace Fumoblilite.Interface.Forms
                 menuItemConnexion_Click(null, null);
                 return true;
             }
+
+            if (keyData == (Keys.Control | Keys.Alt | Keys.C))
+            {
+                using (var stream = new MemoryStream(Resources.lvlup))
+                {
+                    SoundPlayer player = new SoundPlayer(stream);
+                    player.Play();
+                }
+
+            }
+
+            if (keyData == (Keys.Control | Keys.Alt | Keys.V))
+            {
+                using (var stream = new MemoryStream(Resources.chocobo))
+                {
+                    SoundPlayer player = new SoundPlayer(stream);
+                    player.Play();
+                }
+
+            }
+
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
