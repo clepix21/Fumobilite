@@ -20,7 +20,6 @@ namespace Fumoblilite.Interface.Forms
 
             // Activer la capture des touches pour l'invite de commande
             this.KeyPreview = true;
-            this.KeyDown += FormPrincipal_KeyDown;
         }
 
         private void FormPrincipal_Load(object sender, EventArgs e)
@@ -70,23 +69,6 @@ namespace Fumoblilite.Interface.Forms
                     Application.Exit(); // Fermer l'application
                 }
             }
-        }
-
-        private void FormPrincipal_KeyDown(object sender, KeyEventArgs e)
-        {
-            // Vérifier si la combinaison Ctrl + C est pressée
-            if (e.Control && e.KeyCode == Keys.C)
-            {
-                OuvrirInviteCommande();
-                e.Handled = true;
-            }
-        }
-
-        private void OuvrirInviteCommande()
-        {
-            // Charger le contrôle utilisateur d'invite de commande
-            _modeConsole = true;
-            ChargerUserControl(new UCInviteCommande(_connectionString, _utilisateurConnecte, this));
         }
 
         public void ExecuterCommande(string commande)
@@ -265,52 +247,71 @@ namespace Fumoblilite.Interface.Forms
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            // Ouvre la console (déjà existant, mais on le garde ici pour centraliser)
-            if (keyData == (Keys.Control | Keys.C))
+            if (keyData == (Keys.Control | Keys.Shift | Keys.C))
             {
-                OuvrirInviteCommande();
-                return true;
+                // Charger le contrôle utilisateur d'invite de commande
+                _modeConsole = true;
+                ChargerUserControl(new UCInviteCommande(_connectionString, _utilisateurConnecte, this));
             }
+
             // Quitter l'application
             if (keyData == (Keys.Control | Keys.Q))
             {
                 Application.Exit();
                 return true;
             }
-            // Gestion des lignes (admin)
+
+            // Consultation des lignes
             if (keyData == (Keys.Control | Keys.L))
+            {
+                ChargerUserControl(new UCConsultationLigne(_connectionString));
+                return true;
+            }
+            // Gestion des lignes (admin)
+            if (keyData == (Keys.Control | Keys.Shift | Keys.L))
             {
                 if (_utilisateurConnecte?.Role == "Admin")
                     ChargerUserControl(new UCGestionLignes(_connectionString));
                 return true;
             }
+
             // Gestion des arrêts (admin)
-            if (keyData == (Keys.Control | Keys.A))
+            if (keyData == (Keys.Control | Keys.Shift | Keys.A))
             {
                 if (_utilisateurConnecte?.Role == "Admin")
                     ChargerUserControl(new UCGestionArrets(_connectionString));
                 return true;
             }
-            // Gestion des horaires (admin)
+
+            // Consultation des horaires
             if (keyData == (Keys.Control | Keys.H))
+            {
+                ChargerUserControl(new UCConsultationHoraires(_connectionString));
+                return true;
+            }
+            // Gestion des horaires (admin)
+            if (keyData == (Keys.Control | Keys.Shift | Keys.H))
             {
                 if (_utilisateurConnecte?.Role == "Admin")
                     ChargerUserControl(new UCGestionHoraires(_connectionString));
                 return true;
             }
+
             // Gestion des utilisateurs (admin)
-            if (keyData == (Keys.Control | Keys.U))
+            if (keyData == (Keys.Control | Keys.Shift | Keys.U))
             {
                 if (_utilisateurConnecte?.Role == "Admin")
                     ChargerUserControl(new UCGestionUtilisateurs(_connectionString));
                 return true;
             }
+
             // Afficher le réseau
             if (keyData == (Keys.Control | Keys.R))
             {
                 AfficherReseau();
                 return true;
             }
+
             // Aide/crédits
             if (keyData == Keys.F1)
             {
