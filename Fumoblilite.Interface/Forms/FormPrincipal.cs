@@ -243,8 +243,6 @@ namespace Fumoblilite.Interface.Forms
             ChargerUserControl(new UCCredits());
         }
 
-        // Ajoutez ce code dans la classe FormPrincipal
-
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == (Keys.Control | Keys.Shift | Keys.C))
@@ -316,6 +314,20 @@ namespace Fumoblilite.Interface.Forms
             if (keyData == Keys.F1)
             {
                 ChargerUserControl(new UCCredits());
+                return true;
+            }
+
+            // Recherche d'itinéraire
+            if (keyData == (Keys.Control | Keys.I))
+            {
+                ChargerUserControl(new UCRechercheItineraire(_connectionString));
+                return true;
+            }
+
+            // Form de connexion
+            if (keyData == (Keys.Control | Keys.O))
+            {
+                menuItemConnexion_Click(null, null);
                 return true;
             }
             return base.ProcessCmdKey(ref msg, keyData);
