@@ -18,11 +18,14 @@ namespace Fumoblilite.Interface.UserControls
         private List<string> _historiqueCommandes;
         private int _indexHistorique;
 
+
+
         // Services
         private readonly ServiceArret _serviceArret;
         private readonly ServiceLigne _serviceLigne;
         private readonly ServiceHoraire _serviceHoraire;
         private readonly ServiceAuthentification _serviceAuth;
+        private readonly RepositoryActionHistorique _repoHistorique;
 
         public UCInviteCommande(string connectionString, Utilisateur utilisateur, FormPrincipal formPrincipal)
         {
@@ -44,6 +47,7 @@ namespace Fumoblilite.Interface.UserControls
             _serviceLigne = new ServiceLigne(repositoryLigne, repositoryArretLigne);
             _serviceHoraire = new ServiceHoraire(repositoryHoraire);
             _serviceAuth = new ServiceAuthentification(repositoryUtilisateur);
+            _repoHistorique = new RepositoryActionHistorique(_connectionString);
 
             InitialiserInterface();
         }
@@ -130,6 +134,15 @@ namespace Fumoblilite.Interface.UserControls
                 AfficherPrompt();
                 return;
             }
+
+            _repoHistorique.Ajouter(new ActionHistorique
+            {
+                UtilisateurId = _utilisateurConnecte?.Id,
+                NomUtilisateur = _utilisateurConnecte?.NomUtilisateur ?? "Invité",
+                Action = commande,
+                DateAction = DateTime.Now
+            });
+
 
             // Afficher la commande dans la console
             AjouterTexte(commande, Color.White);
@@ -222,6 +235,11 @@ namespace Fumoblilite.Interface.UserControls
                         TraiterCommandeUtilisateurs(parties);
                         break;
 
+                    case "historique":
+                        AfficherHistorique(parties);
+                        break;
+
+
                     default:
                         AjouterTexte($"Commande '{commandePrincipale}' non reconnue. Tapez 'help' pour voir les commandes disponibles.", Color.Red);
                         break;
@@ -272,6 +290,31 @@ namespace Fumoblilite.Interface.UserControls
                 }
             }
         }
+
+        private void AfficherHistorique(string[] parties)
+        {
+            var historique = _repoHistorique.ObtenirParUtilisateur(_utilisateurConnecte?.Id);
+            AjouterTexte("=== HISTORIQUE DES COMMANDES ===", Color.Cyan);
+            foreach (var h in historique)
+                AjouterTexte($"{h.DateAction:dd/MM/yyyy HH:mm:ss} - {h.Action}", Color.White);
+
+            if (parties.Length > 1 && parties[1].ToLower() == "export")
+            {
+                using (var sfd = new SaveFileDialog { Filter = "CSV (*.csv)|*.csv", FileName = "historique.csv" })
+                {
+                    if (sfd.ShowDialog() == DialogResult.OK)
+                    {
+                        var sb = new System.Text.StringBuilder();
+                        sb.AppendLine("Date,Action");
+                        foreach (var h in historique)
+                            sb.AppendLine($"{h.DateAction:yyyy-MM-dd HH:mm:ss},{h.Action.Replace(",", " ")}");
+                        System.IO.File.WriteAllText(sfd.FileName, sb.ToString(), System.Text.Encoding.UTF8);
+                        AjouterTexte("Export CSV effectué.", Color.Green);
+                    }
+                }
+            }
+        }
+
 
         private void TraiterCommandeArret(string[] parties)
         {
@@ -594,6 +637,8 @@ namespace Fumoblilite.Interface.UserControls
             AjouterTexte("  status                    - Afficher le statut", Color.White);
             AjouterTexte("  help                      - Afficher cette aide", Color.White);
             AjouterTexte("  clear                     - Effacer la console", Color.White);
+            AjouterTexte("  historique                - Voir l'historique de vos commandes", Color.White);
+            AjouterTexte("  historique export         - Exporter l'historique en CSV", Color.White);
             AjouterTexte("  exit/fermer               - Fermer la console", Color.White);
             AjouterTexte("  quitter                   - Quitter l'application", Color.White);
             AjouterTexte("", Color.White);
