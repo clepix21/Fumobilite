@@ -5,6 +5,9 @@ using System.Drawing;
 using Fumoblilite.Systeme.Modeles;
 using Fumoblilite.Systeme.Services;
 using Fumoblilite.SQL.Repositories;
+using System.Text.Json;
+using System.Text;
+using System.IO;
 
 namespace Fumoblilite.Interface.UserControls
 {
@@ -15,7 +18,6 @@ namespace Fumoblilite.Interface.UserControls
         private Arret _arretSelectionne;
         private List<Arret> _arrets;
 
-        // Couleurs pour le design moderne
         private readonly Color _couleurPrimaire = Color.FromArgb(0, 120, 215);
         private readonly Color _couleurSecondaire = Color.FromArgb(0, 99, 177);
         private readonly Color _couleurAccent = Color.FromArgb(255, 185, 0);
@@ -381,5 +383,30 @@ namespace Fumoblilite.Interface.UserControls
                 }
             }
         }
+
+        private void btnExporterCsv_Click(object sender, EventArgs e)
+        {
+            var arrets = _serviceArret.ObtenirTous();
+            var sb = new StringBuilder();
+            sb.AppendLine("Id,Nom,Adresse,Latitude,Longitude,EstAccessible,DateCreation,DateModification");
+            foreach (var a in arrets)
+                sb.AppendLine($"{a.Id},{a.Nom},{a.Adresse},{a.Latitude},{a.Longitude},{a.EstAccessible},{a.DateCreation:yyyy-MM-dd HH:mm:ss},{(a.DateModification.HasValue ? a.DateModification.Value.ToString("yyyy-MM-dd HH:mm:ss") : "")}");
+            using (var sfd = new SaveFileDialog { Filter = "CSV (*.csv)|*.csv", FileName = "arrets.csv" })
+            {
+                if (sfd.ShowDialog() == DialogResult.OK)
+                    File.WriteAllText(sfd.FileName, sb.ToString(), Encoding.UTF8);
+            }
+        }
+
+        private void btnExporterJson_Click(object sender, EventArgs e)
+        {
+            var arrets = _serviceArret.ObtenirTous();
+            using (var sfd = new SaveFileDialog { Filter = "JSON (*.json)|*.json", FileName = "arrets.json" })
+            {
+                if (sfd.ShowDialog() == DialogResult.OK)
+                    File.WriteAllText(sfd.FileName, JsonSerializer.Serialize(arrets, new JsonSerializerOptions { WriteIndented = true }), Encoding.UTF8);
+            }
+        }
+
     }
 }
