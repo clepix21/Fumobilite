@@ -690,6 +690,8 @@ namespace Fumoblilite.Interface.UserControls
             // btnExporterCsv
             // 
             this.btnExporterCsv.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnExporterCsv.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
+            this.btnExporterCsv.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExporterCsv.Location = new System.Drawing.Point(1002, 544);
             this.btnExporterCsv.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
             this.btnExporterCsv.Name = "btnExporterCsv";
@@ -701,6 +703,8 @@ namespace Fumoblilite.Interface.UserControls
             // btnExporterJson
             // 
             this.btnExporterJson.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnExporterJson.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
+            this.btnExporterJson.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExporterJson.Location = new System.Drawing.Point(1136, 544);
             this.btnExporterJson.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
             this.btnExporterJson.Name = "btnExporterJson";
