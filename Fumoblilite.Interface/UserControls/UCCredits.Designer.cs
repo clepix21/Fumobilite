@@ -28,6 +28,7 @@ namespace Fumoblilite.Interface.UserControls
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UCCredits));
             this.panelPrincipal = new System.Windows.Forms.Panel();
             this.panelContributeurs = new System.Windows.Forms.Panel();
             this.lblContributeur6 = new System.Windows.Forms.Label();
@@ -36,6 +37,12 @@ namespace Fumoblilite.Interface.UserControls
             this.lblContributeur3 = new System.Windows.Forms.Label();
             this.lblContributeur2 = new System.Windows.Forms.Label();
             this.lblContributeur1 = new System.Windows.Forms.Label();
+            this.pictureBoxContrib6 = new System.Windows.Forms.PictureBox();
+            this.pictureBoxContrib5 = new System.Windows.Forms.PictureBox();
+            this.pictureBoxContrib4 = new System.Windows.Forms.PictureBox();
+            this.pictureBoxContrib3 = new System.Windows.Forms.PictureBox();
+            this.pictureBoxContrib2 = new System.Windows.Forms.PictureBox();
+            this.pictureBoxContrib1 = new System.Windows.Forms.PictureBox();
             this.lblTitreContributeurs = new System.Windows.Forms.Label();
             this.lblTechnologies = new System.Windows.Forms.Label();
             this.lblAnnee = new System.Windows.Forms.Label();
@@ -43,12 +50,6 @@ namespace Fumoblilite.Interface.UserControls
             this.lblDescription = new System.Windows.Forms.Label();
             this.lblVersion = new System.Windows.Forms.Label();
             this.lblTitre = new System.Windows.Forms.Label();
-            this.pictureBoxContrib6 = new System.Windows.Forms.PictureBox();
-            this.pictureBoxContrib5 = new System.Windows.Forms.PictureBox();
-            this.pictureBoxContrib4 = new System.Windows.Forms.PictureBox();
-            this.pictureBoxContrib3 = new System.Windows.Forms.PictureBox();
-            this.pictureBoxContrib2 = new System.Windows.Forms.PictureBox();
-            this.pictureBoxContrib1 = new System.Windows.Forms.PictureBox();
             this.pictureBoxLogo = new System.Windows.Forms.PictureBox();
             this.panelPrincipal.SuspendLayout();
             this.panelContributeurs.SuspendLayout();
@@ -75,7 +76,7 @@ namespace Fumoblilite.Interface.UserControls
             this.panelPrincipal.Controls.Add(this.pictureBoxLogo);
             this.panelPrincipal.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelPrincipal.Location = new System.Drawing.Point(0, 0);
-            this.panelPrincipal.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelPrincipal.Margin = new System.Windows.Forms.Padding(4);
             this.panelPrincipal.Name = "panelPrincipal";
             this.panelPrincipal.Size = new System.Drawing.Size(1200, 862);
             this.panelPrincipal.TabIndex = 0;
@@ -98,7 +99,7 @@ namespace Fumoblilite.Interface.UserControls
             this.panelContributeurs.Controls.Add(this.pictureBoxContrib1);
             this.panelContributeurs.Controls.Add(this.lblTitreContributeurs);
             this.panelContributeurs.Location = new System.Drawing.Point(67, 431);
-            this.panelContributeurs.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelContributeurs.Margin = new System.Windows.Forms.Padding(4);
             this.panelContributeurs.Name = "panelContributeurs";
             this.panelContributeurs.Size = new System.Drawing.Size(1066, 270);
             this.panelContributeurs.TabIndex = 7;
@@ -174,6 +175,78 @@ namespace Fumoblilite.Interface.UserControls
             this.lblContributeur1.TabIndex = 7;
             this.lblContributeur1.Text = "Clément LEMAIRE \n";
             this.lblContributeur1.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // pictureBoxContrib6
+            // 
+            this.pictureBoxContrib6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBoxContrib6.Image = global::Fumoblilite.Interface.Properties.Resources.le_l2;
+            this.pictureBoxContrib6.Location = new System.Drawing.Point(840, 62);
+            this.pictureBoxContrib6.Margin = new System.Windows.Forms.Padding(4);
+            this.pictureBoxContrib6.Name = "pictureBoxContrib6";
+            this.pictureBoxContrib6.Size = new System.Drawing.Size(106, 98);
+            this.pictureBoxContrib6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxContrib6.TabIndex = 6;
+            this.pictureBoxContrib6.TabStop = false;
+            // 
+            // pictureBoxContrib5
+            // 
+            this.pictureBoxContrib5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBoxContrib5.Image = global::Fumoblilite.Interface.Properties.Resources.le_n;
+            this.pictureBoxContrib5.Location = new System.Drawing.Point(680, 62);
+            this.pictureBoxContrib5.Margin = new System.Windows.Forms.Padding(4);
+            this.pictureBoxContrib5.Name = "pictureBoxContrib5";
+            this.pictureBoxContrib5.Size = new System.Drawing.Size(106, 98);
+            this.pictureBoxContrib5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxContrib5.TabIndex = 5;
+            this.pictureBoxContrib5.TabStop = false;
+            // 
+            // pictureBoxContrib4
+            // 
+            this.pictureBoxContrib4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBoxContrib4.Image = global::Fumoblilite.Interface.Properties.Resources.la_l;
+            this.pictureBoxContrib4.Location = new System.Drawing.Point(520, 62);
+            this.pictureBoxContrib4.Margin = new System.Windows.Forms.Padding(4);
+            this.pictureBoxContrib4.Name = "pictureBoxContrib4";
+            this.pictureBoxContrib4.Size = new System.Drawing.Size(106, 98);
+            this.pictureBoxContrib4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxContrib4.TabIndex = 4;
+            this.pictureBoxContrib4.TabStop = false;
+            // 
+            // pictureBoxContrib3
+            // 
+            this.pictureBoxContrib3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBoxContrib3.Image = global::Fumoblilite.Interface.Properties.Resources.le_m;
+            this.pictureBoxContrib3.Location = new System.Drawing.Point(360, 62);
+            this.pictureBoxContrib3.Margin = new System.Windows.Forms.Padding(4);
+            this.pictureBoxContrib3.Name = "pictureBoxContrib3";
+            this.pictureBoxContrib3.Size = new System.Drawing.Size(106, 98);
+            this.pictureBoxContrib3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxContrib3.TabIndex = 3;
+            this.pictureBoxContrib3.TabStop = false;
+            // 
+            // pictureBoxContrib2
+            // 
+            this.pictureBoxContrib2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBoxContrib2.Image = global::Fumoblilite.Interface.Properties.Resources.le_l;
+            this.pictureBoxContrib2.Location = new System.Drawing.Point(200, 62);
+            this.pictureBoxContrib2.Margin = new System.Windows.Forms.Padding(4);
+            this.pictureBoxContrib2.Name = "pictureBoxContrib2";
+            this.pictureBoxContrib2.Size = new System.Drawing.Size(106, 98);
+            this.pictureBoxContrib2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxContrib2.TabIndex = 2;
+            this.pictureBoxContrib2.TabStop = false;
+            // 
+            // pictureBoxContrib1
+            // 
+            this.pictureBoxContrib1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBoxContrib1.Image = global::Fumoblilite.Interface.Properties.Resources.le_c;
+            this.pictureBoxContrib1.Location = new System.Drawing.Point(40, 62);
+            this.pictureBoxContrib1.Margin = new System.Windows.Forms.Padding(4);
+            this.pictureBoxContrib1.Name = "pictureBoxContrib1";
+            this.pictureBoxContrib1.Size = new System.Drawing.Size(106, 98);
+            this.pictureBoxContrib1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBoxContrib1.TabIndex = 1;
+            this.pictureBoxContrib1.TabStop = false;
             // 
             // lblTitreContributeurs
             // 
@@ -252,81 +325,9 @@ namespace Fumoblilite.Interface.UserControls
             this.lblTitre.TabIndex = 1;
             this.lblTitre.Text = "Fumobilité - Crédits";
             // 
-            // pictureBoxContrib6
-            // 
-            this.pictureBoxContrib6.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBoxContrib6.Image = global::Fumoblilite.Interface.Properties.Resources.le_l2;
-            this.pictureBoxContrib6.Location = new System.Drawing.Point(840, 62);
-            this.pictureBoxContrib6.Margin = new System.Windows.Forms.Padding(4);
-            this.pictureBoxContrib6.Name = "pictureBoxContrib6";
-            this.pictureBoxContrib6.Size = new System.Drawing.Size(106, 98);
-            this.pictureBoxContrib6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxContrib6.TabIndex = 6;
-            this.pictureBoxContrib6.TabStop = false;
-            // 
-            // pictureBoxContrib5
-            // 
-            this.pictureBoxContrib5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBoxContrib5.Image = global::Fumoblilite.Interface.Properties.Resources.le_n;
-            this.pictureBoxContrib5.Location = new System.Drawing.Point(680, 62);
-            this.pictureBoxContrib5.Margin = new System.Windows.Forms.Padding(4);
-            this.pictureBoxContrib5.Name = "pictureBoxContrib5";
-            this.pictureBoxContrib5.Size = new System.Drawing.Size(106, 98);
-            this.pictureBoxContrib5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxContrib5.TabIndex = 5;
-            this.pictureBoxContrib5.TabStop = false;
-            // 
-            // pictureBoxContrib4
-            // 
-            this.pictureBoxContrib4.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBoxContrib4.Image = global::Fumoblilite.Interface.Properties.Resources.la_l;
-            this.pictureBoxContrib4.Location = new System.Drawing.Point(520, 62);
-            this.pictureBoxContrib4.Margin = new System.Windows.Forms.Padding(4);
-            this.pictureBoxContrib4.Name = "pictureBoxContrib4";
-            this.pictureBoxContrib4.Size = new System.Drawing.Size(106, 98);
-            this.pictureBoxContrib4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxContrib4.TabIndex = 4;
-            this.pictureBoxContrib4.TabStop = false;
-            // 
-            // pictureBoxContrib3
-            // 
-            this.pictureBoxContrib3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBoxContrib3.Image = global::Fumoblilite.Interface.Properties.Resources.le_m;
-            this.pictureBoxContrib3.Location = new System.Drawing.Point(360, 62);
-            this.pictureBoxContrib3.Margin = new System.Windows.Forms.Padding(4);
-            this.pictureBoxContrib3.Name = "pictureBoxContrib3";
-            this.pictureBoxContrib3.Size = new System.Drawing.Size(106, 98);
-            this.pictureBoxContrib3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxContrib3.TabIndex = 3;
-            this.pictureBoxContrib3.TabStop = false;
-            // 
-            // pictureBoxContrib2
-            // 
-            this.pictureBoxContrib2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBoxContrib2.Image = global::Fumoblilite.Interface.Properties.Resources.le_l;
-            this.pictureBoxContrib2.Location = new System.Drawing.Point(200, 62);
-            this.pictureBoxContrib2.Margin = new System.Windows.Forms.Padding(4);
-            this.pictureBoxContrib2.Name = "pictureBoxContrib2";
-            this.pictureBoxContrib2.Size = new System.Drawing.Size(106, 98);
-            this.pictureBoxContrib2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxContrib2.TabIndex = 2;
-            this.pictureBoxContrib2.TabStop = false;
-            // 
-            // pictureBoxContrib1
-            // 
-            this.pictureBoxContrib1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBoxContrib1.Image = global::Fumoblilite.Interface.Properties.Resources.le_c;
-            this.pictureBoxContrib1.Location = new System.Drawing.Point(40, 62);
-            this.pictureBoxContrib1.Margin = new System.Windows.Forms.Padding(4);
-            this.pictureBoxContrib1.Name = "pictureBoxContrib1";
-            this.pictureBoxContrib1.Size = new System.Drawing.Size(106, 98);
-            this.pictureBoxContrib1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBoxContrib1.TabIndex = 1;
-            this.pictureBoxContrib1.TabStop = false;
-            // 
             // pictureBoxLogo
             // 
-            this.pictureBoxLogo.Image = global::Fumoblilite.Interface.Properties.Resources.GsJFEo4WoAEBxAW;
+            this.pictureBoxLogo.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxLogo.Image")));
             this.pictureBoxLogo.Location = new System.Drawing.Point(67, 62);
             this.pictureBoxLogo.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBoxLogo.Name = "pictureBoxLogo";
@@ -340,7 +341,7 @@ namespace Fumoblilite.Interface.UserControls
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panelPrincipal);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "UCCredits";
             this.Size = new System.Drawing.Size(1200, 862);
             this.panelPrincipal.ResumeLayout(false);
