@@ -690,10 +690,10 @@ namespace Fumoblilite.Interface.UserControls
             // btnExporterCsv
             // 
             this.btnExporterCsv.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnExporterCsv.Location = new System.Drawing.Point(942, 544);
+            this.btnExporterCsv.Location = new System.Drawing.Point(1002, 544);
             this.btnExporterCsv.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
             this.btnExporterCsv.Name = "btnExporterCsv";
-            this.btnExporterCsv.Size = new System.Drawing.Size(160, 46);
+            this.btnExporterCsv.Size = new System.Drawing.Size(120, 37);
             this.btnExporterCsv.TabIndex = 8;
             this.btnExporterCsv.Text = "Exporter CSV";
             this.btnExporterCsv.Click += new System.EventHandler(this.btnExporterCsv_Click);
@@ -701,10 +701,10 @@ namespace Fumoblilite.Interface.UserControls
             // btnExporterJson
             // 
             this.btnExporterJson.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnExporterJson.Location = new System.Drawing.Point(1116, 544);
+            this.btnExporterJson.Location = new System.Drawing.Point(1136, 544);
             this.btnExporterJson.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
             this.btnExporterJson.Name = "btnExporterJson";
-            this.btnExporterJson.Size = new System.Drawing.Size(160, 46);
+            this.btnExporterJson.Size = new System.Drawing.Size(120, 37);
             this.btnExporterJson.TabIndex = 9;
             this.btnExporterJson.Text = "Exporter JSON";
             this.btnExporterJson.Click += new System.EventHandler(this.btnExporterJson_Click);
