@@ -198,6 +198,9 @@
     <EmbeddedResource Include="UserControls\UCGestionArrets.resx">
       <DependentUpon>UCGestionArrets.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\UCGestionHoraires.resx">
+      <DependentUpon>UCGestionHoraires.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\UCGestionLignes.resx">
       <DependentUpon>UCGestionLignes.cs</DependentUpon>
     </EmbeddedResource>

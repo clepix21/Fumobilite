@@ -7,6 +7,9 @@ using Fumoblilite.Systeme.Modeles;
 using Fumoblilite.Systeme.Services;
 using Fumoblilite.SQL.Repositories;
 using Fumoblilite.Systeme.Interfaces;
+using System.Text.Json;
+using System.Text;
+using System.IO;
 
 namespace Fumoblilite.Interface.UserControls
 {
@@ -660,5 +663,87 @@ namespace Fumoblilite.Interface.UserControls
                 }
             }
         }
+
+        private void btnExporterCsv_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int ligneId = (int)cboLigne.SelectedValue;
+                int arretId = (int)cboArret.SelectedValue;
+                int jourValue = (int)cboJour.SelectedValue;
+
+                List<Horaire> horaires;
+                if (jourValue == -1)
+                    horaires = _serviceHoraire.ObtenirParCriteres(new HoraireCriteres());
+                else
+                {
+                    DayOfWeek jour = (DayOfWeek)jourValue;
+                    if (ligneId == 0)
+                        horaires = _serviceHoraire.ObtenirParJour(jour);
+                    else
+                        horaires = _serviceHoraire.ObtenirParLigneEtJour(ligneId, jour);
+                }
+                if (arretId != 0)
+                    horaires = horaires.Where(h => h.ArretId == arretId).ToList();
+
+                var heureDebut = dtpHeureDebut.Value.TimeOfDay;
+                var heureFin = dtpHeureFin.Value.TimeOfDay;
+                horaires = horaires.Where(h => h.HeureDepart >= heureDebut && h.HeureDepart <= heureFin).ToList();
+
+                var sb = new StringBuilder();
+                sb.AppendLine("Id,LigneId,ArretId,JourSemaine,HeureDepart,EstActif,DateCreation,DateModification");
+                foreach (var h in horaires)
+                    sb.AppendLine($"{h.Id},{h.LigneId},{h.ArretId},{h.JourSemaine},{h.HeureDepart},{h.EstActif},{h.DateCreation:yyyy-MM-dd HH:mm:ss},{(h.DateModification.HasValue ? h.DateModification.Value.ToString("yyyy-MM-dd HH:mm:ss") : "")}");
+
+                using (var sfd = new SaveFileDialog { Filter = "CSV (*.csv)|*.csv", FileName = "horaires.csv" })
+                {
+                    if (sfd.ShowDialog() == DialogResult.OK)
+                        File.WriteAllText(sfd.FileName, sb.ToString(), Encoding.UTF8);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de l'export CSV : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnExporterJson_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                int ligneId = (int)cboLigne.SelectedValue;
+                int arretId = (int)cboArret.SelectedValue;
+                int jourValue = (int)cboJour.SelectedValue;
+
+                List<Horaire> horaires;
+                if (jourValue == -1)
+                    horaires = _serviceHoraire.ObtenirParCriteres(new HoraireCriteres());
+                else
+                {
+                    DayOfWeek jour = (DayOfWeek)jourValue;
+                    if (ligneId == 0)
+                        horaires = _serviceHoraire.ObtenirParJour(jour);
+                    else
+                        horaires = _serviceHoraire.ObtenirParLigneEtJour(ligneId, jour);
+                }
+                if (arretId != 0)
+                    horaires = horaires.Where(h => h.ArretId == arretId).ToList();
+
+                var heureDebut = dtpHeureDebut.Value.TimeOfDay;
+                var heureFin = dtpHeureFin.Value.TimeOfDay;
+                horaires = horaires.Where(h => h.HeureDepart >= heureDebut && h.HeureDepart <= heureFin).ToList();
+
+                using (var sfd = new SaveFileDialog { Filter = "JSON (*.json)|*.json", FileName = "horaires.json" })
+                {
+                    if (sfd.ShowDialog() == DialogResult.OK)
+                        File.WriteAllText(sfd.FileName, JsonSerializer.Serialize(horaires, new JsonSerializerOptions { WriteIndented = true }), Encoding.UTF8);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de l'export JSON : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
     }
 }
