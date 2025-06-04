@@ -370,6 +370,8 @@ namespace Fumoblilite.Interface.UserControls
             // btnExporterCsv
             // 
             this.btnExporterCsv.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnExporterCsv.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
+            this.btnExporterCsv.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExporterCsv.Location = new System.Drawing.Point(907, 490);
             this.btnExporterCsv.Margin = new System.Windows.Forms.Padding(5);
             this.btnExporterCsv.Name = "btnExporterCsv";
@@ -381,12 +383,17 @@ namespace Fumoblilite.Interface.UserControls
             // btnExporterJson
             // 
             this.btnExporterJson.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnExporterJson.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
+            this.btnExporterJson.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
+            this.btnExporterJson.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExporterJson.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(51)))));
             this.btnExporterJson.Location = new System.Drawing.Point(773, 490);
             this.btnExporterJson.Margin = new System.Windows.Forms.Padding(5);
             this.btnExporterJson.Name = "btnExporterJson";
             this.btnExporterJson.Size = new System.Drawing.Size(120, 37);
             this.btnExporterJson.TabIndex = 9;
             this.btnExporterJson.Text = "Exporter JSON";
+            this.btnExporterJson.UseVisualStyleBackColor = false;
             this.btnExporterJson.Click += new System.EventHandler(this.btnExporterJson_Click);
             // 
             // UCGestionArrets
