@@ -6,15 +6,29 @@ using Fumoblilite.Systeme.Interfaces;
 
 namespace Fumoblilite.SQL.Repositories
 {
+    /// <summary>
+    /// Repository pour la gestion des utilisateurs dans la base de données MySQL.
+    /// </summary>
     public class RepositoryUtilisateur : IRepositoryUtilisateur
     {
+        /// <summary>
+        /// Chaîne de connexion à la base de données.
+        /// </summary>
         private readonly string _connectionString;
 
+        /// <summary>
+        /// Initialise une nouvelle instance de RepositoryUtilisateur.
+        /// </summary>
+        /// <param name="connectionString">Chaîne de connexion MySQL.</param>
         public RepositoryUtilisateur(string connectionString)
         {
             _connectionString = connectionString;
         }
 
+        /// <summary>
+        /// Récupère la liste de tous les utilisateurs non supprimés.
+        /// </summary>
+        /// <returns>Liste des utilisateurs.</returns>
         public List<Utilisateur> ObtenirTous()
         {
             List<Utilisateur> utilisateurs = new List<Utilisateur>();
@@ -39,6 +53,11 @@ namespace Fumoblilite.SQL.Repositories
             return utilisateurs;
         }
 
+        /// <summary>
+        /// Récupère un utilisateur par son identifiant.
+        /// </summary>
+        /// <param name="id">Identifiant de l'utilisateur.</param>
+        /// <returns>L'utilisateur correspondant ou null si non trouvé.</returns>
         public Utilisateur ObtenirParId(int id)
         {
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
@@ -63,6 +82,11 @@ namespace Fumoblilite.SQL.Repositories
             return null;
         }
 
+        /// <summary>
+        /// Récupère un utilisateur par son nom d'utilisateur.
+        /// </summary>
+        /// <param name="nomUtilisateur">Nom d'utilisateur.</param>
+        /// <returns>L'utilisateur correspondant ou null si non trouvé.</returns>
         public Utilisateur ObtenirParNomUtilisateur(string nomUtilisateur)
         {
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
@@ -87,15 +111,20 @@ namespace Fumoblilite.SQL.Repositories
             return null;
         }
 
+        /// <summary>
+        /// Ajoute un nouvel utilisateur à la base de données.
+        /// </summary>
+        /// <param name="utilisateur">Utilisateur à ajouter.</param>
+        /// <returns>L'identifiant du nouvel utilisateur ajouté.</returns>
         public int Ajouter(Utilisateur utilisateur)
         {
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
                 string query = @"
-                    INSERT INTO Utilisateurs (Nom, Prenom, NomUtilisateur, MotDePasse, Email, Role, EstActif, DateCreation, EstSupprime)
-                    VALUES (@Nom, @Prenom, @NomUtilisateur, @MotDePasse, @Email, @Role, @EstActif, @DateCreation, FALSE);
-                    SELECT LAST_INSERT_ID();";
+                        INSERT INTO Utilisateurs (Nom, Prenom, NomUtilisateur, MotDePasse, Email, Role, EstActif, DateCreation, EstSupprime)
+                        VALUES (@Nom, @Prenom, @NomUtilisateur, @MotDePasse, @Email, @Role, @EstActif, @DateCreation, FALSE);
+                        SELECT LAST_INSERT_ID();";
 
                 using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
@@ -113,21 +142,26 @@ namespace Fumoblilite.SQL.Repositories
             }
         }
 
+        /// <summary>
+        /// Modifie les informations d'un utilisateur existant.
+        /// </summary>
+        /// <param name="utilisateur">Utilisateur avec les nouvelles informations.</param>
+        /// <returns>True si la modification a réussi, sinon false.</returns>
         public bool Modifier(Utilisateur utilisateur)
         {
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
                 string query = @"
-                    UPDATE Utilisateurs 
-                    SET Nom = @Nom, 
-                        Prenom = @Prenom, 
-                        NomUtilisateur = @NomUtilisateur, 
-                        Email = @Email, 
-                        Role = @Role, 
-                        EstActif = @EstActif, 
-                        DateModification = @DateModification
-                    WHERE Id = @Id";
+                        UPDATE Utilisateurs 
+                        SET Nom = @Nom, 
+                            Prenom = @Prenom, 
+                            NomUtilisateur = @NomUtilisateur, 
+                            Email = @Email, 
+                            Role = @Role, 
+                            EstActif = @EstActif, 
+                            DateModification = @DateModification
+                        WHERE Id = @Id";
 
                 using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
@@ -145,6 +179,12 @@ namespace Fumoblilite.SQL.Repositories
             }
         }
 
+        /// <summary>
+        /// Modifie le mot de passe d'un utilisateur.
+        /// </summary>
+        /// <param name="id">Identifiant de l'utilisateur.</param>
+        /// <param name="motDePasse">Nouveau mot de passe.</param>
+        /// <returns>True si la modification a réussi, sinon false.</returns>
         public bool ModifierMotDePasse(int id, string motDePasse)
         {
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
@@ -162,6 +202,11 @@ namespace Fumoblilite.SQL.Repositories
             }
         }
 
+        /// <summary>
+        /// Supprime (logiquement) un utilisateur par son identifiant.
+        /// </summary>
+        /// <param name="id">Identifiant de l'utilisateur à supprimer.</param>
+        /// <returns>True si la suppression a réussi, sinon false.</returns>
         public bool Supprimer(int id)
         {
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
@@ -177,6 +222,11 @@ namespace Fumoblilite.SQL.Repositories
             }
         }
 
+        /// <summary>
+        /// Mappe un enregistrement MySQL en objet Utilisateur.
+        /// </summary>
+        /// <param name="reader">Lecteur de données MySQL.</param>
+        /// <returns>Objet Utilisateur correspondant à l'enregistrement.</returns>
         private Utilisateur MapFromReader(MySqlDataReader reader)
         {
             return new Utilisateur
