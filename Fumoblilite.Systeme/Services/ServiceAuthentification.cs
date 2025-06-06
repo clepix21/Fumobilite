@@ -6,15 +6,31 @@ using Fumoblilite.Systeme.Interfaces;
 
 namespace Fumoblilite.Systeme.Services
 {
+    /// <summary>
+    /// Service gérant l'authentification des utilisateurs.
+    /// </summary>
     public class ServiceAuthentification
     {
+        /// <summary>
+        /// Référence au dépôt des utilisateurs.
+        /// </summary>
         private readonly IRepositoryUtilisateur _repositoryUtilisateur;
 
+        /// <summary>
+        /// Initialise une nouvelle instance du service d'authentification.
+        /// </summary>
+        /// <param name="repositoryUtilisateur">Dépôt des utilisateurs.</param>
         public ServiceAuthentification(IRepositoryUtilisateur repositoryUtilisateur)
         {
             _repositoryUtilisateur = repositoryUtilisateur;
         }
 
+        /// <summary>
+        /// Authentifie un utilisateur à partir de son nom d'utilisateur et de son mot de passe.
+        /// </summary>
+        /// <param name="nomUtilisateur">Nom d'utilisateur.</param>
+        /// <param name="motDePasse">Mot de passe en clair.</param>
+        /// <returns>L'utilisateur authentifié ou null si l'authentification échoue.</returns>
         public Utilisateur Authentifier(string nomUtilisateur, string motDePasse)
         {
             if (string.IsNullOrEmpty(nomUtilisateur) || string.IsNullOrEmpty(motDePasse))
@@ -31,6 +47,11 @@ namespace Fumoblilite.Systeme.Services
             return utilisateur;
         }
 
+        /// <summary>
+        /// Calcule le hash SHA256 d'un mot de passe.
+        /// </summary>
+        /// <param name="motDePasse">Mot de passe en clair.</param>
+        /// <returns>Hash du mot de passe sous forme de chaîne hexadécimale.</returns>
         public string HashMotDePasse(string motDePasse)
         {
             using (SHA256 sha256 = SHA256.Create())
