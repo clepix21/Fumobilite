@@ -2,6 +2,9 @@ using System;
 
 namespace Fumoblilite.Systeme.Modeles
 {
+    /// <summary>
+    /// Représente un horaire pour une ligne et un arrêt donnés.
+    /// </summary>
     public class Horaire
     {
         public int Id { get; set; }
@@ -13,12 +16,23 @@ namespace Fumoblilite.Systeme.Modeles
         public DateTime DateCreation { get; set; }
         public DateTime? DateModification { get; set; }
 
+        /// <summary>
+        /// Initialise une nouvelle instance de la classe Horaire avec les valeurs par défaut.
+        /// </summary>
         public Horaire()
         {
             DateCreation = DateTime.Now;
             EstActif = true;
         }
 
+        /// <summary>
+        /// Initialise une nouvelle instance de la classe Horaire avec les valeurs spécifiées.
+        /// </summary>
+        /// <param name="id">Identifiant de l'horaire.</param>
+        /// <param name="ligneId">Identifiant de la ligne.</param>
+        /// <param name="arretId">Identifiant de l'arrêt.</param>
+        /// <param name="jourSemaine">Jour de la semaine.</param>
+        /// <param name="heureDepart">Heure de départ.</param>
         public Horaire(int id, int ligneId, int arretId, DayOfWeek jourSemaine, TimeSpan heureDepart)
         {
             Id = id;
