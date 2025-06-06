@@ -6,17 +6,30 @@ using Fumoblilite.Systeme.Interfaces;
 
 namespace Fumoblilite.SQL.Repositories
 {
+    /// <summary>
+    /// Repository pour la gestion des arrêts de ligne (ArretLigne) en base de données MySQL.
+    /// </summary>
     public class RepositoryArretLigne : IRepositoryArretLigne
     {
         private readonly string _connectionString;
         private readonly IRepositoryArret _repositoryArret;
 
+        /// <summary>
+        /// Initialise une nouvelle instance de RepositoryArretLigne.
+        /// </summary>
+        /// <param name="connectionString">Chaîne de connexion à la base de données.</param>
+        /// <param name="repositoryArret">Dépendance vers le repository des arrêts.</param>
         public RepositoryArretLigne(string connectionString, IRepositoryArret repositoryArret)
         {
             _connectionString = connectionString;
             _repositoryArret = repositoryArret;
         }
 
+        /// <summary>
+        /// Récupère la liste des arrêts de ligne pour une ligne donnée.
+        /// </summary>
+        /// <param name="ligneId">Identifiant de la ligne.</param>
+        /// <returns>Liste des arrêts de ligne associés à la ligne.</returns>
         public List<ArretLigne> ObtenirParLigne(int ligneId)
         {
             List<ArretLigne> arretsLigne = new List<ArretLigne>();
@@ -45,6 +58,11 @@ namespace Fumoblilite.SQL.Repositories
             return arretsLigne;
         }
 
+        /// <summary>
+        /// Récupère un arrêt de ligne par son identifiant.
+        /// </summary>
+        /// <param name="id">Identifiant de l'arrêt de ligne.</param>
+        /// <returns>L'arrêt de ligne correspondant ou null si non trouvé.</returns>
         public ArretLigne ObtenirParId(int id)
         {
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
@@ -71,15 +89,20 @@ namespace Fumoblilite.SQL.Repositories
             return null;
         }
 
+        /// <summary>
+        /// Ajoute un nouvel arrêt de ligne.
+        /// </summary>
+        /// <param name="arretLigne">L'arrêt de ligne à ajouter.</param>
+        /// <returns>L'identifiant de l'arrêt de ligne ajouté.</returns>
         public int Ajouter(ArretLigne arretLigne)
         {
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
                 string query = @"
-                    INSERT INTO ArretsLignes (LigneId, ArretId, Ordre, TempsArretMinutes, TempsTrajetSuivantMinutes, DateCreation, EstSupprime)
-                    VALUES (@LigneId, @ArretId, @Ordre, @TempsArretMinutes, @TempsTrajetSuivantMinutes, @DateCreation, FALSE);
-                    SELECT LAST_INSERT_ID();";
+                        INSERT INTO ArretsLignes (LigneId, ArretId, Ordre, TempsArretMinutes, TempsTrajetSuivantMinutes, DateCreation, EstSupprime)
+                        VALUES (@LigneId, @ArretId, @Ordre, @TempsArretMinutes, @TempsTrajetSuivantMinutes, @DateCreation, FALSE);
+                        SELECT LAST_INSERT_ID();";
 
                 using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
@@ -95,20 +118,25 @@ namespace Fumoblilite.SQL.Repositories
             }
         }
 
+        /// <summary>
+        /// Modifie un arrêt de ligne existant.
+        /// </summary>
+        /// <param name="arretLigne">L'arrêt de ligne à modifier.</param>
+        /// <returns>True si la modification a réussi, sinon false.</returns>
         public bool Modifier(ArretLigne arretLigne)
         {
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
             {
                 connection.Open();
                 string query = @"
-                    UPDATE ArretsLignes 
-                    SET LigneId = @LigneId, 
-                        ArretId = @ArretId, 
-                        Ordre = @Ordre, 
-                        TempsArretMinutes = @TempsArretMinutes, 
-                        TempsTrajetSuivantMinutes = @TempsTrajetSuivantMinutes, 
-                        DateModification = @DateModification
-                    WHERE Id = @Id";
+                        UPDATE ArretsLignes 
+                        SET LigneId = @LigneId, 
+                            ArretId = @ArretId, 
+                            Ordre = @Ordre, 
+                            TempsArretMinutes = @TempsArretMinutes, 
+                            TempsTrajetSuivantMinutes = @TempsTrajetSuivantMinutes, 
+                            DateModification = @DateModification
+                        WHERE Id = @Id";
 
                 using (MySqlCommand command = new MySqlCommand(query, connection))
                 {
@@ -125,6 +153,11 @@ namespace Fumoblilite.SQL.Repositories
             }
         }
 
+        /// <summary>
+        /// Supprime (logiquement) un arrêt de ligne par son identifiant.
+        /// </summary>
+        /// <param name="id">Identifiant de l'arrêt de ligne à supprimer.</param>
+        /// <returns>True si la suppression a réussi, sinon false.</returns>
         public bool Supprimer(int id)
         {
             using (MySqlConnection connection = new MySqlConnection(_connectionString))
@@ -140,6 +173,11 @@ namespace Fumoblilite.SQL.Repositories
             }
         }
 
+        /// <summary>
+        /// Crée un objet ArretLigne à partir d'un MySqlDataReader.
+        /// </summary>
+        /// <param name="reader">Le lecteur de données MySQL.</param>
+        /// <returns>Un objet ArretLigne initialisé.</returns>
         private ArretLigne MapFromReader(MySqlDataReader reader)
         {
             return new ArretLigne
