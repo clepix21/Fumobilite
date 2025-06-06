@@ -2,21 +2,64 @@ using System;
 
 namespace Fumoblilite.Systeme.Modeles
 {
-    // Modèle de données pour un utilisateur
+    /// <summary>
+    /// Modèle de données pour un utilisateur.
+    /// </summary>
     public class Utilisateur
     {
-        public int Id { get; set; } // Identifiant de l'utilisateur
-        public string Nom { get; set; } // Nom de l'utilisateur
-        public string Prenom { get; set; } // Prénom de l'utilisateur
-        public string NomUtilisateur { get; set; } // pseudo de l'utilisateur
-        public string MotDePasse { get; set; } // Mot de passe de l'utilisateur
-        public string Email { get; set; } // Email de l'utilisateur
-        public string Role { get; set; } // Admin ou Utilisateur
-        public bool EstActif { get; set; } // Statut de l'utilisateur
-        public DateTime DateCreation { get; set; } // Date de création de l'utilisateur
-        public DateTime? DateModification { get; set; } // Date de modification de l'utilisateur
+        /// <summary>
+        /// Identifiant de l'utilisateur.
+        /// </summary>
+        public int Id { get; set; }
 
-        // Constructeur par défaut
+        /// <summary>
+        /// Nom de l'utilisateur.
+        /// </summary>
+        public string Nom { get; set; }
+
+        /// <summary>
+        /// Prénom de l'utilisateur.
+        /// </summary>
+        public string Prenom { get; set; }
+
+        /// <summary>
+        /// Pseudo de l'utilisateur.
+        /// </summary>
+        public string NomUtilisateur { get; set; }
+
+        /// <summary>
+        /// Mot de passe de l'utilisateur.
+        /// </summary>
+        public string MotDePasse { get; set; }
+
+        /// <summary>
+        /// Email de l'utilisateur.
+        /// </summary>
+        public string Email { get; set; }
+
+        /// <summary>
+        /// Rôle de l'utilisateur (Admin ou Utilisateur).
+        /// </summary>
+        public string Role { get; set; }
+
+        /// <summary>
+        /// Statut de l'utilisateur (actif ou non).
+        /// </summary>
+        public bool EstActif { get; set; }
+
+        /// <summary>
+        /// Date de création de l'utilisateur.
+        /// </summary>
+        public DateTime DateCreation { get; set; }
+
+        /// <summary>
+        /// Date de modification de l'utilisateur.
+        /// </summary>
+        public DateTime? DateModification { get; set; }
+
+        /// <summary>
+        /// Constructeur par défaut. Initialise la date de création et le statut actif.
+        /// </summary>
         public Utilisateur()
         {
             DateCreation = DateTime.Now;

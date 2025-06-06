@@ -3,19 +3,54 @@ using System.Collections.Generic;
 
 namespace Fumoblilite.Systeme.Modeles
 {
-    // Modèle de données pour une ligne
+    /// <summary>
+    /// Modèle de données pour une ligne de transport.
+    /// </summary>
     public class Ligne
     {
-        public int Id { get; set; } // Identifiant de la ligne
-        public string Numero { get; set; } // Numéro de la ligne
-        public string Nom { get; set; } // Nom de la ligne
-        public string Couleur { get; set; } // Couleur de la ligne
-        public bool EstActif { get; set; } // Statut de la ligne
-        public DateTime DateCreation { get; set; } // Date de création de la ligne
-        public DateTime? DateModification { get; set; } // Date de modification de la ligne
-        public List<ArretLigne> Arrets { get; set; } // Liste des arrêts de la ligne
+        /// <summary>
+        /// Identifiant de la ligne.
+        /// </summary>
+        public int Id { get; set; }
 
-        // Constructeur par défaut
+        /// <summary>
+        /// Numéro de la ligne.
+        /// </summary>
+        public string Numero { get; set; }
+
+        /// <summary>
+        /// Nom de la ligne.
+        /// </summary>
+        public string Nom { get; set; }
+
+        /// <summary>
+        /// Couleur de la ligne.
+        /// </summary>
+        public string Couleur { get; set; }
+
+        /// <summary>
+        /// Statut de la ligne (active ou non).
+        /// </summary>
+        public bool EstActif { get; set; }
+
+        /// <summary>
+        /// Date de création de la ligne.
+        /// </summary>
+        public DateTime DateCreation { get; set; }
+
+        /// <summary>
+        /// Date de modification de la ligne.
+        /// </summary>
+        public DateTime? DateModification { get; set; }
+
+        /// <summary>
+        /// Liste des arrêts de la ligne.
+        /// </summary>
+        public List<ArretLigne> Arrets { get; set; }
+
+        /// <summary>
+        /// Constructeur par défaut. Initialise la liste des arrêts, la date de création et le statut actif.
+        /// </summary>
         public Ligne()
         {
             Arrets = new List<ArretLigne>();
@@ -23,7 +58,13 @@ namespace Fumoblilite.Systeme.Modeles
             EstActif = true;
         }
 
-        // Constructeur avec paramètres
+        /// <summary>
+        /// Constructeur avec paramètres principaux.
+        /// </summary>
+        /// <param name="id">Identifiant de la ligne.</param>
+        /// <param name="numero">Numéro de la ligne.</param>
+        /// <param name="nom">Nom de la ligne.</param>
+        /// <param name="couleur">Couleur de la ligne.</param>
         public Ligne(int id, string numero, string nom, string couleur)
         {
             Id = id;
