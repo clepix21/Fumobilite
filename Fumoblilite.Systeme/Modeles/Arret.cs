@@ -2,7 +2,9 @@ using System;
 
 namespace Fumoblilite.Systeme.Modeles
 {
-    // Modèle de données pour un arrêt
+    /// <summary>
+    /// Modèle de données pour un arrêt
+    /// </summary>
     public class Arret
     {
         public int Id { get; set; } // Identifiant de l'arrêt
@@ -14,13 +16,23 @@ namespace Fumoblilite.Systeme.Modeles
         public DateTime DateCreation { get; set; } // Date de création de l'arrêt
         public DateTime? DateModification { get; set; } // Date de modification de l'arrêt
 
-        // Constructeur par défaut
+        /// <summary>
+        /// Constructeur par défaut. Initialise la date de création à la date et l'heure actuelles.
+        /// </summary>
         public Arret()
         {
             DateCreation = DateTime.Now;
         }
 
-        // Constructeur avec paramètres
+        /// <summary>
+        /// Constructeur avec paramètres pour initialiser toutes les propriétés sauf la date de modification.
+        /// </summary>
+        /// <param name="id">Identifiant de l'arrêt</param>
+        /// <param name="nom">Nom de l'arrêt</param>
+        /// <param name="adresse">Adresse de l'arrêt</param>
+        /// <param name="latitude">Latitude de l'arrêt</param>
+        /// <param name="longitude">Longitude de l'arrêt</param>
+        /// <param name="estAccessible">Indique si l'arrêt est accessible</param>
         public Arret(int id, string nom, string adresse, double latitude, double longitude, bool estAccessible)
         {
             Id = id;
