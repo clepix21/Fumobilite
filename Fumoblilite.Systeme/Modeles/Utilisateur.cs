@@ -23,7 +23,16 @@ namespace Fumoblilite.Systeme.Modeles
             EstActif = true;
         }
 
-        // Constructeur avec paramètres
+        /// <summary>
+        /// Constructeur avec paramètres pour initialiser toutes les propriétés principales.
+        /// </summary>
+        /// <param name="id">Identifiant de l'utilisateur.</param>
+        /// <param name="nom">Nom de l'utilisateur.</param>
+        /// <param name="prenom">Prénom de l'utilisateur.</param>
+        /// <param name="nomUtilisateur">Pseudo de l'utilisateur.</param>
+        /// <param name="motDePasse">Mot de passe de l'utilisateur.</param>
+        /// <param name="email">Email de l'utilisateur.</param>
+        /// <param name="role">Rôle de l'utilisateur.</param>
         public Utilisateur(int id, string nom, string prenom, string nomUtilisateur, string motDePasse, string email, string role)
         {
             Id = id;
