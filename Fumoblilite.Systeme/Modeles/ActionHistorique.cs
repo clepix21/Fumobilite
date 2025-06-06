@@ -2,6 +2,9 @@
 
 namespace Fumoblilite.Systeme.Modeles
 {
+    /// <summary>
+    /// Représente une action effectuée par un utilisateur dans l'historique du système.
+    /// </summary>
     public class ActionHistorique
     {
         public int Id { get; set; }
