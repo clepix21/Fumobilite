@@ -6,7 +6,12 @@ using Fumoblilite.SQL;
 
 /*
 * Temps passé sur le projet : 
-* LEMAIRE Clément: 69 heures de développement, tests et documentation.
+* LEMAIRE Clément: 83 heures de développement, tests, intégration de la base de données, rédaction de la documentation et de conception de l'interface utilisateur.
+* LEPEUVE Maxence: 53 heures de développement, tests, intégration de la base de données et de conception de l'interface utilisateur.
+* CARPENTIER Louka: 21 heures de développement, tests, rédaction de la documentation.
+* BASIN Léanne: 25 heures de développement, rédaction de la documentation et de conception de l'interface utilisateur.
+* Noa Arnould: 24 heures de développement, tests, rédaction de la documentation.
+* Loïc Restout: 24 heures de développement, tests, rédaction de la documentation.
 */
 
 namespace Fumoblilite.Interface
