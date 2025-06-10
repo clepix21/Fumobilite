@@ -357,5 +357,17 @@ namespace Fumoblilite.Interface.Forms
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
+        private void sinscrireToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Ouvrir le formulaire d'inscription
+            FormInscription formInscription = new FormInscription(_connectionString);
+            formInscription.ShowDialog();
+            // Si l'utilisateur s'inscrit, rafraîchir l'interface
+            if (formInscription.DialogResult == DialogResult.OK)
+            {
+                MessageBox.Show("Inscription réussie ! Vous pouvez maintenant vous connecter.", "Succès", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            }
+        }
     }
 }
