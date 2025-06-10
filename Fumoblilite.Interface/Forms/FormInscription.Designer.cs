@@ -63,7 +63,7 @@ namespace Fumoblilite.Interface.Forms
             this.lblNom.Name = "lblNom";
             this.lblNom.Size = new System.Drawing.Size(47, 16);
             this.lblNom.TabIndex = 1;
-            this.lblNom.Text = "Nom *:";
+            this.lblNom.Text = "Nom :";
             // 
             // lblPrenom
             // 
@@ -73,7 +73,7 @@ namespace Fumoblilite.Interface.Forms
             this.lblPrenom.Name = "lblPrenom";
             this.lblPrenom.Size = new System.Drawing.Size(65, 16);
             this.lblPrenom.TabIndex = 2;
-            this.lblPrenom.Text = "Prénom *:";
+            this.lblPrenom.Text = "Prénom :";
             // 
             // lblNomUtilisateur
             // 
@@ -83,7 +83,7 @@ namespace Fumoblilite.Interface.Forms
             this.lblNomUtilisateur.Name = "lblNomUtilisateur";
             this.lblNomUtilisateur.Size = new System.Drawing.Size(117, 16);
             this.lblNomUtilisateur.TabIndex = 3;
-            this.lblNomUtilisateur.Text = "Nom d\'utilisateur *:";
+            this.lblNomUtilisateur.Text = "Nom d\'utilisateur :";
             // 
             // lblMotDePasse
             // 
@@ -93,7 +93,7 @@ namespace Fumoblilite.Interface.Forms
             this.lblMotDePasse.Name = "lblMotDePasse";
             this.lblMotDePasse.Size = new System.Drawing.Size(100, 16);
             this.lblMotDePasse.TabIndex = 4;
-            this.lblMotDePasse.Text = "Mot de passe *:";
+            this.lblMotDePasse.Text = "Mot de passe :";
             // 
             // lblConfirmationMotDePasse
             // 
@@ -103,7 +103,7 @@ namespace Fumoblilite.Interface.Forms
             this.lblConfirmationMotDePasse.Name = "lblConfirmationMotDePasse";
             this.lblConfirmationMotDePasse.Size = new System.Drawing.Size(177, 16);
             this.lblConfirmationMotDePasse.TabIndex = 5;
-            this.lblConfirmationMotDePasse.Text = "Confirmation mot de passe *:";
+            this.lblConfirmationMotDePasse.Text = "Confirmation mot de passe :";
             // 
             // lblEmail
             // 
@@ -113,7 +113,7 @@ namespace Fumoblilite.Interface.Forms
             this.lblEmail.Name = "lblEmail";
             this.lblEmail.Size = new System.Drawing.Size(44, 16);
             this.lblEmail.TabIndex = 6;
-            this.lblEmail.Text = "Email:";
+            this.lblEmail.Text = "Email :";
             // 
             // txtNom
             // 
