@@ -369,9 +369,12 @@ namespace Fumoblilite.Interface.UserControls
             // 
             // btnExporterCsv
             // 
-            this.btnExporterCsv.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnExporterCsv.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
+            this.btnExporterCsv.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(139)))), ((int)(((byte)(34)))));
+            this.btnExporterCsv.FlatAppearance.BorderSize = 0;
             this.btnExporterCsv.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnExporterCsv.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
+            this.btnExporterCsv.ForeColor = System.Drawing.Color.White;
+            this.btnExporterCsv.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnExporterCsv.Location = new System.Drawing.Point(907, 490);
             this.btnExporterCsv.Margin = new System.Windows.Forms.Padding(5);
             this.btnExporterCsv.Name = "btnExporterCsv";
@@ -382,11 +385,12 @@ namespace Fumoblilite.Interface.UserControls
             // 
             // btnExporterJson
             // 
-            this.btnExporterJson.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnExporterJson.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(240)))), ((int)(((byte)(240)))), ((int)(((byte)(240)))));
-            this.btnExporterJson.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
+            this.btnExporterJson.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(139)))), ((int)(((byte)(34)))));
+            this.btnExporterJson.FlatAppearance.BorderSize = 0;
             this.btnExporterJson.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnExporterJson.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(51)))), ((int)(((byte)(51)))), ((int)(((byte)(51)))));
+            this.btnExporterJson.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnExporterJson.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
+            this.btnExporterJson.ForeColor = System.Drawing.Color.White;
             this.btnExporterJson.Location = new System.Drawing.Point(773, 490);
             this.btnExporterJson.Margin = new System.Windows.Forms.Padding(5);
             this.btnExporterJson.Name = "btnExporterJson";
