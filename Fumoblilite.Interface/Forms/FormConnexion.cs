@@ -89,5 +89,22 @@ namespace Fumoblilite.Interface.Forms
                 btnConnexion_Click(sender, e);
             }
         }
+
+        // Gestionnaire d'événements pour le clic sur le bouton d'inscription
+        private void btnInscription_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                FormInscription formInscription = new FormInscription(_connectionString);
+                if (formInscription.ShowDialog() == DialogResult.OK)
+                {
+                    MessageBox.Show("Inscription réussie ! Vous pouvez maintenant vous connecter.", "Succès", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de l'ouverture du formulaire d'inscription : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }
