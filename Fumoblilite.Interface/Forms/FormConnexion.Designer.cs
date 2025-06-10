@@ -84,7 +84,7 @@ namespace Fumoblilite.Interface.Forms
             this.btnConnexion.FlatAppearance.BorderSize = 0;
             this.btnConnexion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnConnexion.ForeColor = System.Drawing.Color.White;
-            this.btnConnexion.Location = new System.Drawing.Point(113, 197);
+            this.btnConnexion.Location = new System.Drawing.Point(129, 197);
             this.btnConnexion.Margin = new System.Windows.Forms.Padding(4);
             this.btnConnexion.Name = "btnConnexion";
             this.btnConnexion.Size = new System.Drawing.Size(120, 37);
@@ -99,7 +99,7 @@ namespace Fumoblilite.Interface.Forms
             this.btnRetour.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
             this.btnRetour.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnRetour.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
-            this.btnRetour.Location = new System.Drawing.Point(265, 197);
+            this.btnRetour.Location = new System.Drawing.Point(271, 197);
             this.btnRetour.Margin = new System.Windows.Forms.Padding(4);
             this.btnRetour.Name = "btnRetour";
             this.btnRetour.Size = new System.Drawing.Size(120, 37);
@@ -119,7 +119,7 @@ namespace Fumoblilite.Interface.Forms
             this.btnInscription.Name = "btnInscription";
             this.btnInscription.Size = new System.Drawing.Size(120, 37);
             this.btnInscription.TabIndex = 7;
-            this.btnInscription.Text = "S'inscrire";
+            this.btnInscription.Text = "S\'inscrire";
             this.btnInscription.UseVisualStyleBackColor = false;
             this.btnInscription.Click += new System.EventHandler(this.btnInscription_Click);
             // 
