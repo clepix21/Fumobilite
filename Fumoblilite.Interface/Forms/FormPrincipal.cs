@@ -34,6 +34,7 @@ namespace Fumoblilite.Interface.Forms
                 lblStatusUtilisateur.Text = $"Utilisateur connecté: {_utilisateurConnecte.Prenom} {_utilisateurConnecte.Nom} ({_utilisateurConnecte.Role})";
                 menuItemDeconnexion.Visible = true;
                 menuItemConnexion.Visible = false; // Masquer le bouton de connexion
+                sinscrireToolStripMenuItem.Visible = false; // Masquer le menu S'inscrire
             }
             else
             {
@@ -41,6 +42,7 @@ namespace Fumoblilite.Interface.Forms
                 lblStatusUtilisateur.Text = "Mode invité";
                 menuItemDeconnexion.Visible = false;
                 menuItemConnexion.Visible = true; // Afficher le bouton de connexion
+                sinscrireToolStripMenuItem.Visible = true; // Afficher le menu S'inscrire
             }
 
             // Masquer les éléments de menu de gestion pour les utilisateurs non administrateurs
