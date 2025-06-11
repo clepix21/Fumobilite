@@ -146,7 +146,11 @@ namespace Fumoblilite.Interface.UserControls
                 // Initialiser la liste des lignes visibles
                 foreach (var ligne in _lignes)
                 {
-                    _lignesVisibles[ligne.Id] = true;
+                    // Décoche la ligne Noct 1 (id:10) au démarrage
+                    if (ligne.Id == 10)
+                        _lignesVisibles[ligne.Id] = false;
+                    else
+                        _lignesVisibles[ligne.Id] = true;
                 }
 
                 // Remplir le FlowLayoutPanel des lignes
