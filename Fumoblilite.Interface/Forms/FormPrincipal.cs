@@ -336,6 +336,13 @@ namespace Fumoblilite.Interface.Forms
                 return true;
             }
 
+            // Form de connexion
+            if (keyData == (Keys.Control | Keys.S))
+            {
+                sinscrireToolStripMenuItem_Click(null, null);
+                return true;
+            }
+
             if (keyData == (Keys.Control | Keys.Alt | Keys.C))
             {
                 using (var stream = new MemoryStream(Resources.lvlup))
@@ -343,7 +350,6 @@ namespace Fumoblilite.Interface.Forms
                     SoundPlayer player = new SoundPlayer(stream);
                     player.Play();
                 }
-
             }
 
             if (keyData == (Keys.Control | Keys.Alt | Keys.V))

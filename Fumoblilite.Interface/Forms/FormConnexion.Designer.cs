@@ -13,7 +13,6 @@ namespace Fumoblilite.Interface.Forms
         private TextBox txtMotDePasse;
         private Button btnConnexion;
         private Button btnRetour;
-        private Button btnInscription;
 
         private void InitializeComponent()
         {
@@ -25,7 +24,6 @@ namespace Fumoblilite.Interface.Forms
             this.txtMotDePasse = new System.Windows.Forms.TextBox();
             this.btnConnexion = new System.Windows.Forms.Button();
             this.btnRetour = new System.Windows.Forms.Button();
-            this.btnInscription = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // lblTitre
@@ -108,28 +106,12 @@ namespace Fumoblilite.Interface.Forms
             this.btnRetour.UseVisualStyleBackColor = false;
             this.btnRetour.Click += new System.EventHandler(this.btnRetour_Click);
             // 
-            // btnInscription
-            // 
-            this.btnInscription.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(139)))), ((int)(((byte)(34)))));
-            this.btnInscription.FlatAppearance.BorderSize = 0;
-            this.btnInscription.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnInscription.ForeColor = System.Drawing.Color.White;
-            this.btnInscription.Location = new System.Drawing.Point(200, 250);
-            this.btnInscription.Margin = new System.Windows.Forms.Padding(4);
-            this.btnInscription.Name = "btnInscription";
-            this.btnInscription.Size = new System.Drawing.Size(120, 37);
-            this.btnInscription.TabIndex = 7;
-            this.btnInscription.Text = "S\'inscrire";
-            this.btnInscription.UseVisualStyleBackColor = false;
-            this.btnInscription.Click += new System.EventHandler(this.btnInscription_Click);
-            // 
             // FormConnexion
             // 
             this.AcceptButton = this.btnConnexion;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(533, 320);
-            this.Controls.Add(this.btnInscription);
+            this.ClientSize = new System.Drawing.Size(533, 276);
             this.Controls.Add(this.btnRetour);
             this.Controls.Add(this.btnConnexion);
             this.Controls.Add(this.txtMotDePasse);
