@@ -50,6 +50,8 @@ namespace Fumoblilite.Interface.UserControls
         private System.Windows.Forms.Button btnDupliquerLigne;
         private System.Windows.Forms.Button btnExporterCsv;
         private System.Windows.Forms.Button btnExporterJson;
+        // Ajouter un bouton pour supprimer tous les horaires affichés
+        private System.Windows.Forms.Button btnSupprimerTout;
         private void InitializeComponent()
         {
             this.lblTitre = new System.Windows.Forms.Label();
@@ -100,6 +102,8 @@ namespace Fumoblilite.Interface.UserControls
             this.btnDupliquerLigne = new System.Windows.Forms.Button();
             this.btnExporterCsv = new System.Windows.Forms.Button();
             this.btnExporterJson = new System.Windows.Forms.Button();
+            // Ajouter cette déclaration après les autres déclarations de boutons
+            this.btnSupprimerTout = new System.Windows.Forms.Button();
             this.grpFiltres.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.tabGestion.SuspendLayout();
@@ -689,12 +693,8 @@ namespace Fumoblilite.Interface.UserControls
             // 
             // btnExporterCsv
             // 
-            this.btnExporterCsv.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(139)))), ((int)(((byte)(34)))));
-            this.btnExporterCsv.FlatAppearance.BorderSize = 0;
-            this.btnExporterCsv.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnExporterCsv.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
-            this.btnExporterCsv.ForeColor = System.Drawing.Color.White;
             this.btnExporterCsv.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnExporterCsv.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
             this.btnExporterCsv.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExporterCsv.Location = new System.Drawing.Point(1002, 544);
             this.btnExporterCsv.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
@@ -706,12 +706,9 @@ namespace Fumoblilite.Interface.UserControls
             // 
             // btnExporterJson
             // 
-            this.btnExporterJson.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(139)))), ((int)(((byte)(34)))));
-            this.btnExporterJson.FlatAppearance.BorderSize = 0;
-            this.btnExporterJson.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnExporterJson.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
-            this.btnExporterJson.ForeColor = System.Drawing.Color.White;
             this.btnExporterJson.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnExporterJson.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(120)))), ((int)(((byte)(215)))));
+            this.btnExporterJson.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExporterJson.Location = new System.Drawing.Point(1136, 544);
             this.btnExporterJson.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
             this.btnExporterJson.Name = "btnExporterJson";
@@ -719,6 +716,21 @@ namespace Fumoblilite.Interface.UserControls
             this.btnExporterJson.TabIndex = 9;
             this.btnExporterJson.Text = "Exporter JSON";
             this.btnExporterJson.Click += new System.EventHandler(this.btnExporterJson_Click);
+            // 
+            // btnSupprimerTout
+            // 
+            this.btnSupprimerTout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSupprimerTout.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(17)))), ((int)(((byte)(35)))));
+            this.btnSupprimerTout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnSupprimerTout.ForeColor = System.Drawing.Color.White;
+            this.btnSupprimerTout.Location = new System.Drawing.Point(868, 544);
+            this.btnSupprimerTout.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.btnSupprimerTout.Name = "btnSupprimerTout";
+            this.btnSupprimerTout.Size = new System.Drawing.Size(120, 37);
+            this.btnSupprimerTout.TabIndex = 7;
+            this.btnSupprimerTout.Text = "Supprimer tout";
+            this.btnSupprimerTout.UseVisualStyleBackColor = false;
+            this.btnSupprimerTout.Click += new System.EventHandler(this.btnSupprimerTout_Click);
             // 
             // UCGestionHoraires
             // 
@@ -729,6 +741,7 @@ namespace Fumoblilite.Interface.UserControls
             this.Controls.Add(this.flpHoraires);
             this.Controls.Add(this.grpFiltres);
             this.Controls.Add(this.lblTitre);
+            this.Controls.Add(this.btnSupprimerTout);
             this.Controls.Add(this.btnExporterCsv);
             this.Controls.Add(this.btnExporterJson);
             this.Margin = new System.Windows.Forms.Padding(4);

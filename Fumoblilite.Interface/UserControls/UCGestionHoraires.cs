@@ -247,6 +247,7 @@ namespace Fumoblilite.Interface.UserControls
             flpHoraires.ResumeLayout();
         }
 
+        // Modifier la méthode CreerCarteHoraire pour ajouter un bouton de suppression rapide
         private Panel CreerCarteHoraire(dynamic horaire)
         {
             bool estActif = horaire.Actif;
@@ -318,14 +319,126 @@ namespace Fumoblilite.Interface.UserControls
             };
             panel.Controls.Add(lblStatut);
 
+            // Ajout du bouton de suppression rapide
+            var btnSupprimerRapide = new Button
+            {
+                Text = "✕",
+                Font = new Font("Segoe UI", 8, FontStyle.Bold),
+                Size = new Size(24, 24),
+                Location = new Point(panel.Width - 30, panel.Height - 30),
+                FlatStyle = FlatStyle.Flat,
+                BackColor = Color.FromArgb(232, 17, 35),
+                ForeColor = Color.White,
+                Cursor = Cursors.Hand,
+                Tag = horaire.HoraireComplet
+            };
+            btnSupprimerRapide.FlatAppearance.BorderSize = 0;
+            btnSupprimerRapide.Click += BtnSupprimerRapide_Click;
+            panel.Controls.Add(btnSupprimerRapide);
+
             // Gestionnaires d'événements
             panel.Click += (s, e) => SelectionnerHoraire(panel);
             foreach (Control control in panel.Controls)
             {
-                control.Click += (s, e) => SelectionnerHoraire(panel);
+                if (control != btnSupprimerRapide) // Ne pas ajouter l'événement au bouton de suppression
+                {
+                    control.Click += (s, e) => SelectionnerHoraire(panel);
+                }
             }
 
             return panel;
+        }
+
+        // Ajouter cette nouvelle méthode pour gérer le clic sur le bouton de suppression rapide
+        private void BtnSupprimerRapide_Click(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+            Horaire horaire = (Horaire)btn.Tag;
+
+            DialogResult result = MessageBox.Show(
+                $"Êtes-vous sûr de vouloir supprimer l'horaire de {horaire.HeureDepart.ToString(@"hh\:mm")} ?",
+                "Confirmation de suppression",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (result == DialogResult.Yes)
+            {
+                try
+                {
+                    bool resultat = _serviceHoraire.Supprimer(horaire.Id);
+                    if (resultat)
+                    {
+                        MessageBox.Show("Horaire supprimé avec succès.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        btnAfficher_Click(sender, e); // Rafraîchir la liste
+                        ViderChamps();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Erreur lors de la suppression de l'horaire.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Erreur : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        // Ajouter cette méthode pour gérer le clic sur le bouton "Supprimer tout"
+        private void btnSupprimerTout_Click(object sender, EventArgs e)
+        {
+            if (_horairesAffichage == null || _horairesAffichage.Count == 0)
+            {
+                MessageBox.Show("Aucun horaire à supprimer.", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            DialogResult result = MessageBox.Show(
+                $"Êtes-vous sûr de vouloir supprimer tous les {_horairesAffichage.Count} horaires affichés ?",
+                "Confirmation de suppression massive",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
+
+            if (result == DialogResult.Yes)
+            {
+                try
+                {
+                    int nombreSupprimes = 0;
+                    int nombreEchecs = 0;
+
+                    foreach (var item in _horairesAffichage)
+                    {
+                        try
+                        {
+                            bool resultat = _serviceHoraire.Supprimer(item.Id);
+                            if (resultat)
+                                nombreSupprimes++;
+                            else
+                                nombreEchecs++;
+                        }
+                        catch
+                        {
+                            nombreEchecs++;
+                        }
+                    }
+
+                    if (nombreSupprimes > 0)
+                    {
+                        MessageBox.Show($"{nombreSupprimes} horaires supprimés avec succès.\n{nombreEchecs} échecs.",
+                            "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        btnAfficher_Click(sender, e); // Rafraîchir la liste
+                        ViderChamps();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Aucun horaire n'a pu être supprimé.", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Erreur : {ex.Message}", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
         private void SelectionnerHoraire(Panel panel)
