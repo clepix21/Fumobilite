@@ -26,6 +26,7 @@ namespace Fumoblilite.Interface.UserControls
         private readonly ServiceHoraire _serviceHoraire;
         private readonly ServiceAuthentification _serviceAuth;
         private readonly RepositoryActionHistorique _repoHistorique;
+        private readonly ServiceItineraire _serviceItineraire;
 
         public UCInviteCommande(string connectionString, Utilisateur utilisateur, FormPrincipal formPrincipal)
         {
@@ -48,6 +49,7 @@ namespace Fumoblilite.Interface.UserControls
             _serviceHoraire = new ServiceHoraire(repositoryHoraire);
             _serviceAuth = new ServiceAuthentification(repositoryUtilisateur);
             _repoHistorique = new RepositoryActionHistorique(_connectionString);
+            _serviceItineraire = new ServiceItineraire(repositoryArret, repositoryLigne, repositoryArretLigne, repositoryHoraire);
 
             InitialiserInterface();
         }
@@ -562,10 +564,163 @@ namespace Fumoblilite.Interface.UserControls
 
         private void TraiterCommandeItineraire(string[] parties)
         {
-            AjouterTexte("=== RECHERCHE D'ITINÉRAIRE ===", Color.Cyan);
-            AjouterTexte("Usage: itineraire <arret_depart> <arret_arrivee>", Color.Yellow);
-            AjouterTexte("Exemple: itineraire 1 5", Color.Gray);
-            AjouterTexte("Fonctionnalité en cours de développement...", Color.Yellow);
+            if (parties.Length < 3)
+            {
+                AjouterTexte("Usage: itineraire <arret_depart> <arret_arrivee>", Color.Yellow);
+                AjouterTexte("Vous pouvez utiliser:", Color.Gray);
+                AjouterTexte("- L'ID de l'arrêt: itineraire 1 5", Color.Gray);
+                AjouterTexte("- Le nom de l'arrêt: itineraire \"Gare Centrale\" \"Place du Marché\"", Color.Gray);
+                return;
+            }
+
+            try
+            {
+                Arret arretDepart = null;
+                Arret arretArrivee = null;
+
+                // Récupérer l'arrêt de départ
+                string departParam = parties[1].Trim('"');
+                if (int.TryParse(departParam, out int idDepart))
+                {
+                    arretDepart = _serviceArret.ObtenirParId(idDepart);
+                }
+                else
+                {
+                    var arrets = _serviceArret.ObtenirTous();
+                    arretDepart = arrets.FirstOrDefault(a => a.Nom.ToLower().Contains(departParam.ToLower()));
+                }
+
+                // Récupérer l'arrêt d'arrivée
+                string arriveeParam = parties[2].Trim('"');
+                if (int.TryParse(arriveeParam, out int idArrivee))
+                {
+                    arretArrivee = _serviceArret.ObtenirParId(idArrivee);
+                }
+                else
+                {
+                    var arrets = _serviceArret.ObtenirTous();
+                    arretArrivee = arrets.FirstOrDefault(a => a.Nom.ToLower().Contains(arriveeParam.ToLower()));
+                }
+
+                // Vérifier que les arrêts existent
+                if (arretDepart == null)
+                {
+                    AjouterTexte($"Arrêt de départ '{departParam}' non trouvé.", Color.Red);
+                    AfficherArretsSuggeres(departParam);
+                    return;
+                }
+
+                if (arretArrivee == null)
+                {
+                    AjouterTexte($"Arrêt d'arrivée '{arriveeParam}' non trouvé.", Color.Red);
+                    AfficherArretsSuggeres(arriveeParam);
+                    return;
+                }
+
+                if (arretDepart.Id == arretArrivee.Id)
+                {
+                    AjouterTexte("L'arrêt de départ et d'arrivée sont identiques.", Color.Yellow);
+                    return;
+                }
+
+                AjouterTexte("=== RECHERCHE D'ITINÉRAIRE ===", Color.Cyan);
+                AjouterTexte($"De: {arretDepart.Nom} (ID: {arretDepart.Id})", Color.White);
+                AjouterTexte($"Vers: {arretArrivee.Nom} (ID: {arretArrivee.Id})", Color.White);
+                AjouterTexte("", Color.White);
+
+                // Rechercher l'itinéraire
+                var itineraires = _serviceItineraire.RechercherItineraires(arretDepart.Id, arretArrivee.Id, DateTime.Now, true);
+
+                if (itineraires == null || !itineraires.Any())
+                {
+                    AjouterTexte("Aucun itinéraire trouvé entre ces deux arrêts.", Color.Red);
+                    AjouterTexte("Vérifiez que les arrêts sont bien connectés par le réseau de transport.", Color.Yellow);
+                    return;
+                }
+
+                AjouterTexte($"Itinéraires trouvés: {itineraires.Count()}", Color.Green);
+                AjouterTexte("", Color.White);
+
+                for (int i = 0; i < itineraires.Count(); i++)
+                {
+                    var itineraire = itineraires[i];
+                    AjouterTexte($"=== ITINÉRAIRE {i + 1} ===", Color.Cyan);
+
+                    if (itineraire.Etapes != null && itineraire.Etapes.Any())
+                    {
+                        AjouterTexte($"Durée estimée: {itineraire.DureeMinutes} minutes", Color.Yellow);
+                        AjouterTexte($"Nombre de correspondances: {itineraire.NombreChangements}", Color.Yellow);
+                        AjouterTexte("", Color.White);
+
+                        foreach (var etape in itineraire.Etapes)
+                        {
+                            var ligne = _serviceLigne.ObtenirParId(etape.LigneId);
+                            var arretDep = _serviceArret.ObtenirParId(etape.ArretDepartId);
+                            var arretArr = _serviceArret.ObtenirParId(etape.ArretArriveeId);
+
+                            if (ligne != null && arretDep != null && arretArr != null)
+                            {
+                                AjouterTexte($"🚌 Ligne {ligne.Numero} ({ligne.Nom})", Color.Magenta);
+                                AjouterTexte($"   📍 {arretDep.Nom} → {arretArr.Nom}", Color.White);
+                                AjouterTexte($"   ⏱️ {etape.DureeMinutes} min", Color.Gray);
+
+                                if (etape.HeureDepart != default)
+                                {
+                                    AjouterTexte($"   🕐 Départ: {etape.HeureDepart:HH:mm}", Color.Gray);
+                                }
+                                if (etape.HeureArrivee != default)
+                                {
+                                    AjouterTexte($"   🕐 Arrivée: {etape.HeureArrivee:HH:mm}", Color.Gray);
+                                }
+                                AjouterTexte("", Color.White);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        AjouterTexte("Détails de l'itinéraire non disponibles.", Color.Yellow);
+                    }
+
+                    if (i < itineraires.Count() - 1)
+                    {
+                        AjouterTexte(new string('-', 50), Color.Gray);
+                        AjouterTexte("", Color.White);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                AjouterTexte($"Erreur lors de la recherche d'itinéraire: {ex.Message}", Color.Red);
+            }
+        }
+
+        private void AfficherArretsSuggeres(string recherche)
+        {
+            try
+            {
+                var arrets = _serviceArret.ObtenirTous();
+                var suggestions = arrets
+                    .Where(a => a.Nom.ToLower().Contains(recherche.ToLower()))
+                    .Take(5)
+                    .ToList();
+
+                if (suggestions.Any())
+                {
+                    AjouterTexte("Arrêts similaires:", Color.Yellow);
+                    foreach (var arret in suggestions)
+                    {
+                        AjouterTexte($"  {arret.Id}: {arret.Nom}", Color.Gray);
+                    }
+                }
+                else
+                {
+                    AjouterTexte("Utilisez 'arrets' pour voir tous les arrêts disponibles.", Color.Gray);
+                }
+            }
+            catch (Exception ex)
+            {
+                AjouterTexte($"Erreur lors de la recherche de suggestions: {ex.Message}", Color.Red);
+            }
         }
 
         private void TraiterCommandeUtilisateurs(string[] parties)
