@@ -377,5 +377,13 @@ namespace Fumoblilite.Interface.Forms
 
             }
         }
+
+        private void terminalToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Charger le contrôle utilisateur d'invite de commande
+            _modeConsole = true;
+            ChargerUserControl(new UCInviteCommande(_connectionString, _utilisateurConnecte, this));
+
+        }
     }
 }

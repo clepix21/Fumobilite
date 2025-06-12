@@ -37,6 +37,7 @@ namespace Fumoblilite.Interface.Forms
             this.lblStatusUtilisateur = new System.Windows.Forms.ToolStripStatusLabel();
             this.panelContenu = new System.Windows.Forms.Panel();
             this.lblGroupe = new System.Windows.Forms.Label();
+            this.terminalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
@@ -53,7 +54,7 @@ namespace Fumoblilite.Interface.Forms
             this.menuRecherche});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(567, 28);
+            this.menuStrip.Size = new System.Drawing.Size(567, 30);
             this.menuStrip.TabIndex = 2;
             // 
             // menuFichier
@@ -62,10 +63,11 @@ namespace Fumoblilite.Interface.Forms
             this.menuItemConnexion,
             this.sinscrireToolStripMenuItem,
             this.menuItemDeconnexion,
+            this.terminalToolStripMenuItem,
             this.menuItemQuitter});
             this.menuFichier.ForeColor = System.Drawing.Color.White;
             this.menuFichier.Name = "menuFichier";
-            this.menuFichier.Size = new System.Drawing.Size(72, 24);
+            this.menuFichier.Size = new System.Drawing.Size(72, 26);
             this.menuFichier.Text = "Session";
             // 
             // menuItemConnexion
@@ -105,7 +107,7 @@ namespace Fumoblilite.Interface.Forms
             this.menuItemUtilisateurs});
             this.menuGestion.ForeColor = System.Drawing.Color.White;
             this.menuGestion.Name = "menuGestion";
-            this.menuGestion.Size = new System.Drawing.Size(73, 24);
+            this.menuGestion.Size = new System.Drawing.Size(73, 26);
             this.menuGestion.Text = "Gestion";
             // 
             // menuItemArrets
@@ -144,7 +146,7 @@ namespace Fumoblilite.Interface.Forms
             this.menuItemHorairesJournee});
             this.menuConsultation.ForeColor = System.Drawing.Color.White;
             this.menuConsultation.Name = "menuConsultation";
-            this.menuConsultation.Size = new System.Drawing.Size(106, 24);
+            this.menuConsultation.Size = new System.Drawing.Size(106, 26);
             this.menuConsultation.Text = "Consultation";
             // 
             // menuItemReseau
@@ -174,7 +176,7 @@ namespace Fumoblilite.Interface.Forms
             this.menuItemItineraire});
             this.menuRecherche.ForeColor = System.Drawing.Color.White;
             this.menuRecherche.Name = "menuRecherche";
-            this.menuRecherche.Size = new System.Drawing.Size(91, 24);
+            this.menuRecherche.Size = new System.Drawing.Size(91, 26);
             this.menuRecherche.Text = "Recherche";
             // 
             // menuItemItineraire
@@ -205,9 +207,9 @@ namespace Fumoblilite.Interface.Forms
             // panelContenu
             // 
             this.panelContenu.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelContenu.Location = new System.Drawing.Point(0, 28);
+            this.panelContenu.Location = new System.Drawing.Point(0, 30);
             this.panelContenu.Name = "panelContenu";
-            this.panelContenu.Size = new System.Drawing.Size(567, 356);
+            this.panelContenu.Size = new System.Drawing.Size(567, 354);
             this.panelContenu.TabIndex = 0;
             // 
             // lblGroupe
@@ -222,6 +224,13 @@ namespace Fumoblilite.Interface.Forms
             this.lblGroupe.TabIndex = 3;
             this.lblGroupe.Text = "Groupe A-6";
             this.lblGroupe.Click += new System.EventHandler(this.lblGroupe_Click);
+            // 
+            // terminalToolStripMenuItem
+            // 
+            this.terminalToolStripMenuItem.Name = "terminalToolStripMenuItem";
+            this.terminalToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.terminalToolStripMenuItem.Text = "Terminal";
+            this.terminalToolStripMenuItem.Click += new System.EventHandler(this.terminalToolStripMenuItem_Click);
             // 
             // FormPrincipal
             // 
@@ -249,5 +258,6 @@ namespace Fumoblilite.Interface.Forms
         private ToolStripMenuItem menuItemConnexion;
         private Label lblGroupe;
         private ToolStripMenuItem sinscrireToolStripMenuItem;
+        private ToolStripMenuItem terminalToolStripMenuItem;
     }
 }
