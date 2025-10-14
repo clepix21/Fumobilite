@@ -91,7 +91,7 @@ Le projet suit une architecture en couches (Layered Architecture) avec une sépa
 
 ---
 
-## 📦 Prérequis
+##  Prérequis
 
 - **Windows** : 7/8/10/11
 - **.NET Framework** : 4.7.2 ou supérieur
@@ -100,7 +100,7 @@ Le projet suit une architecture en couches (Layered Architecture) avec une sépa
 
 ---
 
-## 🚀 Installation
+##  Installation
 
 ### 1. Cloner le dépôt
 
