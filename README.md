@@ -10,21 +10,7 @@
   ![MySQL](https://img.shields.io/badge/MySQL-Database-orange)
 </div>
 
----
 
-## 📋 Table des matières
-
-- [À propos](#-à-propos)
-- [Fonctionnalités](#-fonctionnalités)
-- [Architecture](#-architecture)
-- [Prérequis](#-prérequis)
-- [Installation](#-installation)
-- [Configuration](#-configuration)
-- [Utilisation](#-utilisation)
-- [Structure du projet](#-structure-du-projet)
-- [Technologies utilisées](#-technologies-utilisées)
-
----
 
 ##  À propos
 
