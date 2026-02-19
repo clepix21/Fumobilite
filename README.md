@@ -1,4 +1,4 @@
-# 🚌 Fumobilite
+# Fumobilite
 
 <div align="center">
   <img src="Fumoblilite.Interface/Resources/logo.png" alt="Logo Fumobilite" width="200"/>
@@ -159,11 +159,11 @@ string bd = "fumobilite";           // Nom de la base de données
 
 L'interface est organisée en contrôles utilisateur (UserControls) accessibles via le menu principal :
 
-- 🌐 **Consultation du réseau**
-- 🚏 **Consultation des lignes**
-- 🕐 **Consultation des horaires**
-- 🗺️ **Recherche d'itinéraire**
-- ⚙️ **Gestion** (administrateurs uniquement)
+- **Consultation du réseau**
+- **Consultation des lignes**
+- **Consultation des horaires**
+- **Recherche d'itinéraire**
+- **Gestion** (administrateurs uniquement)
 
 
 ---
